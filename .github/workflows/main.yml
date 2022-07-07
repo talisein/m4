@@ -10,7 +10,7 @@ concurrency:
 on:
   push:
     branches:
-      - main
+      - meson
   # Allows you to run this workflow manually from the Actions tab
 
 
