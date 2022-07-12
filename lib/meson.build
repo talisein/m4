@@ -1,115 +1,116 @@
 cc = meson.get_compiler('c')
 cdata = configuration_data()
-stringh_data = configuration_data()
+generated_header_data = configuration_data()
 
-if  host_machine.cpu() == 'x86'
+if  host_machine.cpu_family() == 'x86'
   cdata.set('__i386__', 1)
 endif
-if  host_machine.cpu() == 'x86_64' and cc.get_define('__ILP32__') != '' or cc.get_define('_ILP32') != ''
+if  host_machine.cpu_family() == 'x86_64' and cc.get_define('__ILP32__') != '' or cc.get_define('_ILP32') != ''
   cdata.set('__x86_64_x32__', 1)
 endif
-if  host_machine.cpu() == 'x86_64' and cc.get_define('__ILP32__') == '' and cc.get_define('_ILP32') == ''
+if  host_machine.cpu_family() == 'x86_64' and cc.get_define('__ILP32__') == '' and cc.get_define('_ILP32') == ''
   cdata.set('__x86_64__', 1)
 endif
-if  host_machine.cpu() == 'alpha'
+if  host_machine.cpu_family() == 'alpha'
   cdata.set('__alpha__', 1)
 endif
-if  host_machine.cpu() == 'arm' and cc.get_define('__ARM_PCS') != ''
+if  host_machine.cpu_family() == 'arm' and cc.get_define('__ARM_PCS') != ''
   cdata.set('__arm__', 1)
 endif
-if  host_machine.cpu() == 'arm' and cc.get_define('__ARM_PCS_VFP') != ''
+if  host_machine.cpu_family() == 'arm' and cc.get_define('__ARM_PCS_VFP') != ''
   cdata.set('__armhf__', 1)
 endif
-if  host_machine.cpu() == 'aarch64' and cc.get_define('__ILP32__') != '' or cc.get_define('_ILP32') != ''
+if  host_machine.cpu_family() == 'aarch64' and cc.get_define('__ILP32__') != '' or cc.get_define('_ILP32') != ''
   cdata.set('__arm64_ilp32__', 1)
 endif
-if  host_machine.cpu() == 'aarch64' and cc.get_define('__ILP32__') == '' and cc.get_define('_ILP32') == ''
+if  host_machine.cpu_family() == 'aarch64' and cc.get_define('__ILP32__') == '' and cc.get_define('_ILP32') == ''
   cdata.set('__arm64__', 1)
 endif
-if  host_machine.cpu() == 'parisc' and cc.get_define('__ILP64__') == '' and cc.get_define('_ILP64') == ''
+if  host_machine.cpu_family() == 'parisc' and cc.get_define('__ILP64__') == '' and cc.get_define('_ILP64') == ''
   cdata.set('__hppa__', 1)
 endif
-if  host_machine.cpu() == 'parisc' and cc.get_define('__ILP64__') != '' or cc.get_define('_ILP64') != ''
+if  host_machine.cpu_family() == 'parisc' and cc.get_define('__ILP64__') != '' or cc.get_define('_ILP64') != ''
   cdata.set('__hppa64__', 1)
 endif
-if  host_machine.cpu() == 'ia64' and cc.get_define('_ILP32') != ''
+if  host_machine.cpu_family() == 'ia64' and cc.get_define('_ILP32') != ''
   cdata.set('__ia64_ilp32__', 1)
 endif
-if  host_machine.cpu() == 'ia64' and cc.get_define('_ILP32') == ''
+if  host_machine.cpu_family() == 'ia64' and cc.get_define('_ILP32') == ''
   cdata.set('__ia64__', 1)
 endif
-if  host_machine.cpu() == 'm68k'
+if  host_machine.cpu_family() == 'm68k'
   cdata.set('__m68k__', 1)
 endif
-if  host_machine.cpu() == 'mips' and cc.get_define('_MIPS_SIM') != cc.get_define('_ABIN32')
+if  host_machine.cpu_family() == 'mips' and cc.get_define('_MIPS_SIM') != cc.get_define('_ABIN32')
   cdata.set('__mips__', 1)
 endif
-if  host_machine.cpu() == 'mips' and cc.get_define('_MIPS_SIM') == cc.get_define('_ABIN32')
+if  host_machine.cpu_family() == 'mips' and cc.get_define('_MIPS_SIM') == cc.get_define('_ABIN32')
   cdata.set('__mipsn32__', 1)
 endif
-if  host_machine.cpu() == 'mips64'
+if  host_machine.cpu_family() == 'mips64'
   cdata.set('__mips64__', 1)
 endif
-if  host_machine.cpu() == 'ppc'
+if  host_machine.cpu_family() == 'ppc'
   cdata.set('__powerpc__', 1)
 endif
-if  host_machine.cpu() == 'ppc64' and cc.get_define('_CALL_ELF') != '2'
+if  host_machine.cpu_family() == 'ppc64' and cc.get_define('_CALL_ELF') != '2'
   cdata.set('__powerpc64__', 1)
 endif
-if  host_machine.cpu() == 'ppc64' and cc.get_define('_CALL_ELF') == '2'
+if  host_machine.cpu_family() == 'ppc64' and cc.get_define('_CALL_ELF') == '2'
   cdata.set('__powerpc64_elfv2__', 1)
 endif
-if  host_machine.cpu() == 'riscv32'
+if  host_machine.cpu_family() == 'riscv32'
   cdata.set('__riscv32__', 1)
 endif
-if  host_machine.cpu() == 'riscv64'
+if  host_machine.cpu_family() == 'riscv64'
   cdata.set('__riscv64__', 1)
 endif
-if  host_machine.cpu() == 'riscv32' and cc.get_define('__riscv_float_abi_single') == '' and cc.get_define('__riscv_float_abi_double') == ''
+if  host_machine.cpu_family() == 'riscv32' and cc.get_define('__riscv_float_abi_single') == '' and cc.get_define('__riscv_float_abi_double') == ''
   cdata.set('__riscv32_ilp32__', 1)
 endif
-if  host_machine.cpu() == 'riscv32' and cc.get_define('__riscv_float_abi_single') != ''
+if  host_machine.cpu_family() == 'riscv32' and cc.get_define('__riscv_float_abi_single') != ''
   cdata.set('__riscv32_ilp32f__', 1)
 endif
-if  host_machine.cpu() == 'riscv32' and cc.get_define('__riscv_float_abi_double') != ''
+if  host_machine.cpu_family() == 'riscv32' and cc.get_define('__riscv_float_abi_double') != ''
   cdata.set('__riscv32_ilp32d__', 1)
 endif
-if  host_machine.cpu() == 'riscv64' and cc.get_define('__LP64__') == '' and cc.get_define('__riscv_float_abi_single') == '' and cc.get_define('__riscv_float_abi_double') == ''
+if  host_machine.cpu_family() == 'riscv64' and cc.get_define('__LP64__') == '' and cc.get_define('__riscv_float_abi_single') == '' and cc.get_define('__riscv_float_abi_double') == ''
   cdata.set('__riscv64_ilp32__', 1)
 endif
-if  host_machine.cpu() == 'riscv64' and cc.get_define('__LP64__') == '' and cc.get_define('__riscv_float_abi_single') != ''
+if  host_machine.cpu_family() == 'riscv64' and cc.get_define('__LP64__') == '' and cc.get_define('__riscv_float_abi_single') != ''
   cdata.set('__riscv64_ilp32f__', 1)
 endif
-if  host_machine.cpu() == 'riscv64' and cc.get_define('__LP64__') == '' and cc.get_define('__riscv_float_abi_double') != ''
+if  host_machine.cpu_family() == 'riscv64' and cc.get_define('__LP64__') == '' and cc.get_define('__riscv_float_abi_double') != ''
   cdata.set('__riscv64_ilp32d__', 1)
 endif
-if  host_machine.cpu() == 'riscv64' and cc.get_define('__LP64__') != '' and cc.get_define('__riscv_float_abi_single') == '' and cc.get_define('__riscv_float_abi_double') == ''
+if  host_machine.cpu_family() == 'riscv64' and cc.get_define('__LP64__') != '' and cc.get_define('__riscv_float_abi_single') == '' and cc.get_define('__riscv_float_abi_double') == ''
   cdata.set('__riscv64_lp64__', 1)
 endif
-if  host_machine.cpu() == 'riscv64' and cc.get_define('__LP64__') != '' and cc.get_define('__riscv_float_abi_single') != ''
+if  host_machine.cpu_family() == 'riscv64' and cc.get_define('__LP64__') != '' and cc.get_define('__riscv_float_abi_single') != ''
   cdata.set('__riscv64_lp64f__', 1)
 endif
-if  host_machine.cpu() == 'riscv64' and cc.get_define('__LP64__') != '' and cc.get_define('__riscv_float_abi_double') != ''
+if  host_machine.cpu_family() == 'riscv64' and cc.get_define('__LP64__') != '' and cc.get_define('__riscv_float_abi_double') != ''
   cdata.set('__riscv64_lp64d__', 1)
 endif
-if  host_machine.cpu() == 's390'
+if  host_machine.cpu_family() == 's390'
   cdata.set('__s390__', 1)
 endif
-if  host_machine.cpu() == 's390x'
+if  host_machine.cpu_family() == 's390x'
   cdata.set('__s390x__', 1)
 endif
-if  host_machine.cpu() == 'sh4'
+if  host_machine.cpu_family() == 'sh4'
   cdata.set('__sh__', 1)
 endif
-if  host_machine.cpu() == 'sparc'
+if  host_machine.cpu_family() == 'sparc'
   cdata.set('__sparc__', 1)
 endif
-if  host_machine.cpu() == 'sparc64'
+if  host_machine.cpu_family() == 'sparc64'
   cdata.set('__sparc64__', 1)
 endif
 
 
 check_headers = [
+  'sigsegv.h',
   'alloca.h',
   'arpa/inet.h',
   'bcrypt.h',
@@ -157,6 +158,7 @@ check_headers = [
   'sys/types.h',
   'sys/uio.h',
   'sys/wait.h',
+  'sys/loadavg.h',
   'threads.h',
   'unistd.h',
   'wchar.h',
@@ -164,6 +166,7 @@ check_headers = [
   'winsock2.h',
   'ws2tcpip.h',
   'xlocale.h',
+  'random.h',
 ]
 
 have_header_args = []
@@ -172,8 +175,10 @@ foreach h : check_headers
   if cc.has_header(h)
     cdata.set('HAVE_' + h.underscorify().to_upper(), 1)
     have_header_args += '-DHAVE_' + h.underscorify().to_upper() + '=1'
+    generated_header_data.set10('HAVE_' + h.underscorify().to_upper(), true)
+  else
+    generated_header_data.set10('HAVE_' + h.underscorify().to_upper(), false)
   endif
-  stringh_data.set10('HAVE_' + h.underscorify().to_upper(), cc.has_header(h))
 endforeach
 if cc.has_header('stdlib.h') and cc.has_header('stdarg.h') and cc.has_header('string.h') and cc.has_header('float.h') and cc.has_header_symbol('string.h', 'memchr') and cc.has_header_symbol('stdlib.h', 'free')
     cdata.set('STDC_HEADERS', 1)
@@ -278,15 +283,32 @@ check_types = [
   ['HAVE__BOOL', '_Bool', 'stdint.h'],
   ['HAVE_POSIX_SPAWNATTR_T', 'posix_spawnattr_t', 'spawn.h'],
   ['HAVE_POSIX_SPAWN_FILE_ACTIONS_T', 'posix_spawn_file_actions_t', 'spawn.h'],
+  ['HAVE_STRUCT_RANDOM_DATA', 'struct random_data', 'stdlib.h'],
 ]
 foreach f : check_types
   if cc.has_type(f.get(1), prefix: '#include <@0@>'.format(f.get(2)), args:  extension_args)
     cdata.set(f.get(0), 1)
+    generated_header_data.set10(f.get(0), true)
+  else
+    generated_header_data.set10(f.get(0), false)
   endif
-  stringh_data.set10(f.get(0), cc.has_header(h))
+
 endforeach
 
 check_declarations = [
+  ['HAVE_DECL_EACCESS', 'eaccess', 'unistd.h'],
+  ['HAVE_DECL_GETLOADAVG', 'getloadavg', 'stdlib.h'],
+  ['HAVE_DECL_INITSTATE', 'initstate', 'stdlib.h'],
+  ['HAVE_DECL_SETSTATE', 'setstate', 'stdlib.h'],
+  ['HAVE_DECL_FDATASYNC', 'fdatasync', 'unistd.h'],
+  ['HAVE_DECL_GETDOMAINNAME', 'getdomainname', 'unistd.h'],
+  ['HAVE_DECL_GETLOGIN', 'getlogin', 'unistd.h'],
+  ['HAVE_DECL_GETLOGIN_R', 'getlogin_r', 'unistd.h'],
+  ['HAVE_DECL_GETPAGESIZE', 'getpagesize', 'unistd.h'],
+  ['HAVE_DECL_GETUSERSHELL', 'getusershell', 'unistd.h'],
+  ['HAVE_DECL_SETHOSTNAME', 'sethostname', 'unistd.h'],
+  ['HAVE_DECL_TRUNCATE', 'truncate', 'unistd.h'],
+  ['HAVE_DECL_TTYNAME_R', 'ttyname_r', 'unistd.h'],
   ['HAVE_DECL_MEMMEM', 'memmem', 'string.h'],
   ['HAVE_DECL_STRTOK_R', 'strtok_r', 'string.h'],
   ['HAVE_DECL_ALARM', 'alarm', 'unistd.h'],
@@ -350,6 +372,7 @@ check_declarations = [
   ['HAVE_DECL___ARGV', '__argv', 'stdlib.h'],
   ['HAVE_DECL___FPENDING', '__fpending', 'stdio_ext.h'],
   ['HAVE_ENVIRON_DECL', 'environ', 'unistd.h'],
+  ['HAVE_DECL_ENVIRON', 'environ', 'unistd.h'],
   ['HAVE_LC_MESSAGES', 'LC_MESSAGES', 'locale.h'],
   ['HAVE_MAP_ANONYMOUS', 'MAP_ANONYMOUS', 'sys/mman.h'],
   ['HAVE_PTHREAD_MUTEX_RECURSIVE', 'PTHREAD_MUTEX_RECURSIVE', 'pthread.h'],
@@ -361,6 +384,53 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_ALIGNED_ALLOC', 'aligned_alloc', '#include<stdlib.h>'],
+  ['HAVE_ATOLL', 'atoll', '#include<stdlib.h>'],
+  ['HAVE_GETSUBOPT', 'getsubopt', '#include<stdlib.h>'],
+  ['HAVE_GRANTPT', 'grantpt', '#include<stdlib.h>'],
+  ['HAVE_INITSTATE', 'initstate', '#include<stdlib.h>'],
+  ['HAVE_MKOSTEMP', 'mkostemp', '#include<stdlib.h>'],
+  ['HAVE_MKOSTEMPS', 'mkostemps', '#include<stdlib.h>'],
+  ['HAVE_MKSTEMPS', 'mkstemps', '#include<stdlib.h>'],
+  ['HAVE_POSIX_MEMALIGN', 'posix_memalign', '#include<stdlib.h>'],
+  ['HAVE_POSIX_OPENPT', 'posix_openpt', '#include<stdlib.h>'],
+  ['HAVE_PTSNAME', 'ptsname', '#include<stdlib.h>'],
+  ['HAVE_PTSNAME_R', 'ptsname_r', '#include<stdlib.h>'],
+  ['HAVE_QSORT_R', 'qsort_r', '#include<stdlib.h>'],
+  ['HAVE_RANDOM', 'random', '#include<stdlib.h>'],
+  ['HAVE_RANDOM_R', 'random_r', '#include<stdlib.h>'],
+  ['HAVE_RPMATCH', 'rpmatch', '#include<stdlib.h>'],
+  ['HAVE_SETSTATE', 'setstate', '#include<stdlib.h>'],
+  ['HAVE_STRTOD', 'strtod', '#include<stdlib.h>'],
+  ['HAVE_STRTOL', 'strtol', '#include<stdlib.h>'],
+  ['HAVE_STRTOLD', 'strtold', '#include<stdlib.h>'],
+  ['HAVE_STRTOLL', 'strtoll', '#include<stdlib.h>'],
+  ['HAVE_STRTOUL', 'strtoul', '#include<stdlib.h>'],
+  ['HAVE_STRTOULL', 'strtoull', '#include<stdlib.h>'],
+  ['HAVE_UNLOCKPT', 'unlockpt', '#include<stdlib.h>'],
+  ['HAVE__EXIT', '_exit', '#include<stdlib.h>'],
+  ['HAVE_CHOWN', 'chown', '#include<unistd.h>'],
+  ['HAVE_COPY_FILE_RANGE', 'copy_file_range', '#include<unistd.h>'],
+  ['HAVE_DUP3', 'dup3', '#include<unistd.h>'],
+  ['HAVE_EUIDACCESS', 'euidaccess', '#include<unistd.h>'],
+  ['HAVE_EXECVPE', 'execvpe', '#include<unistd.h>'],
+  ['HAVE_FCHOWNAT', 'fchownat', '#include<unistd.h>'],
+  ['HAVE_FDATASYNC', 'fdatasync', '#include<unistd.h>'],
+  ['HAVE_FSYNC', 'fsync', '#include<unistd.h>'],
+  ['HAVE_GETENTROPY', 'getentropy', '#include<unistd.h>'],
+  ['HAVE_GETGROUPS', 'getgroups', '#include<unistd.h>'],
+  ['HAVE_GETHOSTNAME', 'gethostname', '#include<unistd.h>'],
+  ['HAVE_GETPASS', 'getpass', '#include<unistd.h>'],
+  ['HAVE_GROUP_MEMBER', 'group_member', '#include<unistd.h>'],
+  ['HAVE_LCHOWN', 'lchown', '#include<unistd.h>'],
+  ['HAVE_LINKAT', 'linkat', '#include<unistd.h>'],
+  ['HAVE_PREAD', 'pread', '#include<unistd.h>'],
+  ['HAVE_PWRITE', 'pwrite', '#include<unistd.h>'],
+  ['HAVE_READLINKAT', 'readlinkat', '#include<unistd.h>'],
+  ['HAVE_SETHOSTNAME', 'sethostname', '#include<unistd.h>'],
+  ['HAVE_SYMLINKAT', 'symlinkat', '#include<unistd.h>'],
+  ['HAVE_UNLINKAT', 'unlinkat', '#include<unistd.h>'],
+  ['HAVE_USLEEP', 'usleep', '#include<unistd.h>'],
   ['HAVE_STRVERSCMP', 'strverscmp', '#include<string.h>'],
   ['HAVE_STRSEP', 'strsep', '#include<string.h>'],
   ['HAVE_STRPBRK', 'strpbrk', '#include<string.h>'],
@@ -520,8 +590,10 @@ check_functions = [
 foreach f : check_functions
   if cc.has_function(f.get(1), prefix : f.get(2) + '\n' + ac_includes_default, args : have_header_args + extension_args)
     cdata.set(f.get(0), 1)
+    generated_header_data.set10(f.get(0), true)
+  else
+    generated_header_data.set10(f.get(0), false)
   endif
-  stringh_data.set10(f.get(0), cc.has_function(f.get(1), prefix : f.get(2) + '\n' + ac_includes_default, args : have_header_args + extension_args))
 endforeach
 
 
@@ -929,7 +1001,9 @@ cdata.set('GNULIB_MBSSTR', 1)
 cdata.set('GNULIB_STRSIGNAL', 1)
 cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
 cdata.set('ICONV_CONST', '')
-
+if not cdata.has('HAVE_DECL_EACCESS')
+  cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
+endif
 configure_file(input : 'config.h.meson',
   output : 'config.h',
   configuration : cdata)
@@ -967,115 +1041,351 @@ configure_file(input : 'configmake.h.meson',
   output : 'configmake.h',
   configuration : configmake_data)
 
+generated_header_data.set('PRAGMA_SYSTEM_HEADER', '#pragma GCC system_header')
+#generated_header_data.set('PRAGMA_COLUMNS', '')#pragma columns 10000')
+if cc.compiles('#include_next <string.h>')
+  generated_header_data.set('INCLUDE_NEXT', 'include_next')
+  generated_header_data.set('NEXT_STRING_H', '<string.h>')
+  generated_header_data.set('NEXT_UNISTD_H', '<unistd.h>')
+  generated_header_data.set('NEXT_SPAWN_H', '<spawn.h>')
+  generated_header_data.set('NEXT_STDLIB_H', '<stdlib.h>')
+elif cc.compiles('#include <../include/string.h>')
+  generated_header_data.set('INCLUDE_NEXT', 'include')
+  generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
+  generated_header_data.set('NEXT_UNISTD_H', '<../include/unistd.h>')
+  generated_header_data.set('NEXT_SPAWN_H', '<../include/spawn.h>')
+  generated_header_data.set('NEXT_STDLIB_H', '<../include/stdlib.h>')
+elif cc.compiles('#include <../ucrt/string.h>')
+  generated_header_data.set('INCLUDE_NEXT', 'include')
+  generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
+  generated_header_data.set('NEXT_UNISTD_H', '<../ucrt/unistd.h>')
+  generated_header_data.set('NEXT_SPAWN_H', '<../ucrt/spawn.h>')
+  generated_header_data.set('NEXT_STDLIB_H', '<../ucrt/stdlib.h>')
+else
+  error('Can\'t figure out how to #include_next')
+endif
+generated_header_data.set('GUARD_PREFIX', 'GL_M4')
+generated_header_data.merge_from(cdata)
+generated_header_data.set('GNULIB_EXPLICIT_BZERO', 0)
+generated_header_data.set('GNULIB_FFSL', 0)
+generated_header_data.set('GNULIB_FFSLL', 0)
+generated_header_data.set('GNULIB_MBSCASECMP', 0)
+generated_header_data.set('GNULIB_MBSCASESTR', 0)
+generated_header_data.set('GNULIB_MBSCHR', 0)
+generated_header_data.set('GNULIB_MBSCSPN', 0)
+generated_header_data.set('GNULIB_MBSNCASECMP', 0)
+generated_header_data.set('GNULIB_MBSNLEN', 0)
+generated_header_data.set('GNULIB_MBSPBRK', 0)
+generated_header_data.set('GNULIB_MBSPCASECMP', 0)
+generated_header_data.set('GNULIB_MBSRCHR', 0)
+generated_header_data.set('GNULIB_MBSSEP', 0)
+generated_header_data.set('GNULIB_MBSSPN', 0)
+generated_header_data.set('GNULIB_MBSTOK_R', 0)
+generated_header_data.set('GNULIB_MDA_MEMCCPY', 0)
+generated_header_data.set('GNULIB_MDA_STRDUP', 0)
+generated_header_data.set('GNULIB_MEMCHR', 0)
+generated_header_data.set('GNULIB_MEMMEM', 0)
+generated_header_data.set('GNULIB_MEMRCHR', 0)
+generated_header_data.set('GNULIB_RAWMEMCHR', 0)
+generated_header_data.set('GNULIB_SIGABBREV_NP', 0)
+generated_header_data.set('GNULIB_SIGDESCR_NP', 0)
+generated_header_data.set('GNULIB_STPCPY', 0)
+generated_header_data.set('GNULIB_STPNCPY', 0)
+generated_header_data.set('GNULIB_STRCASESTR', 0)
+generated_header_data.set('GNULIB_STRCHRNUL', 0)
+generated_header_data.set('GNULIB_STRDUP', 0)
+generated_header_data.set('GNULIB_STRERROR', 0)
+generated_header_data.set('GNULIB_STRERRORNAME_NP', 0)
+generated_header_data.set('GNULIB_STRERROR_R', 0)
+generated_header_data.set('GNULIB_STRNCAT', 0)
+generated_header_data.set('GNULIB_STRNDUP', 0)
+generated_header_data.set('GNULIB_STRNLEN', 0)
+generated_header_data.set('GNULIB_STRPBRK', 0)
+generated_header_data.set('GNULIB_STRSEP', 0)
+generated_header_data.set('GNULIB_STRSTR', 0)
+generated_header_data.set('GNULIB_STRTOK_R', 0)
+generated_header_data.set('GNULIB_STRVERSCMP', 0)
+generated_header_data.set('PRAGMA_COLUMNS', '')
+generated_header_data.set('REPLACE_FFSLL', 0)
+generated_header_data.set('REPLACE_MEMCHR', 0)
+generated_header_data.set('REPLACE_MEMMEM', 0)
+generated_header_data.set('REPLACE_STPNCPY', 0)
+generated_header_data.set('REPLACE_STRCASESTR', 0)
+generated_header_data.set('REPLACE_STRCHRNUL', 0)
+generated_header_data.set('REPLACE_STRDUP', 0)
+generated_header_data.set('REPLACE_STRERROR', 0)
+generated_header_data.set('REPLACE_STRERRORNAME_NP', 0)
+generated_header_data.set('REPLACE_STRERROR_R', 0)
+generated_header_data.set('REPLACE_STRNCAT', 0)
+generated_header_data.set('REPLACE_STRNDUP', 0)
+generated_header_data.set('REPLACE_STRNLEN', 0)
+generated_header_data.set('REPLACE_STRSIGNAL', 0)
+generated_header_data.set('REPLACE_STRSTR', 0)
+generated_header_data.set('REPLACE_STRTOK_R', 0)
+generated_header_data.set('UNDEFINE_STRTOK_R', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_DESTROY', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_GETFLAGS', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_GETPGROUP', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_GETSCHEDPARAM', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_GETSCHEDPOLICY', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_GETSIGDEFAULT', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_GETSIGMASK', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_INIT', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_SETFLAGS', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_SETPGROUP', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_SETSCHEDPARAM', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_SETSCHEDPOLICY', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_SETSIGDEFAULT', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNATTR_SETSIGMASK', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWNP', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCLOSE', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDDUP2', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDFCHDIR', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDOPEN', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_DESTROY', 0)
+generated_header_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_INIT', 0)
+generated_header_data.set('REPLACE_POSIX_SPAWN', 0)
+generated_header_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
+generated_header_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDCLOSE', 0)
+generated_header_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDDUP2', 0)
+generated_header_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDFCHDIR', 0)
+generated_header_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDOPEN', 0)
+generated_header_data.set('GNULIB_ACCESS', 0)
+generated_header_data.set('GNULIB_CHDIR', 0)
+generated_header_data.set('GNULIB_CHOWN', 0)
+generated_header_data.set('GNULIB_CLOSE', 0)
+generated_header_data.set('GNULIB_COPY_FILE_RANGE', 0)
+generated_header_data.set('GNULIB_DUP', 0)
+generated_header_data.set('GNULIB_DUP2', 0)
+generated_header_data.set('GNULIB_DUP3', 0)
+generated_header_data.set('GNULIB_EUIDACCESS', 0)
+generated_header_data.set('GNULIB_EXECL', 0)
+generated_header_data.set('GNULIB_EXECLE', 0)
+generated_header_data.set('GNULIB_EXECLP', 0)
+generated_header_data.set('GNULIB_EXECV', 0)
+generated_header_data.set('GNULIB_EXECVE', 0)
+generated_header_data.set('GNULIB_EXECVP', 0)
+generated_header_data.set('GNULIB_EXECVPE', 0)
+generated_header_data.set('GNULIB_FACCESSAT', 0)
+generated_header_data.set('GNULIB_FCHDIR', 0)
+generated_header_data.set('GNULIB_FCHOWNAT', 0)
+generated_header_data.set('GNULIB_FDATASYNC', 0)
+generated_header_data.set('GNULIB_FSYNC', 0)
+generated_header_data.set('GNULIB_FTRUNCATE', 0)
+generated_header_data.set('GNULIB_GETCWD', 0)
+generated_header_data.set('GNULIB_GETDOMAINNAME', 0)
+generated_header_data.set('GNULIB_GETDTABLESIZE', 0)
+generated_header_data.set('GNULIB_GETENTROPY', 0)
+generated_header_data.set('GNULIB_GETGROUPS', 0)
+generated_header_data.set('GNULIB_GETHOSTNAME', 0)
+generated_header_data.set('GNULIB_GETLOGIN', 0)
+generated_header_data.set('GNULIB_GETLOGIN_R', 0)
+generated_header_data.set('GNULIB_GETOPT_POSIX', 0)
+generated_header_data.set('GNULIB_GETPAGESIZE', 0)
+generated_header_data.set('GNULIB_GETPASS', 0)
+generated_header_data.set('GNULIB_GETUSERSHELL', 0)
+generated_header_data.set('GNULIB_GROUP_MEMBER', 0)
+generated_header_data.set('GNULIB_ISATTY', 0)
+generated_header_data.set('GNULIB_LCHOWN', 0)
+generated_header_data.set('GNULIB_LINK', 0)
+generated_header_data.set('GNULIB_LINKAT', 0)
+generated_header_data.set('GNULIB_LSEEK', 0)
+generated_header_data.set('GNULIB_MDA_ACCESS', 0)
+generated_header_data.set('GNULIB_MDA_CHDIR', 0)
+generated_header_data.set('GNULIB_MDA_CLOSE', 0)
+generated_header_data.set('GNULIB_MDA_DUP', 0)
+generated_header_data.set('GNULIB_MDA_DUP2', 0)
+generated_header_data.set('GNULIB_MDA_EXECL', 0)
+generated_header_data.set('GNULIB_MDA_EXECLE', 0)
+generated_header_data.set('GNULIB_MDA_EXECLP', 0)
+generated_header_data.set('GNULIB_MDA_EXECV', 0)
+generated_header_data.set('GNULIB_MDA_EXECVE', 0)
+generated_header_data.set('GNULIB_MDA_EXECVP', 0)
+generated_header_data.set('GNULIB_MDA_EXECVPE', 0)
+generated_header_data.set('GNULIB_MDA_GETCWD', 0)
+generated_header_data.set('GNULIB_MDA_GETPID', 0)
+generated_header_data.set('GNULIB_MDA_ISATTY', 0)
+generated_header_data.set('GNULIB_MDA_LSEEK', 0)
+generated_header_data.set('GNULIB_MDA_READ', 0)
+generated_header_data.set('GNULIB_MDA_RMDIR', 0)
+generated_header_data.set('GNULIB_MDA_SWAB', 0)
+generated_header_data.set('GNULIB_MDA_UNLINK', 0)
+generated_header_data.set('GNULIB_MDA_WRITE', 0)
+generated_header_data.set('GNULIB_PIPE', 0)
+generated_header_data.set('GNULIB_PIPE2', 0)
+generated_header_data.set('GNULIB_PREAD', 0)
+generated_header_data.set('GNULIB_PWRITE', 0)
+generated_header_data.set('GNULIB_READ', 0)
+generated_header_data.set('GNULIB_READLINK', 0)
+generated_header_data.set('GNULIB_READLINKAT', 0)
+generated_header_data.set('GNULIB_RMDIR', 0)
+generated_header_data.set('GNULIB_SETHOSTNAME', 0)
+generated_header_data.set('GNULIB_SLEEP', 0)
+generated_header_data.set('GNULIB_SYMLINK', 0)
+generated_header_data.set('GNULIB_SYMLINKAT', 0)
+generated_header_data.set('GNULIB_TRUNCATE', 0)
+generated_header_data.set('GNULIB_TTYNAME_R', 0)
+generated_header_data.set('GNULIB_UNISTD_H_GETOPT', 0)
+generated_header_data.set('GNULIB_UNLINK', 0)
+generated_header_data.set('GNULIB_UNLINKAT', 0)
+generated_header_data.set('GNULIB_USLEEP', 0)
+generated_header_data.set('GNULIB_WRITE', 0)
+generated_header_data.set('REPLACE_ACCESS', 0)
+generated_header_data.set('REPLACE_CHOWN', 0)
+generated_header_data.set('REPLACE_CLOSE', 0)
+generated_header_data.set('REPLACE_DUP', 0)
+generated_header_data.set('REPLACE_DUP2', 0)
+generated_header_data.set('REPLACE_EXECL', 0)
+generated_header_data.set('REPLACE_EXECLE', 0)
+generated_header_data.set('REPLACE_EXECLP', 0)
+generated_header_data.set('REPLACE_EXECV', 0)
+generated_header_data.set('REPLACE_EXECVE', 0)
+generated_header_data.set('REPLACE_EXECVP', 0)
+generated_header_data.set('REPLACE_EXECVPE', 0)
+generated_header_data.set('REPLACE_FACCESSAT', 0)
+generated_header_data.set('REPLACE_FCHOWNAT', 0)
+generated_header_data.set('REPLACE_FTRUNCATE', 0)
+generated_header_data.set('REPLACE_GETCWD', 0)
+generated_header_data.set('REPLACE_GETDOMAINNAME', 0)
+generated_header_data.set('REPLACE_GETDTABLESIZE', 0)
+generated_header_data.set('REPLACE_GETGROUPS', 0)
+generated_header_data.set('REPLACE_GETLOGIN_R', 0)
+generated_header_data.set('REPLACE_GETPAGESIZE', 0)
+generated_header_data.set('REPLACE_GETPASS', 0)
+generated_header_data.set('REPLACE_ISATTY', 0)
+generated_header_data.set('REPLACE_LCHOWN', 0)
+generated_header_data.set('REPLACE_LINK', 0)
+generated_header_data.set('REPLACE_LINKAT', 0)
+generated_header_data.set('REPLACE_LSEEK', 0)
+generated_header_data.set('REPLACE_PREAD', 0)
+generated_header_data.set('REPLACE_PWRITE', 0)
+generated_header_data.set('REPLACE_READ', 0)
+generated_header_data.set('REPLACE_READLINK', 0)
+generated_header_data.set('REPLACE_READLINKAT', 0)
+generated_header_data.set('REPLACE_RMDIR', 0)
+generated_header_data.set('REPLACE_SLEEP', 0)
+generated_header_data.set('REPLACE_SYMLINK', 0)
+generated_header_data.set('REPLACE_SYMLINKAT', 0)
+generated_header_data.set('REPLACE_TRUNCATE', 0)
+generated_header_data.set('REPLACE_TTYNAME_R', 0)
+generated_header_data.set('REPLACE_UNLINK', 0)
+generated_header_data.set('REPLACE_UNLINKAT', 0)
+generated_header_data.set('REPLACE_USLEEP', 0)
+generated_header_data.set('REPLACE_WRITE', 0)
+generated_header_data.set('UNISTD_H_HAVE_SYS_RANDOM_H', 0)
+generated_header_data.set('UNISTD_H_HAVE_WINSOCK2_H', 0)
+generated_header_data.set('UNISTD_H_HAVE_WINSOCK2_H_AND_USE_SOCKETS', 0)
+generated_header_data.set('GNULIB_ALIGNED_ALLOC', 0)
+generated_header_data.set('GNULIB_ATOLL', 0)
+generated_header_data.set('GNULIB_CALLOC_POSIX', 0)
+generated_header_data.set('GNULIB_CANONICALIZE_FILE_NAME', 0)
+generated_header_data.set('GNULIB_FREE_POSIX', 0)
+generated_header_data.set('GNULIB_GETLOADAVG', 0)
+generated_header_data.set('GNULIB_GETSUBOPT', 0)
+generated_header_data.set('GNULIB_GRANTPT', 0)
+generated_header_data.set('GNULIB_MALLOC_POSIX', 0)
+generated_header_data.set('GNULIB_MBTOWC', 0)
+generated_header_data.set('GNULIB_MDA_ECVT', 0)
+generated_header_data.set('GNULIB_MDA_FCVT', 0)
+generated_header_data.set('GNULIB_MDA_GCVT', 0)
+generated_header_data.set('GNULIB_MDA_MKTEMP', 0)
+generated_header_data.set('GNULIB_MDA_PUTENV', 0)
+generated_header_data.set('GNULIB_MKDTEMP', 0)
+generated_header_data.set('GNULIB_MKOSTEMP', 0)
+generated_header_data.set('GNULIB_MKOSTEMPS', 0)
+generated_header_data.set('GNULIB_MKSTEMP', 0)
+generated_header_data.set('GNULIB_MKSTEMPS', 0)
+generated_header_data.set('GNULIB_POSIX_MEMALIGN', 0)
+generated_header_data.set('GNULIB_POSIX_OPENPT', 0)
+generated_header_data.set('GNULIB_PTSNAME', 0)
+generated_header_data.set('GNULIB_PTSNAME_R', 0)
+generated_header_data.set('GNULIB_PUTENV', 0)
+generated_header_data.set('GNULIB_QSORT_R', 0)
+generated_header_data.set('GNULIB_RANDOM', 0)
+generated_header_data.set('GNULIB_RANDOM_R', 0)
+generated_header_data.set('GNULIB_REALLOC_POSIX', 0)
+generated_header_data.set('GNULIB_REALPATH', 0)
+generated_header_data.set('GNULIB_RPMATCH', 0)
+generated_header_data.set('GNULIB_SECURE_GETENV', 0)
+generated_header_data.set('GNULIB_SETENV', 0)
+generated_header_data.set('GNULIB_STRTOD', 0)
+generated_header_data.set('GNULIB_STRTOL', 0)
+generated_header_data.set('GNULIB_STRTOLD', 0)
+generated_header_data.set('GNULIB_STRTOLL', 0)
+generated_header_data.set('GNULIB_STRTOUL', 0)
+generated_header_data.set('GNULIB_STRTOULL', 0)
+generated_header_data.set('GNULIB_SYSTEM_POSIX', 0)
+generated_header_data.set('GNULIB_UNLOCKPT', 0)
+generated_header_data.set('GNULIB_UNSETENV', 0)
+generated_header_data.set('GNULIB_WCTOMB', 0)
+generated_header_data.set('GNULIB__EXIT', 0)
+generated_header_data.set('REPLACE_ALIGNED_ALLOC', 0)
+generated_header_data.set('REPLACE_CALLOC', 0)
+generated_header_data.set('REPLACE_CANONICALIZE_FILE_NAME', 0)
+generated_header_data.set('REPLACE_FREE', 0)
+generated_header_data.set('REPLACE_INITSTATE', 0)
+generated_header_data.set('REPLACE_MALLOC', 0)
+generated_header_data.set('REPLACE_MBTOWC', 0)
+generated_header_data.set('REPLACE_MKSTEMP', 0)
+generated_header_data.set('REPLACE_POSIX_MEMALIGN', 0)
+generated_header_data.set('REPLACE_PTSNAME', 0)
+generated_header_data.set('REPLACE_PTSNAME_R', 0)
+generated_header_data.set('REPLACE_PUTENV', 0)
+generated_header_data.set('REPLACE_QSORT_R', 0)
+generated_header_data.set('REPLACE_RANDOM', 0)
+generated_header_data.set('REPLACE_RANDOM_R', 0)
+generated_header_data.set('REPLACE_REALLOC', 0)
+generated_header_data.set('REPLACE_REALLOCARRAY', 0)
+generated_header_data.set('REPLACE_REALPATH', 0)
+generated_header_data.set('REPLACE_SETENV', 0)
+generated_header_data.set('REPLACE_SETSTATE', 0)
+generated_header_data.set('REPLACE_STRTOD', 0)
+generated_header_data.set('REPLACE_STRTOL', 0)
+generated_header_data.set('REPLACE_STRTOLD', 0)
+generated_header_data.set('REPLACE_STRTOLL', 0)
+generated_header_data.set('REPLACE_STRTOUL', 0)
+generated_header_data.set('REPLACE_STRTOULL', 0)
+generated_header_data.set('REPLACE_UNSETENV', 0)
+generated_header_data.set('REPLACE_WCTOMB', 0)
+
+generated_header_data.set10('GNULIB_ENVIRON', not cdata.has('HAVE_ENVIRON_DECL'))
+generated_header_data.set10('GNULIB_REALLOCARRAY', not cdata.has('HAVE_REALLOCARRAY'))
+generated_header_data.set10('GNULIB_MEMPCPY', not cdata.has('HAVE_MEMPCPY'))
+
+# STRING.H
+configure_file(input : 'string.in.h.meson',
+               output : 'string.h',
+               configuration : generated_header_data)
+
+# SPAWN.H
+configure_file(input : 'spawn.in.h.meson',
+               output : 'spawn.h',
+               configuration : generated_header_data)
+
+# UNISTD.H
+if generated_header_data.get('GNULIB_ENVIRON') == 0
+
+configure_file(input : 'unistd.in.h.meson',
+               output : 'unistd.h',
+               configuration : generated_header_data)
+endif
+
+# STDLIB.H
+if generated_header_data.get('HAVE_REALLOCARRAY') == 0
+configure_file(input : 'stdlib.in.h.meson',
+               output : 'stdlib.h',
+               configuration : generated_header_data)
+endif
+
+# SIGSEGV.H
+if not cdata.has('HAVE_SIGSEGV_H')
 configure_file(input : 'sigsegv.in.h',
                output : 'sigsegv.h',
                copy: true)
+endif
 
 
-stringh_data.set('PRAGMA_SYSTEM_HEADER', '#pragma GCC system_header')
-#stringh_data.set('PRAGMA_COLUMNS', '')#pragma columns 10000')
-stringh_data.set('INCLUDE_NEXT', 'include_next')
-stringh_data.set('NEXT_STRING_H', '<string.h>')
-stringh_data.set('GUARD_PREFIX', 'GL_M4')
-stringh_data.merge_from(cdata)
-stringh_data.set('GNULIB_EXPLICIT_BZERO', 0)
-stringh_data.set('GNULIB_FFSL', 0)
-stringh_data.set('GNULIB_FFSLL', 0)
-stringh_data.set('GNULIB_MBSCASECMP', 0)
-stringh_data.set('GNULIB_MBSCASESTR', 0)
-stringh_data.set('GNULIB_MBSCHR', 0)
-stringh_data.set('GNULIB_MBSCSPN', 0)
-stringh_data.set('GNULIB_MBSNCASECMP', 0)
-stringh_data.set('GNULIB_MBSNLEN', 0)
-stringh_data.set('GNULIB_MBSPBRK', 0)
-stringh_data.set('GNULIB_MBSPCASECMP', 0)
-stringh_data.set('GNULIB_MBSRCHR', 0)
-stringh_data.set('GNULIB_MBSSEP', 0)
-stringh_data.set('GNULIB_MBSSPN', 0)
-stringh_data.set('GNULIB_MBSTOK_R', 0)
-stringh_data.set('GNULIB_MDA_MEMCCPY', 0)
-stringh_data.set('GNULIB_MDA_STRDUP', 0)
-stringh_data.set('GNULIB_MEMCHR', 0)
-stringh_data.set('GNULIB_MEMMEM', 0)
-stringh_data.set('GNULIB_MEMPCPY', 0)
-stringh_data.set('GNULIB_MEMRCHR', 0)
-stringh_data.set('GNULIB_RAWMEMCHR', 0)
-stringh_data.set('GNULIB_SIGABBREV_NP', 0)
-stringh_data.set('GNULIB_SIGDESCR_NP', 0)
-stringh_data.set('GNULIB_STPCPY', 0)
-stringh_data.set('GNULIB_STPNCPY', 0)
-stringh_data.set('GNULIB_STRCASESTR', 0)
-stringh_data.set('GNULIB_STRCHRNUL', 0)
-stringh_data.set('GNULIB_STRDUP', 0)
-stringh_data.set('GNULIB_STRERROR', 0)
-stringh_data.set('GNULIB_STRERRORNAME_NP', 0)
-stringh_data.set('GNULIB_STRERROR_R', 0)
-stringh_data.set('GNULIB_STRNCAT', 0)
-stringh_data.set('GNULIB_STRNDUP', 0)
-stringh_data.set('GNULIB_STRNLEN', 0)
-stringh_data.set('GNULIB_STRPBRK', 0)
-stringh_data.set('GNULIB_STRSEP', 0)
-stringh_data.set('GNULIB_STRSTR', 0)
-stringh_data.set('GNULIB_STRTOK_R', 0)
-stringh_data.set('GNULIB_STRVERSCMP', 0)
-stringh_data.set('PRAGMA_COLUMNS', '')
-stringh_data.set('REPLACE_FFSLL', 0)
-stringh_data.set('REPLACE_MEMCHR', 0)
-stringh_data.set('REPLACE_MEMMEM', 0)
-stringh_data.set('REPLACE_STPNCPY', 0)
-stringh_data.set('REPLACE_STRCASESTR', 0)
-stringh_data.set('REPLACE_STRCHRNUL', 0)
-stringh_data.set('REPLACE_STRDUP', 0)
-stringh_data.set('REPLACE_STRERROR', 0)
-stringh_data.set('REPLACE_STRERRORNAME_NP', 0)
-stringh_data.set('REPLACE_STRERROR_R', 0)
-stringh_data.set('REPLACE_STRNCAT', 0)
-stringh_data.set('REPLACE_STRNDUP', 0)
-stringh_data.set('REPLACE_STRNLEN', 0)
-stringh_data.set('REPLACE_STRSIGNAL', 0)
-stringh_data.set('REPLACE_STRSTR', 0)
-stringh_data.set('REPLACE_STRTOK_R', 0)
-stringh_data.set('UNDEFINE_STRTOK_R', 0)
-
-spawnh_data = configuration_data()
-spawnh_data.merge_from(stringh_data)
-configure_file(input : 'string.in.h.meson',
-               output : 'string.h',
-               configuration : stringh_data)
-
-spawnh_data.set('GNULIB_POSIX_SPAWN', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_DESTROY', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_GETFLAGS', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_GETPGROUP', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_GETSCHEDPARAM', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_GETSCHEDPOLICY', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_GETSIGDEFAULT', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_GETSIGMASK', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_INIT', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_SETFLAGS', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_SETPGROUP', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_SETSCHEDPARAM', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_SETSCHEDPOLICY', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_SETSIGDEFAULT', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNATTR_SETSIGMASK', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWNP', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCLOSE', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDDUP2', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDFCHDIR', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDOPEN', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_DESTROY', 0)
-spawnh_data.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_INIT', 0)
-spawnh_data.set('NEXT_SPAWN_H', '<spawn.h>')
-spawnh_data.set('REPLACE_POSIX_SPAWN', 0)
-spawnh_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
-spawnh_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDCLOSE', 0)
-spawnh_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDDUP2', 0)
-spawnh_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDFCHDIR', 0)
-spawnh_data.set('REPLACE_POSIX_SPAWN_FILE_ACTIONS_ADDOPEN', 0)
-
-configure_file(input : 'spawn.in.h.meson',
-               output : 'spawn.h',
-               configuration : spawnh_data)
 
 lib_inc = include_directories('.')
 m4lib_src = [

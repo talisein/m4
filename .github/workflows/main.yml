@@ -120,6 +120,14 @@ jobs:
           C:\msys64\usr\bin\wget.exe http://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.xz
           C:\msys64\usr\bin\tar.exe --strip-components=1 -xvf m4-1.4.19.tar.xz
 
+      - name: msys configure?
+        run: |
+          C:\msys64\usr\bin\sh.exe configure
+
+      - name: msys make?
+        run: |
+          C:\msys64\usr\bin\make.exe
+
       # Runs a set of commands using the runners shell
       - name: Configure
         run: |
