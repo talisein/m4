@@ -109,14 +109,10 @@ struct random_data
 # endif
 #endif
 
-/* The definition of _Noreturn is copied here.  */
-
-/* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
-
-/* The definition of _GL_ARG_NONNULL is copied here.  */
-
-/* The definition of _GL_WARN_ON_USE is copied here.  */
-
+#include "_Noreturn.h"
+#include "c++defs.h"
+#include "arg-nonnull.h"
+#include "warn-on-use.h"
 
 /* Some systems do not define EXIT_*, despite otherwise supporting C89.  */
 #ifndef EXIT_SUCCESS

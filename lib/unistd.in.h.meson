@@ -139,6 +139,10 @@
 /* Get off_t, ssize_t, mode_t.  */
 #include <sys/types.h>
 
+#include "c++defs.h"
+#include "arg-nonnull.h"
+#include "warn-on-use.h"
+
 /* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
 
 /* The definition of _GL_ARG_NONNULL is copied here.  */
