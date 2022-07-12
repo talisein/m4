@@ -1065,7 +1065,7 @@ else
   error('Can\'t figure out how to #include_next')
 endif
 generated_header_data.set('GUARD_PREFIX', 'GL_M4')
-#generated_header_data.merge_from(cdata)
+generated_header_data.merge_from(cdata)
 generated_header_data.set('GNULIB_EXPLICIT_BZERO', 0)
 generated_header_data.set('GNULIB_FFSL', 0)
 generated_header_data.set('GNULIB_FFSLL', 0)
