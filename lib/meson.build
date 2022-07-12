@@ -1065,7 +1065,7 @@ else
   error('Can\'t figure out how to #include_next')
 endif
 generated_header_data.set('GUARD_PREFIX', 'GL_M4')
-generated_header_data.merge_from(cdata)
+#generated_header_data.merge_from(cdata)
 generated_header_data.set('GNULIB_EXPLICIT_BZERO', 0)
 generated_header_data.set('GNULIB_FFSL', 0)
 generated_header_data.set('GNULIB_FFSLL', 0)
@@ -1349,7 +1349,7 @@ generated_header_data.set('REPLACE_STRTOULL', 0)
 generated_header_data.set('REPLACE_UNSETENV', 0)
 generated_header_data.set('REPLACE_WCTOMB', 0)
 
-generated_header_data.set10('GNULIB_ENVIRON', not cdata.has('HAVE_ENVIRON_DECL'))
+generated_header_data.set10('GNULIB_ENVIRON', cdata.get('HAVE_ENVIRON_DECL') == 0)
 generated_header_data.set10('GNULIB_REALLOCARRAY', not cdata.has('HAVE_REALLOCARRAY'))
 generated_header_data.set10('GNULIB_MEMPCPY', not cdata.has('HAVE_MEMPCPY'))
 

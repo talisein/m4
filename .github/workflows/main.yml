@@ -83,7 +83,7 @@ jobs:
       - name: Capture config.h
         uses: actions/upload-artifact@v3
         with:
-          name: config.h
+          name: config-mac.h
           path: _build-mac/lib/*.h
 
       # Runs a set of commands using the runners shell
@@ -134,7 +134,7 @@ jobs:
       - name: Capture config.h
         uses: actions/upload-artifact@v3
         with:
-          name: config.h
+          name: config-win.h
           path: _build-win/lib/*.h
 
       # Runs a set of commands using the runners shell
