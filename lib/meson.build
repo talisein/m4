@@ -1364,15 +1364,14 @@ configure_file(input : 'spawn.in.h.meson',
                configuration : generated_header_data)
 
 # UNISTD.H
-if generated_header_data.get('GNULIB_ENVIRON') == 0
-
+if generated_header_data.get('GNULIB_ENVIRON') == 1
 configure_file(input : 'unistd.in.h.meson',
                output : 'unistd.h',
                configuration : generated_header_data)
 endif
 
 # STDLIB.H
-if generated_header_data.get('HAVE_REALLOCARRAY') == 0
+if generated_header_data.get('GNULIB_REALLOCARRAY') == 1
 configure_file(input : 'stdlib.in.h.meson',
                output : 'stdlib.h',
                configuration : generated_header_data)
@@ -1385,6 +1384,11 @@ configure_file(input : 'sigsegv.in.h',
                copy: true)
 endif
 
+if not cdata.has('HAVE_ALLOCA_H')
+configure_file(input : 'alloca.in.h',
+               output : 'alloca.h',
+               configuration: generated_header_data)
+endif
 
 
 lib_inc = include_directories('.')

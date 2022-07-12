@@ -80,6 +80,12 @@ jobs:
       - name: Configure
         run: CC=gcc-12 CXX=g++-12 meson setup --warnlevel 3 --buildtype release _build-mac
 
+      - name: Capture config.h
+        uses: actions/upload-artifact@v3
+        with:
+          name: config.h
+          path: _build-mac/lib/*.h
+
       # Runs a set of commands using the runners shell
       - name: Compile
         run: ninja -C _build-mac
@@ -92,8 +98,8 @@ jobs:
       - name: Binary
         uses: actions/upload-artifact@v3
         with:
-          name: dregarnuhr-macos
-          path: _build-mac/src/dregarnuhr
+          name: m4
+          path: _build-mac/src/m4
 
   build-win:
     # The type of runner that the job will run on
@@ -125,6 +131,12 @@ jobs:
         run: |
           meson setup --buildtype release _build-win
 
+      - name: Capture config.h
+        uses: actions/upload-artifact@v3
+        with:
+          name: config.h
+          path: _build-win/lib/*.h
+
       # Runs a set of commands using the runners shell
       - name: Compile
         run: ninja -C _build-win
@@ -137,5 +149,5 @@ jobs:
       - name: Binary
         uses: actions/upload-artifact@v3
         with:
-          name: dregarnuhr-win
-          path: _build-win/src/dregarnuhr.exe
+          name: m4
+          path: _build-win/src/m4.exe
