@@ -270,6 +270,8 @@ endif
 
 
 check_types = [
+  ['HAVE_PID_T', 'pid_t', 'sys/types.h'],
+  ['HAVE_UID_T', 'uid_t', 'sys/types.h'],
   ['HAVE_MAX_ALIGN_T', 'max_align_t', 'stddef.h'],
   ['HAVE_INTMAX_T', 'intmax_t', 'stdint.h'],
   ['HAVE_INTTYPES_H_WITH_UINTMAX', 'uintmax_t', 'inttypes.h'],
@@ -1035,11 +1037,15 @@ endif
 if host_machine.system() == 'windows'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
   cdata.set('ssize_t', 'ptrdiff_t')
-  cdata.set('pid_t', 'int')
 else
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
 endif
-
+if not cdata.has('HAVE_PID_T')
+    cdata.set('pid_t', 'int')
+endif
+if not cdata.has('HAVE_UID_T')
+    cdata.set('uid_t', 'int')
+endif
 
 configure_file(input : 'config.h.meson',
   output : 'config.h',
