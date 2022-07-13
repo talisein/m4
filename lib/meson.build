@@ -650,8 +650,6 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token FUNC_REALPATH_WORKS --
 # check token FUNC_UNGETC_BROKEN
 # check token GETTIMEOFDAY_TIMEZONE
-# check token GNULIB_CANONICALIZE
-# check token GNULIB_CANONICALIZE_LGPL
 # check token GNULIB_CLOSE_STREAM
 # check token GNULIB_DIRNAME
 # check token GNULIB_FDOPENDIR
@@ -1012,6 +1010,8 @@ cdata.set('GNULIB_CLOSE_STREAM', 1)
 cdata.set('GNULIB_MBSLEN', 1)
 cdata.set('GNULIB_MBSSTR', 1)
 cdata.set('GNULIB_STRSIGNAL', 1)
+cdata.set('GNULIB_CANONICALIZE', 1)
+cdata.set('GNULIB_CANONICALIZE_LGPL', 1)
 cdata.set('ICONV_CONST', '')
 if cdata.get('HAVE_DECL_EACCESS') == 0
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
@@ -1070,6 +1070,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<sys/wait.h>')
+  generated_header_data.set('NEXT_SYS_TYPES_H', '<sys/types.h>')
   generated_header_data.set('NEXT_STDIO_H', '<stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
 elif cc.compiles('#include <../include/string.h>')
@@ -1079,6 +1080,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<../include/spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../include/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../include/sys/wait.h>')
+  generated_header_data.set('NEXT_SYS_TYPES_H', '<../include/sys/types.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../include/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
@@ -1088,6 +1090,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<../ucrt/spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../ucrt/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../ucrt/sys/wait.h>')
+  generated_header_data.set('NEXT_SYS_TYPES_H', '<../ucrt/sys/types.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../ucrt/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
 else
@@ -1306,7 +1309,6 @@ generated_header_data.set('UNISTD_H_HAVE_WINSOCK2_H_AND_USE_SOCKETS', 0)
 generated_header_data.set('GNULIB_ALIGNED_ALLOC', 0)
 generated_header_data.set('GNULIB_ATOLL', 0)
 generated_header_data.set('GNULIB_CALLOC_POSIX', 0)
-generated_header_data.set('GNULIB_CANONICALIZE_FILE_NAME', 0)
 generated_header_data.set('GNULIB_FREE_POSIX', 0)
 generated_header_data.set('GNULIB_GETLOADAVG', 0)
 generated_header_data.set('GNULIB_GETSUBOPT', 0)
@@ -1477,6 +1479,7 @@ generated_header_data.set10('GNULIB_STRNDUP', not cdata.has('HAVE_STRNDUP'))
 generated_header_data.set10('GNULIB_WAITPID', not cdata.has('HAVE_WAITPID'))
 generated_header_data.set10('GNULIB_RAWMEMCHR', not cdata.has('HAVE_RAWMEMCHR'))
 generated_header_data.set10('GNULIB_SECURE_GETENV', not cdata.has('HAVE_SECURE_GETENV'))
+generated_header_data.set10('GNULIB_CANONICALIZE_FILE_NAME', not cdata.has('HAVE_CANONICALIZE_FILE_NAME'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1528,7 +1531,15 @@ configure_file(input : 'stddef.in.h.meson',
                configuration : generated_header_data)
 endif
 
+# SIGNAL.H
+if not cdata.has('HAVE_SIGSET_T')
+configure_file(input : 'signal.in.h.meson',
+               output : 'signal.h',
+               configuration : generated_header_data)
+endif
+
 sys_wait_src = files('sys_wait.in.h.meson')
+sys_types_src = files('sys_types.in.h.meson')
 cppdefs_src = files('c++defs.h')
 warnonuse_src = files('warn-on-use.h')
 subdir('sys')
@@ -1628,6 +1639,10 @@ endif
 
 if generated_header_data.get('GNULIB_REALLOCARRAY') == 1
 m4lib_src += 'reallocarray.c'
+endif
+
+if not cdata.has('HAVE_SYS_WAIT_H') or not cdata.has('HAVE_SYS_TYPES_H')
+  m4lib_src += sys_files
 endif
 
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
