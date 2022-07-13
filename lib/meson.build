@@ -1035,12 +1035,13 @@ if cdata.get('HAVE_DECL_EACCESS') == 0
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
 endif
 
-c_args = []
+libm4_c_args = []
 if host_machine.system() == 'windows'
-  c_args.append('-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1')
+  libm4_c_args += '-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1'
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
 else
+  libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
 endif
 if not cdata.has('HAVE_SSIZE_T')
@@ -1594,7 +1595,7 @@ subdir('sys')
 
 lib_inc = include_directories('.')
 m4lib_src = [
-  'xalloc.c',
+  'xmalloc.c',
   'xalloc-die.c',
   'filenamecat.c',
   'filenamecat-lgpl.c',
@@ -1605,7 +1606,6 @@ m4lib_src = [
   'xasprintf.c',
   'xvasprintf.c',
   'xprintf.c',
-  'xmalloc.c',
   'progname.c',
   'verror.c',
   'closein.c',
@@ -1615,7 +1615,6 @@ m4lib_src = [
   'quotearg.c',
   'localcharset.c',
   'c-stack.c',
-  'getprogname.c',
   'sigsegv.c',
   'stackvma.c',
   'version-etc.c',
@@ -1709,4 +1708,8 @@ if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
                ]
 endif
 
-m4_lib = static_library(m4lib_src, c_args: '-DGCC_LINT')
+if not cdata.has('HAVE_GETPROGNAME')
+  m4lib_src += 'getprogname.c'
+endif
+
+m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
