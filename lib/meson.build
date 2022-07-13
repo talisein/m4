@@ -1035,6 +1035,7 @@ endif
 if host_machine.system() == 'windows'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
   cdata.set('ssize_t', 'ptrdiff_t')
+  cdata.set('pid_t', 'int')
 else
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
 endif
