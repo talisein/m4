@@ -1691,4 +1691,4 @@ if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
                ]
 endif
 
-m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
+m4_lib = static_library(m4lib_src, c_args: '-DGCC_LINT')
