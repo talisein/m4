@@ -1494,9 +1494,16 @@ generated_header_data.set('GNULIB_SIGPROCMASK', 0)
 generated_header_data.set('HAVE_POSIX_SIGNALBLOCKING', 0)
 generated_header_data.set('REPLACE_PTHREAD_SIGMASK', 0)
 generated_header_data.set('REPLACE_RAISE', 0)
-
+generated_header_data.set('WINDOWS_STAT_INODES', 0)
 generated_header_data.set('ASM_SYMBOL_PREFIX', '')
 
+if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
+struct stat buf;
+int verify_offt_size[sizeof (off_t) >= 8 ? 1 : -1];''')
+generated_header_data.set('WINDOWS_64_BIT_OFF_T', 1)
+else
+generated_header_data.set('WINDOWS_64_BIT_OFF_T', 0)
+endif
 
 
 generated_header_data.set10('GNULIB_ENVIRON', cdata.get('HAVE_ENVIRON_DECL') == 0)
