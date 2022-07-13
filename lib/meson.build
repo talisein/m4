@@ -1026,6 +1026,7 @@ endif
 
 if host_machine.system() == 'windows'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
+  cdata.set('ssize_t', 'ptrdiff_t')
 else
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
 endif
@@ -1669,7 +1670,16 @@ if cdata.get('HAVE_OBSTACK') == 0
 endif
 
 if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
-  m4lib_src += 'regex.c'
+  m4lib_src += ['regcomp.c',
+                'regex.c',
+                'regex_internal.c',
+                'regexec.c',
+                'malloc/dynarray_at_failure.c',
+                'malloc/dynarray_emplace_enlarge.c',
+                'malloc/dynarray_finalize.c',
+                'malloc/dynarray_resize.c',
+                'malloc/dynarray_resize_clear.c',
+               ]
 endif
 
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
