@@ -288,7 +288,6 @@ check_types = [
   ['HAVE_POSIX_SPAWN_FILE_ACTIONS_T', 'posix_spawn_file_actions_t', 'spawn.h'],
   ['HAVE_STRUCT_RANDOM_DATA', 'struct random_data', 'stdlib.h'],
   ['HAVE_SIGHANDLER_T', 'sighandler_t', 'signal.h'],
-  ['HAVE_STRUCT_SIGACTION_SA_SIGACTION', 'struct sigaction', 'signal.h'],
   ['HAVE_TYPE_VOLATILE_SIG_ATOMIC_T', 'sig_atomic_t', 'signal.h'],
 ]
 foreach f : check_types
@@ -300,6 +299,15 @@ foreach f : check_types
   endif
 
 endforeach
+
+if cc.compiles('''#include <signal.h>
+struct sigaction m_sigaction;
+void f(void) { (void)m_sigaction.sa_sigaction; }''', name: 'struct sigaction has sa_sigaction member')
+  cdata.set('HAVE_STRUCT_SIGACTION_SA_SIGACTION', 1)
+  generated_header_data.set10('HAVE_STRUCT_SIGACTION_SA_SIGACTION', true)
+else
+  generated_header_data.set10('HAVE_STRUCT_SIGACTION_SA_SIGACTION', false)
+endif
 
 check_declarations = [
   ['HAVE_DECL_GETDELIM', 'getdelim', 'stdio.h'],
@@ -1481,7 +1489,6 @@ generated_header_data.set('REPLACE_VSPRINTF', 0)
 generated_header_data.set('REPLACE_NULL', 0)
 generated_header_data.set('GNULIB_PTHREAD_SIGMASK', 0)
 generated_header_data.set('GNULIB_RAISE', 0)
-generated_header_data.set('GNULIB_SIGACTION', 0)
 generated_header_data.set('GNULIB_SIGNAL_H_SIGPIPE', 0)
 generated_header_data.set('GNULIB_SIGPROCMASK', 0)
 generated_header_data.set('HAVE_POSIX_SIGNALBLOCKING', 0)
@@ -1500,6 +1507,7 @@ generated_header_data.set10('GNULIB_WAITPID', not cdata.has('HAVE_WAITPID'))
 generated_header_data.set10('GNULIB_RAWMEMCHR', not cdata.has('HAVE_RAWMEMCHR'))
 generated_header_data.set10('GNULIB_SECURE_GETENV', not cdata.has('HAVE_SECURE_GETENV'))
 generated_header_data.set10('GNULIB_CANONICALIZE_FILE_NAME', not cdata.has('HAVE_CANONICALIZE_FILE_NAME'))
+generated_header_data.set10('GNULIB_SIGACTION', not cdata.has('HAVE_SIGACTION'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1669,16 +1677,17 @@ if cdata.get('HAVE_OBSTACK') == 0
   m4lib_src += 'obstack.c'
 endif
 
+if generated_header_data.get('GNULIB_SIGACTION') == 1
+  m4lib_src += 'sigaction.c'
+endif
+
 if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
-  m4lib_src += ['regcomp.c',
-                'regex.c',
-                'regex_internal.c',
-                'regexec.c',
-                'malloc/dynarray_at_failure.c',
-                'malloc/dynarray_emplace_enlarge.c',
-                'malloc/dynarray_finalize.c',
+  m4lib_src += ['regex.c',
+#                'malloc/dynarray_at_failure.c',
+#                'malloc/dynarray_emplace_enlarge.c',
+#                'malloc/dynarray_finalize.c',
                 'malloc/dynarray_resize.c',
-                'malloc/dynarray_resize_clear.c',
+#                'malloc/dynarray_resize_clear.c',
                ]
 endif
 
