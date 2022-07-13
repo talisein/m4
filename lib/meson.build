@@ -270,6 +270,7 @@ endif
 
 
 check_types = [
+  ['HAVE_SSIZE_T', 'ssize_t', 'sys/types.h'],
   ['HAVE_PID_T', 'pid_t', 'sys/types.h'],
   ['HAVE_UID_T', 'uid_t', 'sys/types.h'],
   ['HAVE_MAX_ALIGN_T', 'max_align_t', 'stddef.h'],
@@ -1034,11 +1035,16 @@ if cdata.get('HAVE_DECL_EACCESS') == 0
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
 endif
 
+c_args = []
 if host_machine.system() == 'windows'
+  c_args.append('-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1')
+  cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
-  cdata.set('ssize_t', 'ptrdiff_t')
 else
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
+endif
+if not cdata.has('HAVE_SSIZE_T')
+  cdata.set('ssize_t', 'ptrdiff_t')
 endif
 if not cdata.has('HAVE_PID_T')
     cdata.set('pid_t', 'int')
@@ -1655,6 +1661,8 @@ m4lib_src = [
 ]
 
 if host_machine.system() == 'windows'
+  m4lib_src += ['windows-spawn.c',
+                'msvc-nothrow.c']
 else
 m4lib_src += 'spawn_faction_addchdir.c'
 endif
@@ -1697,11 +1705,7 @@ endif
 
 if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
   m4lib_src += ['regex.c',
-#                'malloc/dynarray_at_failure.c',
-#                'malloc/dynarray_emplace_enlarge.c',
-#                'malloc/dynarray_finalize.c',
                 'malloc/dynarray_resize.c',
-#                'malloc/dynarray_resize_clear.c',
                ]
 endif
 
