@@ -269,6 +269,7 @@ endif
 
 
 check_types = [
+  ['HAVE_MAX_ALIGN_T', 'max_align_t', 'stddef.h'],
   ['HAVE_INTMAX_T', 'intmax_t', 'stdint.h'],
   ['HAVE_INTTYPES_H_WITH_UINTMAX', 'uintmax_t', 'inttypes.h'],
   ['HAVE_PTHREAD_T', 'pthread_t', 'pthread.h'],
@@ -297,6 +298,10 @@ foreach f : check_types
 endforeach
 
 check_declarations = [
+  ['HAVE_DECL_GETDELIM', 'getdelim', 'stdio.h'],
+  ['HAVE_DECL_GETLINE', 'getline', 'stdio.h'],
+  ['HAVE_DECL_OBSTACK_PRINTF', 'obstack_printf', 'stdio.h'],
+  ['HAVE_DECL_VSNPRINTF', 'vsnprintf', 'stdio.h'],
   ['HAVE_DECL_EACCESS', 'eaccess', 'unistd.h'],
   ['HAVE_DECL_GETLOADAVG', 'getloadavg', 'stdlib.h'],
   ['HAVE_DECL_INITSTATE', 'initstate', 'stdlib.h'],
@@ -385,6 +390,11 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_DPRINTF', 'dprintf', '#include<stdio.h>'],
+  ['HAVE_PCLOSE', 'pclose', '#include<stdio.h>'],
+  ['HAVE_POPEN', 'popen', '#include<stdio.h>'],
+  ['HAVE_RENAMEAT', 'renameat', '#include<stdio.h>'],
+  ['HAVE_VDPRINTF', 'vdprintf', '#include<stdio.h>'],
   ['HAVE_ERROR_AT_LINE', 'error_at_line', '#include<error.h>'],
   ['HAVE_WAITPID', 'waitpid', '#include<sys/wait.h>'],
   ['HAVE_ALIGNED_ALLOC', 'aligned_alloc', '#include<stdlib.h>'],
@@ -1060,6 +1070,8 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<sys/wait.h>')
+  generated_header_data.set('NEXT_STDIO_H', '<stdio.h>')
+  generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -1067,6 +1079,8 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<../include/spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../include/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../include/sys/wait.h>')
+  generated_header_data.set('NEXT_STDIO_H', '<../include/stdio.h>')
+  generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -1074,6 +1088,8 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<../ucrt/spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../ucrt/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../ucrt/sys/wait.h>')
+  generated_header_data.set('NEXT_STDIO_H', '<../ucrt/stdio.h>')
+  generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1358,6 +1374,100 @@ generated_header_data.set('REPLACE_STRTOUL', 0)
 generated_header_data.set('REPLACE_STRTOULL', 0)
 generated_header_data.set('REPLACE_UNSETENV', 0)
 generated_header_data.set('REPLACE_WCTOMB', 0)
+generated_header_data.set('GNULIB_DPRINTF', 0)
+generated_header_data.set('GNULIB_FCLOSE', 0)
+generated_header_data.set('GNULIB_FDOPEN', 0)
+generated_header_data.set('GNULIB_FFLUSH', 0)
+generated_header_data.set('GNULIB_FGETC', 0)
+generated_header_data.set('GNULIB_FGETS', 0)
+generated_header_data.set('GNULIB_FOPEN', 0)
+generated_header_data.set('GNULIB_FPRINTF', 0)
+generated_header_data.set('GNULIB_FPRINTF_POSIX', 0)
+generated_header_data.set('GNULIB_FPURGE', 0)
+generated_header_data.set('GNULIB_FPUTC', 0)
+generated_header_data.set('GNULIB_FPUTS', 0)
+generated_header_data.set('GNULIB_FREAD', 0)
+generated_header_data.set('GNULIB_FREOPEN', 0)
+generated_header_data.set('GNULIB_FSCANF', 0)
+generated_header_data.set('GNULIB_FSEEK', 0)
+generated_header_data.set('GNULIB_FSEEKO', 0)
+generated_header_data.set('GNULIB_FTELL', 0)
+generated_header_data.set('GNULIB_FTELLO', 0)
+generated_header_data.set('GNULIB_FWRITE', 0)
+generated_header_data.set('GNULIB_GETC', 0)
+generated_header_data.set('GNULIB_GETCHAR', 0)
+generated_header_data.set('GNULIB_GETDELIM', 0)
+generated_header_data.set('GNULIB_GETLINE', 0)
+generated_header_data.set('GNULIB_MDA_FCLOSEALL', 0)
+generated_header_data.set('GNULIB_MDA_FDOPEN', 0)
+generated_header_data.set('GNULIB_MDA_FILENO', 0)
+generated_header_data.set('GNULIB_MDA_GETW', 0)
+generated_header_data.set('GNULIB_MDA_PUTW', 0)
+generated_header_data.set('GNULIB_MDA_TEMPNAM', 0)
+generated_header_data.set('GNULIB_OBSTACK_PRINTF', 0)
+generated_header_data.set('GNULIB_OBSTACK_PRINTF_POSIX', 0)
+generated_header_data.set('GNULIB_PCLOSE', 0)
+generated_header_data.set('GNULIB_PERROR', 0)
+generated_header_data.set('GNULIB_POPEN', 0)
+generated_header_data.set('GNULIB_PRINTF', 0)
+generated_header_data.set('GNULIB_PRINTF_POSIX', 0)
+generated_header_data.set('GNULIB_PUTC', 0)
+generated_header_data.set('GNULIB_PUTCHAR', 0)
+generated_header_data.set('GNULIB_PUTS', 0)
+generated_header_data.set('GNULIB_REMOVE', 0)
+generated_header_data.set('GNULIB_RENAME', 0)
+generated_header_data.set('GNULIB_RENAMEAT', 0)
+generated_header_data.set('GNULIB_SCANF', 0)
+generated_header_data.set('GNULIB_SNPRINTF', 0)
+generated_header_data.set('GNULIB_SPRINTF_POSIX', 0)
+generated_header_data.set('GNULIB_STDIO_H_NONBLOCKING', 0)
+generated_header_data.set('GNULIB_STDIO_H_SIGPIPE', 0)
+generated_header_data.set('GNULIB_TMPFILE', 0)
+generated_header_data.set('GNULIB_VASPRINTF', 0)
+generated_header_data.set('GNULIB_VDPRINTF', 0)
+generated_header_data.set('GNULIB_VFPRINTF', 0)
+generated_header_data.set('GNULIB_VFPRINTF_POSIX', 0)
+generated_header_data.set('GNULIB_VFSCANF', 0)
+generated_header_data.set('GNULIB_VPRINTF', 0)
+generated_header_data.set('GNULIB_VPRINTF_POSIX', 0)
+generated_header_data.set('GNULIB_VSCANF', 0)
+generated_header_data.set('GNULIB_VSNPRINTF', 0)
+generated_header_data.set('GNULIB_VSPRINTF_POSIX', 0)
+generated_header_data.set('REPLACE_DPRINTF', 0)
+generated_header_data.set('REPLACE_FCLOSE', 0)
+generated_header_data.set('REPLACE_FDOPEN', 0)
+generated_header_data.set('REPLACE_FFLUSH', 0)
+generated_header_data.set('REPLACE_FOPEN', 0)
+generated_header_data.set('REPLACE_FPRINTF', 0)
+generated_header_data.set('REPLACE_FPURGE', 0)
+generated_header_data.set('REPLACE_FREOPEN', 0)
+generated_header_data.set('REPLACE_FSEEK', 0)
+generated_header_data.set('REPLACE_FSEEKO', 0)
+generated_header_data.set('REPLACE_FTELL', 0)
+generated_header_data.set('REPLACE_FTELLO', 0)
+generated_header_data.set('REPLACE_GETDELIM', 0)
+generated_header_data.set('REPLACE_GETLINE', 0)
+generated_header_data.set('REPLACE_OBSTACK_PRINTF', 0)
+generated_header_data.set('REPLACE_PERROR', 0)
+generated_header_data.set('REPLACE_POPEN', 0)
+generated_header_data.set('REPLACE_PRINTF', 0)
+generated_header_data.set('REPLACE_REMOVE', 0)
+generated_header_data.set('REPLACE_RENAME', 0)
+generated_header_data.set('REPLACE_RENAMEAT', 0)
+generated_header_data.set('REPLACE_SNPRINTF', 0)
+generated_header_data.set('REPLACE_SPRINTF', 0)
+generated_header_data.set('REPLACE_STDIO_READ_FUNCS', 0)
+generated_header_data.set('REPLACE_STDIO_WRITE_FUNCS', 0)
+generated_header_data.set('REPLACE_TMPFILE', 0)
+generated_header_data.set('REPLACE_VASPRINTF', 0)
+generated_header_data.set('REPLACE_VDPRINTF', 0)
+generated_header_data.set('REPLACE_VFPRINTF', 0)
+generated_header_data.set('REPLACE_VPRINTF', 0)
+generated_header_data.set('REPLACE_VSNPRINTF', 0)
+generated_header_data.set('REPLACE_VSPRINTF', 0)
+generated_header_data.set('ASM_SYMBOL_PREFIX', '')
+
+
 
 generated_header_data.set10('GNULIB_ENVIRON', cdata.get('HAVE_ENVIRON_DECL') == 0)
 generated_header_data.set10('GNULIB_REALLOCARRAY', not cdata.has('HAVE_REALLOCARRAY'))
@@ -1370,6 +1480,11 @@ generated_header_data.set10('GNULIB_SECURE_GETENV', not cdata.has('HAVE_SECURE_G
 # STRING.H
 configure_file(input : 'string.in.h.meson',
                output : 'string.h',
+               configuration : generated_header_data)
+
+# STDIO.H
+configure_file(input : 'stdio.in.h.meson',
+               output : 'stdio.h',
                configuration : generated_header_data)
 
 # SPAWN.H
@@ -1405,7 +1520,16 @@ configure_file(input : 'alloca.in.h',
                configuration: generated_header_data)
 endif
 
+# STDIO.H
+if not cdata.has('HAVE_MAX_ALIGN_T')
+configure_file(input : 'stddef.in.h.meson',
+               output : 'stddef.h',
+               configuration : generated_header_data)
+endif
+
 sys_wait_src = files('sys_wait.in.h.meson')
+cppdefs_src = files('c++defs.h')
+warnonuse_src = files('warn-on-use.h')
 subdir('sys')
 
 lib_inc = include_directories('.')
