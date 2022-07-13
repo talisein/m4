@@ -1465,6 +1465,7 @@ generated_header_data.set('REPLACE_VFPRINTF', 0)
 generated_header_data.set('REPLACE_VPRINTF', 0)
 generated_header_data.set('REPLACE_VSNPRINTF', 0)
 generated_header_data.set('REPLACE_VSPRINTF', 0)
+generated_header_data.set('REPLACE_NULL', 0)
 generated_header_data.set('ASM_SYMBOL_PREFIX', '')
 
 
