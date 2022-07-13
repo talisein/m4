@@ -1098,7 +1098,6 @@ generated_header_data.set('GNULIB_STRERROR', 0)
 generated_header_data.set('GNULIB_STRERRORNAME_NP', 0)
 generated_header_data.set('GNULIB_STRERROR_R', 0)
 generated_header_data.set('GNULIB_STRNCAT', 0)
-generated_header_data.set('GNULIB_STRNDUP', 0)
 generated_header_data.set('GNULIB_STRNLEN', 0)
 generated_header_data.set('GNULIB_STRPBRK', 0)
 generated_header_data.set('GNULIB_STRSEP', 0)
@@ -1352,6 +1351,7 @@ generated_header_data.set('REPLACE_WCTOMB', 0)
 generated_header_data.set10('GNULIB_ENVIRON', cdata.get('HAVE_ENVIRON_DECL') == 0)
 generated_header_data.set10('GNULIB_REALLOCARRAY', not cdata.has('HAVE_REALLOCARRAY'))
 generated_header_data.set10('GNULIB_MEMPCPY', not cdata.has('HAVE_MEMPCPY'))
+generated_header_data.set10('GNULIB_STRNDUP', not cdata.has('HAVE_STRNDUP'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1428,9 +1428,6 @@ m4lib_src = [
   'mbslen.c',
   'striconv.c',
   'malloca.c',
-  'mkstemp-safer.c',
-  'fd-safer.c',
-  'dup-safer.c',
   'execute.c',
   'spawn_faction_addchdir.c',
   'findprog-in.c',
@@ -1448,7 +1445,6 @@ m4lib_src = [
   'hash.c',
   'hash-pjw.c',
   'spawn-pipe.c',
-  'pipe-safer.c',
   'memchr2.c',
   'clean-temp.c',
   'clean-temp-simple.c',
@@ -1458,5 +1454,17 @@ m4lib_src = [
   'asyncsafe-spin.c',
   'gl_linkedhash_list.c',
   'gl_avltree_oset.c'
-  ]
+]
+
+if generated_header_data.get('GNULIB_STRNDUP') == 1
+m4lib_src += 'strndup.c'
+endif
+
+if generated_header_data.get('GNULIB_ENVIRON') == 0 and false
+m4lib_src += 'mkstemp-safer.c'
+m4lib_src += 'fd-safer.c'
+m4lib_src += 'dup-safer.c'
+m4lib_src += 'pipe-safer.c'
+endif
+
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
