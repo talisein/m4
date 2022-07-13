@@ -84,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: config-mac.h
-          path: _build-mac/lib/*.h
+          path: _build-mac/lib/**/*.h
 
       # Runs a set of commands using the runners shell
       - name: Compile
@@ -135,7 +135,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: config-win.h
-          path: _build-win/lib/*.h
+          path: _build-win/lib/**/*.h
 
       # Runs a set of commands using the runners shell
       - name: Compile

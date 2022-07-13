@@ -167,6 +167,7 @@ check_headers = [
   'ws2tcpip.h',
   'xlocale.h',
   'random.h',
+  'error.h',
 ]
 
 have_header_args = []
@@ -384,6 +385,7 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_ERROR_AT_LINE', 'error_at_line', '#include<error.h>'],
   ['HAVE_WAITPID', 'waitpid', '#include<sys/wait.h>'],
   ['HAVE_ALIGNED_ALLOC', 'aligned_alloc', '#include<stdlib.h>'],
   ['HAVE_ATOLL', 'atoll', '#include<stdlib.h>'],
@@ -1493,6 +1495,14 @@ endif
 
 if not cdata.has('HAVE_SECURE_GETENV')
 m4lib_src += 'secure_getenv.c'
+endif
+
+if not cdata.has('HAVE_ERROR_AT_LINE')
+m4lib_src += 'error.c'
+endif
+
+if generated_header_data.get('GNULIB_REALLOCARRAY') == 1
+m4lib_src += 'reallocarray.c'
 endif
 
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')

@@ -34,8 +34,8 @@
 #include <sys/types.h>
 
 
-#include "c++defs.h"
-#include "warn-on-use.h"
+#include "../c++defs.h"
+#include "../warn-on-use.h"
 
 /* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
 
