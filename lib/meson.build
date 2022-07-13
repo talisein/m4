@@ -384,6 +384,7 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_WAITPID', 'waitpid', '#include<sys/wait.h>'],
   ['HAVE_ALIGNED_ALLOC', 'aligned_alloc', '#include<stdlib.h>'],
   ['HAVE_ATOLL', 'atoll', '#include<stdlib.h>'],
   ['HAVE_GETSUBOPT', 'getsubopt', '#include<stdlib.h>'],
@@ -999,11 +1000,18 @@ cdata.set('GNULIB_CLOSE_STREAM', 1)
 cdata.set('GNULIB_MBSLEN', 1)
 cdata.set('GNULIB_MBSSTR', 1)
 cdata.set('GNULIB_STRSIGNAL', 1)
-cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
 cdata.set('ICONV_CONST', '')
 if not cdata.has('HAVE_DECL_EACCESS')
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
 endif
+
+if host_machine.system() == 'windows'
+  cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
+else
+  cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
+endif
+
+
 configure_file(input : 'config.h.meson',
   output : 'config.h',
   configuration : cdata)
@@ -1049,18 +1057,21 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_UNISTD_H', '<unistd.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<stdlib.h>')
+  generated_header_data.set('NEXT_SYS_WAIT_H', '<sys/wait.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
   generated_header_data.set('NEXT_UNISTD_H', '<../include/unistd.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<../include/spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../include/stdlib.h>')
+  generated_header_data.set('NEXT_SYS_WAIT_H', '<../include/sys/wait.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
   generated_header_data.set('NEXT_UNISTD_H', '<../ucrt/unistd.h>')
   generated_header_data.set('NEXT_SPAWN_H', '<../ucrt/spawn.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../ucrt/stdlib.h>')
+  generated_header_data.set('NEXT_SYS_WAIT_H', '<../ucrt/sys/wait.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1352,6 +1363,7 @@ generated_header_data.set10('GNULIB_ENVIRON', cdata.get('HAVE_ENVIRON_DECL') == 
 generated_header_data.set10('GNULIB_REALLOCARRAY', not cdata.has('HAVE_REALLOCARRAY'))
 generated_header_data.set10('GNULIB_MEMPCPY', not cdata.has('HAVE_MEMPCPY'))
 generated_header_data.set10('GNULIB_STRNDUP', not cdata.has('HAVE_STRNDUP'))
+generated_header_data.set10('GNULIB_WAITPID', not cdata.has('HAVE_WAITPID'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1384,12 +1396,19 @@ configure_file(input : 'sigsegv.in.h',
                copy: true)
 endif
 
+# ALLOCA.H
 if not cdata.has('HAVE_ALLOCA_H')
 configure_file(input : 'alloca.in.h',
                output : 'alloca.h',
                configuration: generated_header_data)
 endif
 
+# SYS/WAIT.H
+if not cdata.has('HAVE_SYS_WAIT_H')
+configure_file(input : 'sys_wait.in.h.meson',
+               output : 'sys/wait.h',
+               configuration: generated_header_data)
+endif
 
 lib_inc = include_directories('.')
 m4lib_src = [
@@ -1429,7 +1448,6 @@ m4lib_src = [
   'striconv.c',
   'malloca.c',
   'execute.c',
-  'spawn_faction_addchdir.c',
   'findprog-in.c',
   'canonicalize.c',
   'canonicalize-lgpl.c',
@@ -1453,18 +1471,20 @@ m4lib_src = [
   'tmpdir.c',
   'asyncsafe-spin.c',
   'gl_linkedhash_list.c',
-  'gl_avltree_oset.c'
+  'gl_avltree_oset.c',
+  'mkstemp-safer.c',
+  'fd-safer.c',
+  'dup-safer.c',
+  'pipe-safer.c',
 ]
+
+if host_machine.system() == 'windows'
+else
+m4lib_src += 'spawn_faction_addchdir.c'
+endif
 
 if generated_header_data.get('GNULIB_STRNDUP') == 1
 m4lib_src += 'strndup.c'
-endif
-
-if generated_header_data.get('GNULIB_ENVIRON') == 0 and false
-m4lib_src += 'mkstemp-safer.c'
-m4lib_src += 'fd-safer.c'
-m4lib_src += 'dup-safer.c'
-m4lib_src += 'pipe-safer.c'
 endif
 
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
