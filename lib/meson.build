@@ -168,6 +168,7 @@ check_headers = [
   'xlocale.h',
   'random.h',
   'error.h',
+  'regex.h',
 ]
 
 have_header_args = []
@@ -286,6 +287,9 @@ check_types = [
   ['HAVE_POSIX_SPAWNATTR_T', 'posix_spawnattr_t', 'spawn.h'],
   ['HAVE_POSIX_SPAWN_FILE_ACTIONS_T', 'posix_spawn_file_actions_t', 'spawn.h'],
   ['HAVE_STRUCT_RANDOM_DATA', 'struct random_data', 'stdlib.h'],
+  ['HAVE_SIGHANDLER_T', 'sighandler_t', 'signal.h'],
+  ['HAVE_STRUCT_SIGACTION_SA_SIGACTION', 'struct sigaction', 'signal.h'],
+  ['HAVE_TYPE_VOLATILE_SIG_ATOMIC_T', 'sig_atomic_t', 'signal.h'],
 ]
 foreach f : check_types
   if cc.has_type(f.get(1), prefix: '#include <@0@>'.format(f.get(2)), args:  extension_args)
@@ -383,6 +387,7 @@ check_declarations = [
   ['HAVE_MAP_ANONYMOUS', 'MAP_ANONYMOUS', 'sys/mman.h'],
   ['HAVE_PTHREAD_MUTEX_RECURSIVE', 'PTHREAD_MUTEX_RECURSIVE', 'pthread.h'],
   ['HAVE_VAR___PROGNAME', '__progname', 'stdlib.h'],
+  ['HAVE_OBSTACK', 'obstack_init', 'obstack.h'], # it's a define
 ]
 
 foreach f : check_declarations
@@ -390,6 +395,9 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_RE_COMPILE_PATTERN', 're_compile_pattern', '#include<regex.h>'],
+  ['HAVE_RE_SEARCH', 're_search', '#include<regex.h>'],
+  ['HAVE_RE_SET_REGISTERS', 're_set_registers', '#include<regex.h>'],
   ['HAVE_DPRINTF', 'dprintf', '#include<stdio.h>'],
   ['HAVE_PCLOSE', 'pclose', '#include<stdio.h>'],
   ['HAVE_POPEN', 'popen', '#include<stdio.h>'],
@@ -531,7 +539,6 @@ check_functions = [
   ['HAVE_MSVC_INVALID_PARAMETER_HANDLER', '_set_invalid_parameter_handler', '#include<stdlib.h>'],
   ['HAVE_NEWLOCALE', 'newlocale', '#include<locale.h>'],
   ['HAVE_NL_LANGINFO', 'nl_langinfo', '#include<langinfo.h>'],
-  ['HAVE_OBSTACK', 'obstack_init', '#include<obstack.h>'],
   ['HAVE_OPENAT', 'openat', '#include<fcntl.h>'],
   ['HAVE_OPENDIR', 'opendir', '#include<dirent.h>'],
   ['HAVE_PIPE', 'pipe', '#include<unistd.h>'],
@@ -1073,6 +1080,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<sys/types.h>')
   generated_header_data.set('NEXT_STDIO_H', '<stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
+  generated_header_data.set('NEXT_SIGNAL_H', '<signal.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -1083,6 +1091,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<../include/sys/types.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../include/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
+  generated_header_data.set('NEXT_SIGNAL_H', '<../include/signal.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -1093,6 +1102,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<../ucrt/sys/types.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../ucrt/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
+  generated_header_data.set('NEXT_SIGNAL_H', '<../ucrt/signal.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1468,6 +1478,15 @@ generated_header_data.set('REPLACE_VPRINTF', 0)
 generated_header_data.set('REPLACE_VSNPRINTF', 0)
 generated_header_data.set('REPLACE_VSPRINTF', 0)
 generated_header_data.set('REPLACE_NULL', 0)
+generated_header_data.set('GNULIB_PTHREAD_SIGMASK', 0)
+generated_header_data.set('GNULIB_RAISE', 0)
+generated_header_data.set('GNULIB_SIGACTION', 0)
+generated_header_data.set('GNULIB_SIGNAL_H_SIGPIPE', 0)
+generated_header_data.set('GNULIB_SIGPROCMASK', 0)
+generated_header_data.set('HAVE_POSIX_SIGNALBLOCKING', 0)
+generated_header_data.set('REPLACE_PTHREAD_SIGMASK', 0)
+generated_header_data.set('REPLACE_RAISE', 0)
+
 generated_header_data.set('ASM_SYMBOL_PREFIX', '')
 
 
@@ -1643,6 +1662,14 @@ endif
 
 if not cdata.has('HAVE_SYS_WAIT_H') or not cdata.has('HAVE_SYS_TYPES_H')
   m4lib_src += sys_files
+endif
+
+if cdata.get('HAVE_OBSTACK') == 0
+  m4lib_src += 'obstack.c'
+endif
+
+if not cdata.get('HAVE_REGEX_H') or not cdata.get('HAVE_RE_COMPILE_PATTERN')
+  m4lib_src += 'regex.c'
 endif
 
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
