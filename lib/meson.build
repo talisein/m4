@@ -1001,7 +1001,7 @@ cdata.set('GNULIB_MBSLEN', 1)
 cdata.set('GNULIB_MBSSTR', 1)
 cdata.set('GNULIB_STRSIGNAL', 1)
 cdata.set('ICONV_CONST', '')
-if not cdata.has('HAVE_DECL_EACCESS')
+if cdata.get('HAVE_DECL_EACCESS') == 0
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
 endif
 
@@ -1097,7 +1097,6 @@ generated_header_data.set('GNULIB_MDA_STRDUP', 0)
 generated_header_data.set('GNULIB_MEMCHR', 0)
 generated_header_data.set('GNULIB_MEMMEM', 0)
 generated_header_data.set('GNULIB_MEMRCHR', 0)
-generated_header_data.set('GNULIB_RAWMEMCHR', 0)
 generated_header_data.set('GNULIB_SIGABBREV_NP', 0)
 generated_header_data.set('GNULIB_SIGDESCR_NP', 0)
 generated_header_data.set('GNULIB_STPCPY', 0)
@@ -1317,7 +1316,6 @@ generated_header_data.set('GNULIB_RANDOM_R', 0)
 generated_header_data.set('GNULIB_REALLOC_POSIX', 0)
 generated_header_data.set('GNULIB_REALPATH', 0)
 generated_header_data.set('GNULIB_RPMATCH', 0)
-generated_header_data.set('GNULIB_SECURE_GETENV', 0)
 generated_header_data.set('GNULIB_SETENV', 0)
 generated_header_data.set('GNULIB_STRTOD', 0)
 generated_header_data.set('GNULIB_STRTOL', 0)
@@ -1364,6 +1362,8 @@ generated_header_data.set10('GNULIB_REALLOCARRAY', not cdata.has('HAVE_REALLOCAR
 generated_header_data.set10('GNULIB_MEMPCPY', not cdata.has('HAVE_MEMPCPY'))
 generated_header_data.set10('GNULIB_STRNDUP', not cdata.has('HAVE_STRNDUP'))
 generated_header_data.set10('GNULIB_WAITPID', not cdata.has('HAVE_WAITPID'))
+generated_header_data.set10('GNULIB_RAWMEMCHR', not cdata.has('HAVE_RAWMEMCHR'))
+generated_header_data.set10('GNULIB_SECURE_GETENV', not cdata.has('HAVE_SECURE_GETENV'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1403,12 +1403,8 @@ configure_file(input : 'alloca.in.h',
                configuration: generated_header_data)
 endif
 
-# SYS/WAIT.H
-if not cdata.has('HAVE_SYS_WAIT_H')
-configure_file(input : 'sys_wait.in.h.meson',
-               output : 'sys/wait.h',
-               configuration: generated_header_data)
-endif
+sys_wait_src = files('sys_wait.in.h.meson')
+subdir('sys')
 
 lib_inc = include_directories('.')
 m4lib_src = [
@@ -1485,6 +1481,18 @@ endif
 
 if generated_header_data.get('GNULIB_STRNDUP') == 1
 m4lib_src += 'strndup.c'
+endif
+
+if cdata.get('HAVE_DECL___FPENDING') == 0
+m4lib_src += 'fpending.c'
+endif
+
+if not cdata.has('HAVE_RAWMEMCHR')
+m4lib_src += 'rawmemchr.c'
+endif
+
+if not cdata.has('HAVE_SECURE_GETENV')
+m4lib_src += 'secure_getenv.c'
 endif
 
 m4_lib = library(m4lib_src, c_args: '-DGCC_LINT')
