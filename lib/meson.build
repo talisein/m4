@@ -1668,7 +1668,7 @@ if cdata.get('HAVE_OBSTACK') == 0
   m4lib_src += 'obstack.c'
 endif
 
-if not cdata.get('HAVE_REGEX_H') or not cdata.get('HAVE_RE_COMPILE_PATTERN')
+if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
   m4lib_src += 'regex.c'
 endif
 
