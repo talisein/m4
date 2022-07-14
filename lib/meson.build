@@ -1476,7 +1476,7 @@ configure_file(input : 'fcntl.in.h.meson',
 endif
 
 # LANGINFO.H
-if cdata.get('HAVE_LANGINFO_H') == 0
+if cdata.has('HAVE_LANGINFO_H')
 configure_file(input : 'langinfo.in.h.meson',
                output : 'langinfo.h',
                configuration : generated_header_data)
