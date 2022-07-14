@@ -17,6 +17,6 @@ m4_src = [
 
 
 executable('m4', m4_src,
+           dependencies: m4_dep
            include_directories : lib_inc,
-           c_args: libm4_c_args,
            link_with: m4_lib)
