@@ -1388,8 +1388,19 @@ generated_header_data.set('REPLACE_FCNTL', 0)
 generated_header_data.set('REPLACE_OPEN', 0)
 generated_header_data.set('REPLACE_OPENAT', 0)
 generated_header_data.set('REPLACE_NL_LANGINFO', 0)
-
-
+generated_header_data.set('GNULIB_DUPLOCALE', 0)
+generated_header_data.set('GNULIB_FREELOCALE', 0)
+generated_header_data.set('GNULIB_LOCALECONV', 0)
+generated_header_data.set('GNULIB_LOCALENAME', 0)
+generated_header_data.set('GNULIB_NEWLOCALE', 0)
+generated_header_data.set('GNULIB_SETLOCALE', 0)
+generated_header_data.set('LOCALENAME_ENHANCE_LOCALE_FUNCS', 0)
+generated_header_data.set('REPLACE_DUPLOCALE', 0)
+generated_header_data.set('REPLACE_FREELOCALE', 0)
+generated_header_data.set('REPLACE_LOCALECONV', 0)
+generated_header_data.set('REPLACE_NEWLOCALE', 0)
+generated_header_data.set('REPLACE_SETLOCALE', 0)
+generated_header_data.set('REPLACE_STRUCT_LCONV', 0)
 
 
 if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
