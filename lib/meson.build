@@ -1665,7 +1665,10 @@ configure_file(input : 'wchar.in.h.meson',
                configuration : generated_header_data)
 configure_file(input : 'uniwidth.in.h',
                output : 'uniwidth.h',
-               configuration : generated_header_data)
+               copy: true)
+configure_file(input : 'unitypes.in.h',
+               output : 'unitypes.h',
+               copy: true)
 endif
 sys_wait_src = files('sys_wait.in.h.meson')
 sys_types_src = files('sys_types.in.h.meson')
