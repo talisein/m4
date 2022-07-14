@@ -937,7 +937,8 @@ if host_machine.system() == 'windows'
   libm4_c_args += '-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-DSPAWN_PIPE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-D_Restrict_arr_'
-  libm4_c_args += '-D_GL_ARG_NONNULL(params)'
+  nononnull_file = files('nononnull.h')
+  libm4_c_args += '/FI ' + nonnonnull_file
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
 else
@@ -1736,6 +1737,8 @@ m4lib_src = [
   'xstrndup.c',
   'xvasprintf.c',
 ]
+cc.get_define('__GNUC__')
+cc.get_define('__clang__')
 
 if host_machine.system() == 'windows'
   m4lib_src += ['windows-spawn.c',
