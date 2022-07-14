@@ -965,6 +965,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<signal.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<fcntl.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<langinfo.h>')
+  generated_header_data.set('NEXT_LOCALE_H', '<locale.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -978,6 +979,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../include/signal.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<../include/fcntl.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<../include/langinfo.h>')
+  generated_header_data.set('NEXT_LOCALE_H', '<../include/locale.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -991,6 +993,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../ucrt/signal.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<../ucrt/fcntl.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<../ucrt/langinfo.h>')
+  generated_header_data.set('NEXT_LOCALE_H', '<../ucrt/locale.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1410,6 +1413,7 @@ generated_header_data.set10('GNULIB_SIGACTION', not cdata.has('HAVE_SIGACTION'))
 generated_header_data.set10('GNULIB_SIGPROCMASK', not cdata.has('HAVE_SIGPROCMASK'))
 generated_header_data.set10('GNULIB_REALPATH', not cdata.has('HAVE_REALPATH'))
 generated_header_data.set10('GNULIB_NL_LANGINFO', not cdata.has('HAVE_NL_LANGINFO'))
+generated_header_data.set10('GNULIB_SETLOCALE_NULL', not cdata.has('HAVE_NL_LANGINFO'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1479,6 +1483,13 @@ endif
 if not cdata.has('HAVE_LANGINFO_H')
 configure_file(input : 'langinfo.in.h.meson',
                output : 'langinfo.h',
+               configuration : generated_header_data)
+endif
+
+# LOCALE.H
+if generated_header_data.get('GNULIB_SETLOCALE_NULL') == 1
+configure_file(input : 'locale.in.h.meson',
+               output : 'locale.h',
                configuration : generated_header_data)
 endif
 
