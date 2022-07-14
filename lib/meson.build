@@ -108,6 +108,8 @@ if  host_machine.cpu_family() == 'sparc64'
   cdata.set('__sparc64__', 1)
 endif
 
+cc.get_define('__GNUC__')
+cc.get_define('__clang__')
 
 check_headers = [
   'alloca.h',
@@ -1737,8 +1739,6 @@ m4lib_src = [
   'xstrndup.c',
   'xvasprintf.c',
 ]
-cc.get_define('__GNUC__')
-cc.get_define('__clang__')
 
 if host_machine.system() == 'windows'
   m4lib_src += ['windows-spawn.c',
