@@ -271,6 +271,7 @@ endif
 
 check_types = [
   ['HAVE_SSIZE_T', 'ssize_t', 'sys/types.h'],
+  ['HAVE_MODE_T', 'mode_t', 'sys/types.h'],
   ['HAVE_PID_T', 'pid_t', 'sys/types.h'],
   ['HAVE_UID_T', 'uid_t', 'sys/types.h'],
   ['HAVE_MAX_ALIGN_T', 'max_align_t', 'stddef.h'],
@@ -1053,6 +1054,9 @@ endif
 if not cdata.has('HAVE_UID_T')
     cdata.set('uid_t', 'int')
 endif
+if not cdata.has('HAVE_MODE_T')
+    cdata.set('mode_t', 'int')
+endif
 
 configure_file(input : 'config.h.meson',
   output : 'config.h',
@@ -1367,7 +1371,6 @@ generated_header_data.set('GNULIB_QSORT_R', 0)
 generated_header_data.set('GNULIB_RANDOM', 0)
 generated_header_data.set('GNULIB_RANDOM_R', 0)
 generated_header_data.set('GNULIB_REALLOC_POSIX', 0)
-generated_header_data.set('GNULIB_REALPATH', 0)
 generated_header_data.set('GNULIB_RPMATCH', 0)
 generated_header_data.set('GNULIB_SETENV', 0)
 generated_header_data.set('GNULIB_STRTOD', 0)
@@ -1529,6 +1532,8 @@ generated_header_data.set10('GNULIB_RAWMEMCHR', not cdata.has('HAVE_RAWMEMCHR'))
 generated_header_data.set10('GNULIB_SECURE_GETENV', not cdata.has('HAVE_SECURE_GETENV'))
 generated_header_data.set10('GNULIB_CANONICALIZE_FILE_NAME', not cdata.has('HAVE_CANONICALIZE_FILE_NAME'))
 generated_header_data.set10('GNULIB_SIGACTION', not cdata.has('HAVE_SIGACTION'))
+generated_header_data.set10('GNULIB_REALPATH', not cdata.has('HAVE_REALPATH'))
+
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
