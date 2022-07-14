@@ -408,6 +408,48 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_MBRLEN', 'mbrlen', '#include<wchar.h>'],
+  ['HAVE_MBSNRTOWCS', 'mbsnrtowcs', '#include<wchar.h>'],
+  ['HAVE_MBSRTOWCS', 'mbsrtowcs', '#include<wchar.h>'],
+  ['HAVE_WCPCPY', 'wcpcpy', '#include<wchar.h>'],
+  ['HAVE_WCPNCPY', 'wcpncpy', '#include<wchar.h>'],
+  ['HAVE_WCSCASECMP', 'wcscasecmp', '#include<wchar.h>'],
+  ['HAVE_WCSCAT', 'wcscat', '#include<wchar.h>'],
+  ['HAVE_WCSCHR', 'wcschr', '#include<wchar.h>'],
+  ['HAVE_WCSCMP', 'wcscmp', '#include<wchar.h>'],
+  ['HAVE_WCSCOLL', 'wcscoll', '#include<wchar.h>'],
+  ['HAVE_WCSCPY', 'wcscpy', '#include<wchar.h>'],
+  ['HAVE_WCSCSPN', 'wcscspn', '#include<wchar.h>'],
+  ['HAVE_WCSDUP', 'wcsdup', '#include<wchar.h>'],
+  ['HAVE_WCSFTIME', 'wcsftime', '#include<wchar.h>'],
+  ['HAVE_WCSNCASECMP', 'wcsncasecmp', '#include<wchar.h>'],
+  ['HAVE_WCSNCAT', 'wcsncat', '#include<wchar.h>'],
+  ['HAVE_WCSNCMP', 'wcsncmp', '#include<wchar.h>'],
+  ['HAVE_WCSNCPY', 'wcsncpy', '#include<wchar.h>'],
+  ['HAVE_WCSNRTOMBS', 'wcsnrtombs', '#include<wchar.h>'],
+  ['HAVE_WCSPBRK', 'wcspbrk', '#include<wchar.h>'],
+  ['HAVE_WCSRCHR', 'wcsrchr', '#include<wchar.h>'],
+  ['HAVE_WCSRTOMBS', 'wcsrtombs', '#include<wchar.h>'],
+  ['HAVE_WCSSPN', 'wcsspn', '#include<wchar.h>'],
+  ['HAVE_WCSSTR', 'wcsstr', '#include<wchar.h>'],
+  ['HAVE_WCSTOK', 'wcstok', '#include<wchar.h>'],
+  ['HAVE_WCSWIDTH', 'wcswidth', '#include<wchar.h>'],
+  ['HAVE_WCSXFRM', 'wcsxfrm', '#include<wchar.h>'],
+  ['HAVE_WMEMCHR', 'wmemchr', '#include<wchar.h>'],
+  ['HAVE_WMEMCMP', 'wmemcmp', '#include<wchar.h>'],
+  ['HAVE_WMEMCPY', 'wmemcpy', '#include<wchar.h>'],
+  ['HAVE_WMEMMOVE', 'wmemmove', '#include<wchar.h>'],
+  ['HAVE_WMEMPCPY', 'wmempcpy', '#include<wchar.h>'],
+  ['HAVE_WMEMSET', 'wmemset', '#include<wchar.h>'],
+  ['HAVE_FUTIMENS', 'futimens', '#include<sys/stat.h>'],
+  ['HAVE_GETUMASK', 'getumask', '#include<sys/stat.h>'],
+  ['HAVE_LCHMOD', 'lchmod', '#include<sys/stat.h>'],
+  ['HAVE_MKDIRAT', 'mkdirat', '#include<sys/stat.h>'],
+  ['HAVE_MKFIFO', 'mkfifo', '#include<sys/stat.h>'],
+  ['HAVE_MKFIFOAT', 'mkfifoat', '#include<sys/stat.h>'],
+  ['HAVE_MKNOD', 'mknod', '#include<sys/stat.h>'],
+  ['HAVE_MKNODAT', 'mknodat', '#include<sys/stat.h>'],
+  ['HAVE_UTIMENSAT', 'utimensat', '#include<sys/stat.h>'],
   ['HAVE_LANGINFO_CODESET', 'CODESET', '#include<langinfo.h>'],
   ['HAVE_LANGINFO_T_FMT_AMPM', 'T_FMT_AMPM', '#include<langinfo.h>'],
   ['HAVE_LANGINFO_ALTMON', 'ALTMON_1', '#include<langinfo.h>'],
@@ -960,6 +1002,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<sys/wait.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<sys/types.h>')
+  generated_header_data.set('NEXT_SYS_STAT_H', '<sys/stat.h>')
   generated_header_data.set('NEXT_STDIO_H', '<stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<signal.h>')
@@ -976,6 +1019,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../include/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../include/sys/wait.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<../include/sys/types.h>')
+  generated_header_data.set('NEXT_SYS_STAT_H', '<../ucrt/sys/stat.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../include/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../include/signal.h>')
@@ -992,6 +1036,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../ucrt/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../ucrt/sys/wait.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<../ucrt/sys/types.h>')
+  generated_header_data.set('NEXT_SYS_STAT_H', '<../ucrt/sys/stat.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../ucrt/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../ucrt/signal.h>')
@@ -1406,7 +1451,90 @@ generated_header_data.set('WINDOWS_STAT_TIMESPEC', 0)
 generated_header_data.set('GNULIB_MDA_CHMOD', 0)
 generated_header_data.set('GNULIB_FCHMODAT', 0)
 generated_header_data.set('REPLACE_FCHMODAT', 0)
-
+generated_header_data.set('GNULIBHEADERS_OVERRIDE_WINT_T', 0)
+generated_header_data.set('GNULIB_BTOWC', 0)
+generated_header_data.set('GNULIB_MBRLEN', 0)
+generated_header_data.set('GNULIB_MBRTOWC', 0)
+generated_header_data.set('GNULIB_MBSINIT', 0)
+generated_header_data.set('GNULIB_MBSNRTOWCS', 0)
+generated_header_data.set('GNULIB_MBSRTOWCS', 0)
+generated_header_data.set('GNULIB_MDA_WCSDUP', 0)
+generated_header_data.set('GNULIB_WCPCPY', 0)
+generated_header_data.set('GNULIB_WCPNCPY', 0)
+generated_header_data.set('GNULIB_WCRTOMB', 0)
+generated_header_data.set('GNULIB_WCSCASECMP', 0)
+generated_header_data.set('GNULIB_WCSCAT', 0)
+generated_header_data.set('GNULIB_WCSCHR', 0)
+generated_header_data.set('GNULIB_WCSCMP', 0)
+generated_header_data.set('GNULIB_WCSCOLL', 0)
+generated_header_data.set('GNULIB_WCSCPY', 0)
+generated_header_data.set('GNULIB_WCSCSPN', 0)
+generated_header_data.set('GNULIB_WCSDUP', 0)
+generated_header_data.set('GNULIB_WCSFTIME', 0)
+generated_header_data.set('GNULIB_WCSLEN', 0)
+generated_header_data.set('GNULIB_WCSNCASECMP', 0)
+generated_header_data.set('GNULIB_WCSNCAT', 0)
+generated_header_data.set('GNULIB_WCSNCMP', 0)
+generated_header_data.set('GNULIB_WCSNCPY', 0)
+generated_header_data.set('GNULIB_WCSNLEN', 0)
+generated_header_data.set('GNULIB_WCSNRTOMBS', 0)
+generated_header_data.set('GNULIB_WCSPBRK', 0)
+generated_header_data.set('GNULIB_WCSRCHR', 0)
+generated_header_data.set('GNULIB_WCSRTOMBS', 0)
+generated_header_data.set('GNULIB_WCSSPN', 0)
+generated_header_data.set('GNULIB_WCSSTR', 0)
+generated_header_data.set('GNULIB_WCSTOK', 0)
+generated_header_data.set('GNULIB_WCSWIDTH', 0)
+generated_header_data.set('GNULIB_WCSXFRM', 0)
+generated_header_data.set('GNULIB_WCTOB', 0)
+generated_header_data.set('GNULIB_WMEMCHR', 0)
+generated_header_data.set('GNULIB_WMEMCMP', 0)
+generated_header_data.set('GNULIB_WMEMCPY', 0)
+generated_header_data.set('GNULIB_WMEMMOVE', 0)
+generated_header_data.set('GNULIB_WMEMPCPY', 0)
+generated_header_data.set('GNULIB_WMEMSET', 0)
+generated_header_data.set('REPLACE_BTOWC', 0)
+generated_header_data.set('REPLACE_MBRLEN', 0)
+generated_header_data.set('REPLACE_MBRTOWC', 0)
+generated_header_data.set('REPLACE_MBSINIT', 0)
+generated_header_data.set('REPLACE_MBSNRTOWCS', 0)
+generated_header_data.set('REPLACE_MBSRTOWCS', 0)
+generated_header_data.set('REPLACE_MBSTATE_T', 0)
+generated_header_data.set('REPLACE_WCRTOMB', 0)
+generated_header_data.set('REPLACE_WCSFTIME', 0)
+generated_header_data.set('REPLACE_WCSNRTOMBS', 0)
+generated_header_data.set('REPLACE_WCSRTOMBS', 0)
+generated_header_data.set('REPLACE_WCSTOK', 0)
+generated_header_data.set('REPLACE_WCSWIDTH', 0)
+generated_header_data.set('REPLACE_WCTOB', 0)
+generated_header_data.set('REPLACE_WCWIDTH', 0)
+generated_header_data.set('GNULIB_FSTAT', 0)
+generated_header_data.set('GNULIB_FSTATAT', 0)
+generated_header_data.set('GNULIB_FUTIMENS', 0)
+generated_header_data.set('GNULIB_GETUMASK', 0)
+generated_header_data.set('GNULIB_LCHMOD', 0)
+generated_header_data.set('GNULIB_LSTAT', 0)
+generated_header_data.set('GNULIB_MDA_MKDIR', 0)
+generated_header_data.set('GNULIB_MDA_UMASK', 0)
+generated_header_data.set('GNULIB_MKDIR', 0)
+generated_header_data.set('GNULIB_MKDIRAT', 0)
+generated_header_data.set('GNULIB_MKFIFO', 0)
+generated_header_data.set('GNULIB_MKFIFOAT', 0)
+generated_header_data.set('GNULIB_MKNOD', 0)
+generated_header_data.set('GNULIB_MKNODAT', 0)
+generated_header_data.set('GNULIB_UTIMENSAT', 0)
+generated_header_data.set('REPLACE_FSTAT', 0)
+generated_header_data.set('REPLACE_FSTATAT', 0)
+generated_header_data.set('REPLACE_FUTIMENS', 0)
+generated_header_data.set('REPLACE_LSTAT', 0)
+generated_header_data.set('REPLACE_MKDIR', 0)
+generated_header_data.set('REPLACE_MKFIFO', 0)
+generated_header_data.set('REPLACE_MKFIFOAT', 0)
+generated_header_data.set('REPLACE_MKNOD', 0)
+generated_header_data.set('REPLACE_MKNODAT', 0)
+generated_header_data.set('REPLACE_STAT', 0)
+generated_header_data.set('REPLACE_UTIMENSAT', 0)
+generated_header_data.set('WINDOWS_64_BIT_ST_SIZE', 0)
 
 if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
 struct stat buf;
