@@ -114,7 +114,6 @@ cc.get_define('__clang__')
 check_headers = [
   'alloca.h',
   'arpa/inet.h',
-  'bcrypt.h',
   'bp/sym.h',
   'crtdefs.h',
   'dirent.h',
@@ -313,6 +312,30 @@ void f(void) { (void)m_sigaction.sa_sigaction; }''', name: 'struct sigaction has
   generated_header_data.set10('HAVE_STRUCT_SIGACTION_SA_SIGACTION', true)
 else
   generated_header_data.set10('HAVE_STRUCT_SIGACTION_SA_SIGACTION', false)
+endif
+
+# Bcrypt
+if host_machine.system() == 'windows'
+  if cc.has_header('bcrypt.h', prefix: '#include <windows.h>')
+    cdata.set('HAVE_BCRYPT_H', 1)
+    generated_header_data.set10('HAVE_BCRYPT_H', true)
+
+    if cc.compiles('''#include <windows.h>
+#if !(_WIN32_WINNT >= _WIN32_WINNT_WIN7)
+  cannot assume it
+#endif''')
+    cdata.set10('HAVE_LIB_BCRYPT', true)
+    generated_header_data.set10('HAVE_LIB_BCRYPT', true)
+    getrandom_lib = cc.find_library('bcrypt')
+    else
+      generated_header_data.set10('HAVE_LIB_BCRYPT', false)
+      getrandom_lib = cc.find_library('advapi32')
+    endif
+  else
+    generated_header_data.set10('HAVE_BCRYPT_H', false)
+    generated_header_data.set10('HAVE_LIB_BCRYPT', false)
+    getrandom_lib = cc.find_library('advapi32')
+  endif
 endif
 
 check_declarations = [
@@ -1520,7 +1543,6 @@ generated_header_data.set('GNULIB_FSTATAT', 0)
 generated_header_data.set('GNULIB_FUTIMENS', 0)
 generated_header_data.set('GNULIB_GETUMASK', 0)
 generated_header_data.set('GNULIB_LCHMOD', 0)
-generated_header_data.set('GNULIB_LSTAT', 0)
 generated_header_data.set('GNULIB_MDA_MKDIR', 0)
 generated_header_data.set('GNULIB_MDA_UMASK', 0)
 generated_header_data.set('GNULIB_MKDIR', 0)
@@ -1580,6 +1602,7 @@ generated_header_data.set10('GNULIB_TEMPNAME', not cdata.has('HAVE_MKDTEMP') or 
 generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
+generated_header_data.set10('GNULIB_LSTAT', not cdata.has(HAVE_LSTAT))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1865,6 +1888,8 @@ endif
 
 if generated_header_data.get('GNULIB_VASNPRINTF') == 1
   m4lib_src += 'vasnprintf.c'
+  m4lib_src += 'printf-parse.c'
+  m4lib_src += 'printf-args.c'
 endif
 
 if generated_header_data.get('GNULIB_WCWIDTH') == 1
@@ -1905,4 +1930,21 @@ if generated_header_data.get('GNULIB_GETDTABLESIZE') == 1
   m4lib_src += 'getdtablesize.c'
 endif
 
+if generated_header_data.get('GNULIB_LSTAT') == 1
+  m4lib_src += 'lstat.c'
+endif
+
+if generated_header_data.get('GNULIB_GETRANDOM') == 1
+  m4lib_src += 'getrandom.c'
+endif
+
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
+if host_machine.system() == 'windows'
+  m4_dep = declare_dependency(link_with: [m4_lib, getrandom_lib],
+                              compile_args: libm4_c_args,
+                              include_directories: lib_inc)
+else
+  m4_dep = declare_dependency(link_with: m4_lib,
+                              compile_args: libm4_c_args,
+                              include_directories: lib_inc)
+endif
