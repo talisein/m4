@@ -16,5 +16,5 @@ m4_src = [
 ]
 
 
-executable('m4', m4_src,
-           dependencies: m4_dep)
+m4 = executable('m4', m4_src,
+                dependencies: m4_dep)
