@@ -426,7 +426,6 @@ check_declarations = [
   ['HAVE_OBSTACK', 'obstack_init', 'obstack.h'], # it's a define
   ['HAVE_PTHREAD_MUTEX_RECURSIVE', 'PTHREAD_MUTEX_RECURSIVE', 'pthread.h'],
   ['HAVE_VAR___PROGNAME', '__progname', 'stdlib.h'],
-  ['HAVE_DECL_MKDIR', 'mkdir', 'sys/stat.h'],
 ]
 
 foreach f : check_declarations
@@ -1602,8 +1601,7 @@ generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
 generated_header_data.set10('GNULIB_LSTAT', not cdata.has('HAVE_LSTAT'))
-generated_header_data.set10('GNULIB_MKDIR', cdata.get('HAVE_DECL_MKDIR') == 0)
-generated_header_data.set10('GNULIB_MDA_MKDIR', cdata.get('HAVE_DECL_MKDIR') == 1 and host_machine.system() == 'windows')
+generated_header_data.set10('GNULIB_MDA_MKDIR', host_machine.system() == 'windows')
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1934,10 +1932,6 @@ endif
 
 if generated_header_data.get('GNULIB_GETRANDOM') == 1
   m4lib_src += 'getrandom.c'
-endif
-
-if generated_header_data.get('GNULIB_MKDIR') == 1
-  m4lib_src += 'mkdir.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
