@@ -469,6 +469,7 @@ check_functions = [
   ['HAVE_FUTIMENS', 'futimens', '#include<sys/stat.h>'],
   ['HAVE_GETUMASK', 'getumask', '#include<sys/stat.h>'],
   ['HAVE_LCHMOD', 'lchmod', '#include<sys/stat.h>'],
+  ['HAVE_MKDIR', 'mkdir', '#include<sys/stat.h>'],
   ['HAVE_MKDIRAT', 'mkdirat', '#include<sys/stat.h>'],
   ['HAVE_MKFIFO', 'mkfifo', '#include<sys/stat.h>'],
   ['HAVE_MKFIFOAT', 'mkfifoat', '#include<sys/stat.h>'],
@@ -1545,7 +1546,6 @@ generated_header_data.set('GNULIB_GETUMASK', 0)
 generated_header_data.set('GNULIB_LCHMOD', 0)
 generated_header_data.set('GNULIB_MDA_MKDIR', 0)
 generated_header_data.set('GNULIB_MDA_UMASK', 0)
-generated_header_data.set('GNULIB_MKDIR', 0)
 generated_header_data.set('GNULIB_MKDIRAT', 0)
 generated_header_data.set('GNULIB_MKFIFO', 0)
 generated_header_data.set('GNULIB_MKFIFOAT', 0)
@@ -1603,6 +1603,7 @@ generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
 generated_header_data.set10('GNULIB_LSTAT', not cdata.has('HAVE_LSTAT'))
+generated_header_data.set10('GNULIB_MKDIR', not cdata.has('HAVE_MKDIR') or host_machine.system() == 'windows')
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1933,6 +1934,10 @@ endif
 
 if generated_header_data.get('GNULIB_GETRANDOM') == 1
   m4lib_src += 'getrandom.c'
+endif
+
+if generated_header_data.get('GNULIB_MKDIR') == 1
+  m4lib_src += 'mkdir.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)

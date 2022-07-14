@@ -26,7 +26,7 @@ sys_files += configure_file(input : sys_stat_src,
                             output : 'stat.h',
                             configuration: generated_header_data)
 endif
-if not cdata.has('HAVE_SYS_RANDOM_H') or host_machine.system() == 'windows'
+if not cdata.has('HAVE_SYS_RANDOM_H') or not cdata.has('HAVE_GETRANDOM') or host_machine.system() == 'windows'
 sys_files += configure_file(input : sys_random_src,
                             output : 'random.h',
                             configuration: generated_header_data)
