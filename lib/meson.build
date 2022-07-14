@@ -314,6 +314,7 @@ else
 endif
 
 check_declarations = [
+  ['HAVE_DECL_O_CLOEXEC', 'O_CLOEXEC', 'fcntl.h'],
   ['HAVE_DECL_GETDELIM', 'getdelim', 'stdio.h'],
   ['HAVE_DECL_GETLINE', 'getline', 'stdio.h'],
   ['HAVE_DECL_OBSTACK_PRINTF', 'obstack_printf', 'stdio.h'],
@@ -1590,6 +1591,13 @@ endif
 if not cdata.has('HAVE_SIGSET_T')
 configure_file(input : 'signal.in.h.meson',
                output : 'signal.h',
+               configuration : generated_header_data)
+endif
+
+# FCNTL.H
+if cdata.get('HAVE_DECL_O_CLOEXEC') == 0
+configure_file(input : 'fcntl.in.h.meson',
+               output : 'fcntl.h',
                configuration : generated_header_data)
 endif
 
