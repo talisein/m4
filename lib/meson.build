@@ -1544,7 +1544,6 @@ generated_header_data.set('GNULIB_FSTATAT', 0)
 generated_header_data.set('GNULIB_FUTIMENS', 0)
 generated_header_data.set('GNULIB_GETUMASK', 0)
 generated_header_data.set('GNULIB_LCHMOD', 0)
-generated_header_data.set('GNULIB_MDA_MKDIR', 0)
 generated_header_data.set('GNULIB_MDA_UMASK', 0)
 generated_header_data.set('GNULIB_MKDIRAT', 0)
 generated_header_data.set('GNULIB_MKFIFO', 0)
@@ -1603,7 +1602,8 @@ generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
 generated_header_data.set10('GNULIB_LSTAT', not cdata.has('HAVE_LSTAT'))
-generated_header_data.set10('GNULIB_MKDIR', not cdata.has('HAVE_MKDIR') or host_machine.system() == 'windows')
+generated_header_data.set10('GNULIB_MKDIR', not cdata.has('HAVE_MKDIR'))
+generated_header_data.set10('GNULIB_MDA_MKDIR', cdata.has('HAVE_MKDIR') and host_machine.system() == 'windows')
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
