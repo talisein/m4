@@ -443,6 +443,7 @@ check_functions = [
   ['HAVE_EXPLICIT_MEMSET', 'explicit_memset', '#include<string.h>'],
   ['HAVE_FACCESSAT', 'faccessat', '#include<unistd.h>'],
   ['HAVE_FCHDIR', 'fchdir', '#include<unistd.h>'],
+  ['HAVE_FCHMODAT', 'fchmodat', '#include<sys/stat.h>'],
   ['HAVE_FCHOWNAT', 'fchownat', '#include<unistd.h>'],
   ['HAVE_FCNTL', 'fcntl', '#include<fcntl.h>'],
   ['HAVE_FDATASYNC', 'fdatasync', '#include<unistd.h>'],
@@ -882,7 +883,6 @@ cdata.set('GNULIB_FILENAMECAT', 1)
 cdata.set('GNULIB_CLOSE_STREAM', 1)
 cdata.set('GNULIB_MBSLEN', 1)
 cdata.set('GNULIB_MBSSTR', 1)
-cdata.set('GNULIB_STRSIGNAL', 1)
 cdata.set('GNULIB_CANONICALIZE', 1)
 cdata.set('GNULIB_CANONICALIZE_LGPL', 1)
 cdata.set('ICONV_CONST', '')
@@ -967,6 +967,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<langinfo.h>')
   generated_header_data.set('NEXT_LOCALE_H', '<locale.h>')
   generated_header_data.set('NEXT_GETOPT_H', '<getopt.h>')
+  generated_header_data.set('NEXT_WCHAR_H', '<wchar.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -982,6 +983,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<../include/langinfo.h>')
   generated_header_data.set('NEXT_LOCALE_H', '<../include/locale.h>')
   generated_header_data.set('NEXT_GETOPT_H', '<../include/getopt.h>')
+  generated_header_data.set('NEXT_WCHAR_H', '<../include/wchar.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -997,6 +999,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<../ucrt/langinfo.h>')
   generated_header_data.set('NEXT_LOCALE_H', '<../ucrt/locale.h>')
   generated_header_data.set('NEXT_GETOPT_H', '<../ucrt/getopt.h>')
+  generated_header_data.set('NEXT_WCHAR_H', '<../ucrt/wchar.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1024,7 +1027,6 @@ generated_header_data.set('GNULIB_MEMMEM', 0)
 generated_header_data.set('GNULIB_MEMRCHR', 0)
 generated_header_data.set('GNULIB_SIGABBREV_NP', 0)
 generated_header_data.set('GNULIB_SIGDESCR_NP', 0)
-generated_header_data.set('GNULIB_STPCPY', 0)
 generated_header_data.set('GNULIB_STPNCPY', 0)
 generated_header_data.set('GNULIB_STRCASESTR', 0)
 generated_header_data.set('GNULIB_STRCHRNUL', 0)
@@ -1151,7 +1153,6 @@ generated_header_data.set('GNULIB_PIPE2', 0)
 generated_header_data.set('GNULIB_PREAD', 0)
 generated_header_data.set('GNULIB_PWRITE', 0)
 generated_header_data.set('GNULIB_READ', 0)
-generated_header_data.set('GNULIB_READLINK', 0)
 generated_header_data.set('GNULIB_READLINKAT', 0)
 generated_header_data.set('GNULIB_RMDIR', 0)
 generated_header_data.set('GNULIB_SETHOSTNAME', 0)
@@ -1224,10 +1225,8 @@ generated_header_data.set('GNULIB_MDA_FCVT', 0)
 generated_header_data.set('GNULIB_MDA_GCVT', 0)
 generated_header_data.set('GNULIB_MDA_MKTEMP', 0)
 generated_header_data.set('GNULIB_MDA_PUTENV', 0)
-generated_header_data.set('GNULIB_MKDTEMP', 0)
 generated_header_data.set('GNULIB_MKOSTEMP', 0)
 generated_header_data.set('GNULIB_MKOSTEMPS', 0)
-generated_header_data.set('GNULIB_MKSTEMP', 0)
 generated_header_data.set('GNULIB_MKSTEMPS', 0)
 generated_header_data.set('GNULIB_POSIX_MEMALIGN', 0)
 generated_header_data.set('GNULIB_POSIX_OPENPT', 0)
@@ -1295,7 +1294,6 @@ generated_header_data.set('GNULIB_FREAD', 0)
 generated_header_data.set('GNULIB_FREOPEN', 0)
 generated_header_data.set('GNULIB_FSCANF', 0)
 generated_header_data.set('GNULIB_FSEEK', 0)
-generated_header_data.set('GNULIB_FSEEKO', 0)
 generated_header_data.set('GNULIB_FTELL', 0)
 generated_header_data.set('GNULIB_FTELLO', 0)
 generated_header_data.set('GNULIB_FWRITE', 0)
@@ -1328,7 +1326,6 @@ generated_header_data.set('GNULIB_SPRINTF_POSIX', 0)
 generated_header_data.set('GNULIB_STDIO_H_NONBLOCKING', 0)
 generated_header_data.set('GNULIB_STDIO_H_SIGPIPE', 0)
 generated_header_data.set('GNULIB_TMPFILE', 0)
-generated_header_data.set('GNULIB_VASPRINTF', 0)
 generated_header_data.set('GNULIB_VDPRINTF', 0)
 generated_header_data.set('GNULIB_VFPRINTF', 0)
 generated_header_data.set('GNULIB_VFPRINTF_POSIX', 0)
@@ -1380,7 +1377,6 @@ generated_header_data.set('REPLACE_RAISE', 0)
 generated_header_data.set('WINDOWS_STAT_INODES', 0)
 generated_header_data.set('ASM_SYMBOL_PREFIX', '')
 generated_header_data.set('GNULIB_CREAT', 0)
-generated_header_data.set('GNULIB_FCNTL', 0)
 generated_header_data.set('GNULIB_MDA_CREAT', 0)
 generated_header_data.set('GNULIB_MDA_OPEN', 0)
 generated_header_data.set('GNULIB_NONBLOCKING', 0)
@@ -1404,6 +1400,12 @@ generated_header_data.set('REPLACE_LOCALECONV', 0)
 generated_header_data.set('REPLACE_NEWLOCALE', 0)
 generated_header_data.set('REPLACE_SETLOCALE', 0)
 generated_header_data.set('REPLACE_STRUCT_LCONV', 0)
+generated_header_data.set('GNULIB_OVERRIDES_STRUCT_STAT', 0)
+generated_header_data.set('GNULIB_STAT', 0)
+generated_header_data.set('WINDOWS_STAT_TIMESPEC', 0)
+generated_header_data.set('GNULIB_MDA_CHMOD', 0)
+generated_header_data.set('GNULIB_FCHMODAT', 0)
+generated_header_data.set('REPLACE_FCHMODAT', 0)
 
 
 if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
@@ -1428,6 +1430,15 @@ generated_header_data.set10('GNULIB_SIGPROCMASK', not cdata.has('HAVE_SIGPROCMAS
 generated_header_data.set10('GNULIB_REALPATH', not cdata.has('HAVE_REALPATH'))
 generated_header_data.set10('GNULIB_NL_LANGINFO', not cdata.has('HAVE_NL_LANGINFO'))
 generated_header_data.set10('GNULIB_SETLOCALE_NULL', not cdata.has('HAVE_NL_LANGINFO'))
+generated_header_data.set10('GNULIB_FSEEKO', not cdata.has('HAVE_FSEEKO'))
+generated_header_data.set10('GNULIB_STRSIGNAL', not cdata.has('HAVE_STRSIGNAL'))
+generated_header_data.set10('GNULIB_MKSTEMP', not cdata.has('HAVE_MKSTEMP'))
+generated_header_data.set10('GNULIB_MKDTEMP', not cdata.has('HAVE_MKDTEMP'))
+generated_header_data.set10('GNULIB_READLINK', not cdata.has('HAVE_READLINK'))
+generated_header_data.set10('GNULIB_VASPRINTF', not cdata.has('HAVE_VASPRINTF'))
+generated_header_data.set10('GNULIB_WCWIDTH', not cdata.has('HAVE_WCWIDTH'))
+generated_header_data.set10('GNULIB_FCNTL', not cdata.has('HAVE_FCNTL'))
+generated_header_data.set10('GNULIB_STPCPY', not cdata.has('HAVE_STPCPY'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1517,14 +1528,22 @@ configure_file(input : 'getopt-cdefs.in.h',
                configuration : generated_header_data)
 endif
 
+if generated_header_data.get('GNULIB_WCWIDTH') == 1
+configure_file(input : 'wchar.in.h.meson',
+               output : 'wchar.h',
+               configuration : generated_header_data)
+endif
 sys_wait_src = files('sys_wait.in.h.meson')
 sys_types_src = files('sys_types.in.h.meson')
+sys_stat_src = files('sys_stat.in.h.meson')
 cppdefs_src = files('c++defs.h')
 warnonuse_src = files('warn-on-use.h')
+arg_nonnull_src = files('warn-on-use.h')
 subdir('sys')
 
 lib_inc = include_directories('.')
 m4lib_src = [
+  'trim.c',
   'asyncsafe-spin.c',
   'basename-lgpl.c',
   'basename.c',
@@ -1591,7 +1610,10 @@ m4lib_src = [
 
 if host_machine.system() == 'windows'
   m4lib_src += ['windows-spawn.c',
-                'msvc-nothrow.c']
+                'pipe2-safer.c', # used by spawn-pipe.c only for windows
+                'windows-spin.c', # used by asyncsafe-spin.c only for windows
+                'msvc-nothrow.c',
+                'msvc-inval.c']
 else
 m4lib_src += 'spawn_faction_addchdir.c'
 endif
@@ -1645,6 +1667,63 @@ endif
 if generated_header_data.get('GNULIB_NL_LANGINFO') == 1
   m4lib_src += 'nl_langinfo.c'
   m4lib_src += 'nl_langinfo-lock.c'
+  m4lib_src += 'setlocale_null.c'
+endif
+
+if not cdata.has('HAVE_GETOPT_H')
+  message('Adding getopt_long source')
+  m4lib_src += 'getopt.c'
+  m4lib_src += 'getopt1.c'
+else
+  message('***NOT adding getopt_long source??***')
+endif
+
+if generated_header_data.get('GNULIB_FSEEKO') == 1
+  m4lib_src += 'fseeko.c'
+endif
+
+if generated_header_data.get('GNULIB_STRSIGNAL') == 1
+  m4lib_src += 'strsignal.c'
+endif
+
+if generated_header_data.get('GNULIB_SIGPROCMASK') == 1
+  m4lib_src += 'sigprocmask.c'
+endif
+
+if generated_header_data.get('GNULIB_MKSTEMP') == 1
+  m4lib_src += 'mkstemp.c'
+endif
+
+if generated_header_data.get('GNULIB_MKDTEMP') == 1
+  m4lib_src += 'mkdtemp.c'
+endif
+
+if generated_header_data.get('GNULIB_WAITPID') == 1
+  m4lib_src += 'waitpid.c'
+endif
+
+if generated_header_data.get('GNULIB_MEMPCPY') == 1
+  m4lib_src += 'mempcpy.c'
+endif
+
+if generated_header_data.get('GNULIB_READLINK') == 1
+  m4lib_src += 'readlink.c'
+endif
+
+if generated_header_data.get('GNULIB_VASPRINTF') == 1
+  m4lib_src += 'vasprintf.c'
+endif
+
+if generated_header_data.get('GNULIB_WCWIDTH') == 1
+  m4lib_src += 'wcwidth.c'
+endif
+
+if generated_header_data.get('GNULIB_FCNTL') == 1
+  m4lib_src += 'fcntl.c'
+endif
+
+if generated_header_data.get('GNULIB_STPCPY') == 1
+  m4lib_src += 'stpcpy.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
