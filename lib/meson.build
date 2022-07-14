@@ -1663,6 +1663,9 @@ if generated_header_data.get('GNULIB_WCWIDTH') == 1
 configure_file(input : 'wchar.in.h.meson',
                output : 'wchar.h',
                configuration : generated_header_data)
+configure_file(input : 'uniwidth.in.h',
+               output : 'uniwidth.h',
+               configuration : generated_header_data)
 endif
 sys_wait_src = files('sys_wait.in.h.meson')
 sys_types_src = files('sys_types.in.h.meson')
@@ -1847,6 +1850,7 @@ endif
 
 if generated_header_data.get('GNULIB_WCWIDTH') == 1
   m4lib_src += 'wcwidth.c'
+  m4lib_src += 'uniwidth/width.c'
 endif
 
 if generated_header_data.get('GNULIB_FCNTL') == 1
