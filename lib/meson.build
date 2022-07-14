@@ -1602,7 +1602,7 @@ generated_header_data.set10('GNULIB_TEMPNAME', not cdata.has('HAVE_MKDTEMP') or 
 generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
-generated_header_data.set10('GNULIB_LSTAT', not cdata.has(HAVE_LSTAT))
+generated_header_data.set10('GNULIB_LSTAT', not cdata.has('HAVE_LSTAT'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
