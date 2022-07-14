@@ -1009,6 +1009,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<sys/wait.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<sys/types.h>')
   generated_header_data.set('NEXT_SYS_STAT_H', '<sys/stat.h>')
+  generated_header_data.set('NEXT_SYS_RANDOM_H', '<sys/random.h>')
   generated_header_data.set('NEXT_STDIO_H', '<stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<signal.h>')
@@ -1025,7 +1026,8 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_STDLIB_H', '<../include/stdlib.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../include/sys/wait.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<../include/sys/types.h>')
-  generated_header_data.set('NEXT_SYS_STAT_H', '<../ucrt/sys/stat.h>')
+  generated_header_data.set('NEXT_SYS_STAT_H', '<../include/sys/stat.h>')
+  generated_header_data.set('NEXT_SYS_RANDOM_H', '<../include/sys/random.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../include/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../include/signal.h>')
@@ -1043,6 +1045,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_SYS_WAIT_H', '<../ucrt/sys/wait.h>')
   generated_header_data.set('NEXT_SYS_TYPES_H', '<../ucrt/sys/types.h>')
   generated_header_data.set('NEXT_SYS_STAT_H', '<../ucrt/sys/stat.h>')
+  generated_header_data.set('NEXT_SYS_RANDOM_H', '<../ucrt/sys/random.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../ucrt/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../ucrt/signal.h>')
@@ -1539,6 +1542,7 @@ generated_header_data.set('REPLACE_MKNODAT', 0)
 generated_header_data.set('REPLACE_STAT', 0)
 generated_header_data.set('REPLACE_UTIMENSAT', 0)
 generated_header_data.set('WINDOWS_64_BIT_ST_SIZE', 0)
+generated_header_data.set('REPLACE_GETRANDOM', 0)
 
 if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
 struct stat buf;
@@ -1575,6 +1579,7 @@ generated_header_data.set10('GNULIB_STPCPY', not cdata.has('HAVE_STPCPY'))
 generated_header_data.set10('GNULIB_TEMPNAME', not cdata.has('HAVE_MKDTEMP') or not cdata.has('HAVE_MKSTEMP'))
 generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
+generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1675,6 +1680,7 @@ configure_file(input : 'unitypes.in.h',
                output : 'unitypes.h',
                copy: true)
 endif
+sys_random_src = files('sys_random.in.h.meson')
 sys_wait_src = files('sys_wait.in.h.meson')
 sys_types_src = files('sys_types.in.h.meson')
 sys_stat_src = files('sys_stat.in.h.meson')
@@ -1878,11 +1884,11 @@ if generated_header_data.get('GNULIB_PIPE2') == 1
   m4lib_src += 'pipe2.c'
 endif
 
-if generated_header_data.get('GNULIB_PIPE2_SAFER') == 1
+if cdata.has('GNULIB_PIPE2_SAFER')
   m4lib_src += 'pipe2-safer.c'
 endif
 
-if generated_header_data.get('GNULIB_FD_SAFER_FLAG') == 1
+if cdata.has('GNULIB_FD_SAFER_FLAG')
   m4lib_src += 'dup-safer-flag.c'
   m4lib_src += 'fd-safer-flag.c'
 endif
