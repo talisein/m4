@@ -905,7 +905,7 @@ if not cdata.has('HAVE_SSIZE_T')
   cdata.set('ssize_t', 'ptrdiff_t')
 endif
 if not cdata.has('HAVE_PID_T')
-    cdata.set('pid_t', 'int')
+    cdata.set('pid_t', 'intptr_t')
 endif
 if not cdata.has('HAVE_UID_T')
     cdata.set('uid_t', 'int')
@@ -966,6 +966,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<fcntl.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<langinfo.h>')
   generated_header_data.set('NEXT_LOCALE_H', '<locale.h>')
+  generated_header_data.set('NEXT_GETOPT_H', '<getopt.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -980,6 +981,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<../include/fcntl.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<../include/langinfo.h>')
   generated_header_data.set('NEXT_LOCALE_H', '<../include/locale.h>')
+  generated_header_data.set('NEXT_GETOPT_H', '<../include/getopt.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -994,6 +996,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<../ucrt/fcntl.h>')
   generated_header_data.set('NEXT_LANGINFO_H', '<../ucrt/langinfo.h>')
   generated_header_data.set('NEXT_LOCALE_H', '<../ucrt/locale.h>')
+  generated_header_data.set('NEXT_GETOPT_H', '<../ucrt/getopt.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1501,6 +1504,16 @@ endif
 if generated_header_data.get('GNULIB_SETLOCALE_NULL') == 1
 configure_file(input : 'locale.in.h.meson',
                output : 'locale.h',
+               configuration : generated_header_data)
+endif
+
+# GETOPT.H
+if not cdata.has('HAVE_GETOPT_H')
+configure_file(input : 'getopt.in.h.meson',
+               output : 'getopt.h',
+               configuration : generated_header_data)
+configure_file(input : 'getopt-cdefs.in.h',
+               output : 'getopt-cdefs.h',
                configuration : generated_header_data)
 endif
 
