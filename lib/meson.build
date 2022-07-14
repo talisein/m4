@@ -1384,7 +1384,6 @@ generated_header_data.set('REPLACE_CREAT', 0)
 generated_header_data.set('REPLACE_FCNTL', 0)
 generated_header_data.set('REPLACE_OPEN', 0)
 generated_header_data.set('REPLACE_OPENAT', 0)
-generated_header_data.set('GNULIB_NL_LANGINFO', 0)
 generated_header_data.set('REPLACE_NL_LANGINFO', 0)
 
 
@@ -1410,6 +1409,7 @@ generated_header_data.set10('GNULIB_CANONICALIZE_FILE_NAME', not cdata.has('HAVE
 generated_header_data.set10('GNULIB_SIGACTION', not cdata.has('HAVE_SIGACTION'))
 generated_header_data.set10('GNULIB_SIGPROCMASK', not cdata.has('HAVE_SIGPROCMASK'))
 generated_header_data.set10('GNULIB_REALPATH', not cdata.has('HAVE_REALPATH'))
+generated_header_data.set10('GNULIB_NL_LANGINFO', not cdata.has('HAVE_NL_LANGINFO'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1476,7 +1476,7 @@ configure_file(input : 'fcntl.in.h.meson',
 endif
 
 # LANGINFO.H
-if cdata.has('HAVE_LANGINFO_H')
+if not cdata.has('HAVE_LANGINFO_H')
 configure_file(input : 'langinfo.in.h.meson',
                output : 'langinfo.h',
                configuration : generated_header_data)
@@ -1605,6 +1605,11 @@ endif
 
 if not cdata.has('HAVE_GETPROGNAME')
   m4lib_src += 'getprogname.c'
+endif
+
+if generated_header_data.get('GNULIB_NL_LANGINFO') == 1
+  m4lib_src += 'nl_langinfo.c'
+  m4lib_src += 'nl_langinfo-lock.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
