@@ -579,6 +579,7 @@ check_functions = [
   ['HAVE_SETEUID', 'seteuid', '#include<unistd.h>'],
   ['HAVE_SETRLIMIT', 'setrlimit', '#include<sys/resource.h>'],
   ['HAVE_SHUTDOWN', 'shutdown', '#include<sys/socket.h>'],
+  ['HAVE_SIGPROCMASK', 'sigprocmask', '#include<signal.h>'],
   ['HAVE_SIGACTION', 'sigaction', '#include<signal.h>'],
   ['HAVE_SIGALTSTACK', 'sigaltstack', '#include<signal.h>'],
   ['HAVE_SIGINTERRUPT', 'siginterrupt', '#include<signal.h>'],
@@ -1507,7 +1508,6 @@ generated_header_data.set('REPLACE_NULL', 0)
 generated_header_data.set('GNULIB_PTHREAD_SIGMASK', 0)
 generated_header_data.set('GNULIB_RAISE', 0)
 generated_header_data.set('GNULIB_SIGNAL_H_SIGPIPE', 0)
-generated_header_data.set('GNULIB_SIGPROCMASK', 0)
 generated_header_data.set('HAVE_POSIX_SIGNALBLOCKING', 0)
 generated_header_data.set('REPLACE_PTHREAD_SIGMASK', 0)
 generated_header_data.set('REPLACE_RAISE', 0)
@@ -1532,8 +1532,8 @@ generated_header_data.set10('GNULIB_RAWMEMCHR', not cdata.has('HAVE_RAWMEMCHR'))
 generated_header_data.set10('GNULIB_SECURE_GETENV', not cdata.has('HAVE_SECURE_GETENV'))
 generated_header_data.set10('GNULIB_CANONICALIZE_FILE_NAME', not cdata.has('HAVE_CANONICALIZE_FILE_NAME'))
 generated_header_data.set10('GNULIB_SIGACTION', not cdata.has('HAVE_SIGACTION'))
+generated_header_data.set10('GNULIB_SIGPROCMASK', not cdata.has('HAVE_SIGPROCMASK'))
 generated_header_data.set10('GNULIB_REALPATH', not cdata.has('HAVE_REALPATH'))
-
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',

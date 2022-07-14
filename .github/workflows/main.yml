@@ -46,7 +46,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Configure
-        run: meson setup  --warnlevel 3 --buildtype release _build-linux
+        run: meson setup --warnlevel 3 --buildtype release -Dc_args='-Wno-sign-compare -Wno-unused-parameter' _build-linux
 
       # Runs a set of commands using the runners shell
       - name: Compile
