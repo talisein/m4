@@ -110,13 +110,13 @@ endif
 
 
 check_headers = [
-  'sigsegv.h',
   'alloca.h',
   'arpa/inet.h',
   'bcrypt.h',
   'bp/sym.h',
   'crtdefs.h',
   'dirent.h',
+  'error.h',
   'features.h',
   'getopt.h',
   'iconv.h',
@@ -132,21 +132,25 @@ check_headers = [
   'os.h',
   'paths.h',
   'pthread.h',
+  'random.h',
+  'regex.h',
   'sched.h',
   'sdkddkver.h',
   'search.h',
   'semaphore.h',
+  'sigsegv.h',
   'spawn.h',
   'stdint.h',
-  'stdio_ext.h',
   'stdio.h',
+  'stdio_ext.h',
   'stdlib.h',
-  'strings.h',
   'string.h',
+  'strings.h',
   'sys/bitypes.h',
   'sys/cdefs.h',
   'sys/inttypes.h',
   'sys/ioctl.h',
+  'sys/loadavg.h',
   'sys/mman.h',
   'sys/param.h',
   'sys/random.h',
@@ -158,7 +162,6 @@ check_headers = [
   'sys/types.h',
   'sys/uio.h',
   'sys/wait.h',
-  'sys/loadavg.h',
   'threads.h',
   'unistd.h',
   'wchar.h',
@@ -166,9 +169,6 @@ check_headers = [
   'winsock2.h',
   'ws2tcpip.h',
   'xlocale.h',
-  'random.h',
-  'error.h',
-  'regex.h',
 ]
 
 have_header_args = []
@@ -270,29 +270,29 @@ endif
 
 
 check_types = [
-  ['HAVE_SSIZE_T', 'ssize_t', 'sys/types.h'],
-  ['HAVE_MODE_T', 'mode_t', 'sys/types.h'],
-  ['HAVE_PID_T', 'pid_t', 'sys/types.h'],
-  ['HAVE_UID_T', 'uid_t', 'sys/types.h'],
-  ['HAVE_MAX_ALIGN_T', 'max_align_t', 'stddef.h'],
   ['HAVE_INTMAX_T', 'intmax_t', 'stdint.h'],
   ['HAVE_INTTYPES_H_WITH_UINTMAX', 'uintmax_t', 'inttypes.h'],
+  ['HAVE_MAX_ALIGN_T', 'max_align_t', 'stddef.h'],
+  ['HAVE_MODE_T', 'mode_t', 'sys/types.h'],
+  ['HAVE_PID_T', 'pid_t', 'sys/types.h'],
+  ['HAVE_POSIX_SPAWNATTR_T', 'posix_spawnattr_t', 'spawn.h'],
+  ['HAVE_POSIX_SPAWN_FILE_ACTIONS_T', 'posix_spawn_file_actions_t', 'spawn.h'],
   ['HAVE_PTHREAD_T', 'pthread_t', 'pthread.h'],
   ['HAVE_SA_FAMILY_T', 'sa_family_t', 'sys/socket.h'],
+  ['HAVE_SIGHANDLER_T', 'sighandler_t', 'signal.h'],
   ['HAVE_SIGINFO_T', 'siginfo_t', 'signal.h'],
   ['HAVE_SIGSET_T', 'sigset_t', 'signal.h'],
   ['HAVE_SIG_ATOMIC_T', 'sig_atomic_t', 'signal.h'],
+  ['HAVE_SSIZE_T', 'ssize_t', 'sys/types.h'],
   ['HAVE_STDINT_H_WITH_UINTMAX', 'uintmax_t', 'stdint.h'],
+  ['HAVE_STRUCT_RANDOM_DATA', 'struct random_data', 'stdlib.h'],
   ['HAVE_STRUCT_SOCKADDR_STORAGE', 'struct sockaddr_storage', 'sys/socket.h'],
+  ['HAVE_TYPE_VOLATILE_SIG_ATOMIC_T', 'sig_atomic_t', 'signal.h'],
+  ['HAVE_UID_T', 'uid_t', 'sys/types.h'],
   ['HAVE_UNSIGNED_LONG_LONG_INT', 'unsigned long long', 'stdint.h'],
   ['HAVE_WCHAR_T', 'wchar_t', 'wchar.h'],
   ['HAVE_WINT_T', 'wint_t', 'wchar.h'],
   ['HAVE__BOOL', '_Bool', 'stdint.h'],
-  ['HAVE_POSIX_SPAWNATTR_T', 'posix_spawnattr_t', 'spawn.h'],
-  ['HAVE_POSIX_SPAWN_FILE_ACTIONS_T', 'posix_spawn_file_actions_t', 'spawn.h'],
-  ['HAVE_STRUCT_RANDOM_DATA', 'struct random_data', 'stdlib.h'],
-  ['HAVE_SIGHANDLER_T', 'sighandler_t', 'signal.h'],
-  ['HAVE_TYPE_VOLATILE_SIG_ATOMIC_T', 'sig_atomic_t', 'signal.h'],
 ]
 foreach f : check_types
   if cc.has_type(f.get(1), prefix: '#include <@0@>'.format(f.get(2)), args:  extension_args)
@@ -314,37 +314,19 @@ else
 endif
 
 check_declarations = [
-  ['HAVE_DECL_O_CLOEXEC', 'O_CLOEXEC', 'fcntl.h'],
-  ['HAVE_DECL_GETDELIM', 'getdelim', 'stdio.h'],
-  ['HAVE_DECL_GETLINE', 'getline', 'stdio.h'],
-  ['HAVE_DECL_OBSTACK_PRINTF', 'obstack_printf', 'stdio.h'],
-  ['HAVE_DECL_VSNPRINTF', 'vsnprintf', 'stdio.h'],
-  ['HAVE_DECL_EACCESS', 'eaccess', 'unistd.h'],
-  ['HAVE_DECL_GETLOADAVG', 'getloadavg', 'stdlib.h'],
-  ['HAVE_DECL_INITSTATE', 'initstate', 'stdlib.h'],
-  ['HAVE_DECL_SETSTATE', 'setstate', 'stdlib.h'],
-  ['HAVE_DECL_FDATASYNC', 'fdatasync', 'unistd.h'],
-  ['HAVE_DECL_GETDOMAINNAME', 'getdomainname', 'unistd.h'],
-  ['HAVE_DECL_GETLOGIN', 'getlogin', 'unistd.h'],
-  ['HAVE_DECL_GETLOGIN_R', 'getlogin_r', 'unistd.h'],
-  ['HAVE_DECL_GETPAGESIZE', 'getpagesize', 'unistd.h'],
-  ['HAVE_DECL_GETUSERSHELL', 'getusershell', 'unistd.h'],
-  ['HAVE_DECL_SETHOSTNAME', 'sethostname', 'unistd.h'],
-  ['HAVE_DECL_TRUNCATE', 'truncate', 'unistd.h'],
-  ['HAVE_DECL_TTYNAME_R', 'ttyname_r', 'unistd.h'],
-  ['HAVE_DECL_MEMMEM', 'memmem', 'string.h'],
-  ['HAVE_DECL_STRTOK_R', 'strtok_r', 'string.h'],
   ['HAVE_DECL_ALARM', 'alarm', 'unistd.h'],
   ['HAVE_DECL_CLEARERR_UNLOCKED', 'clearerr_unlocked', 'stdio.h'],
   ['HAVE_DECL_COPYSIGN', 'copysign', 'math.h'],
   ['HAVE_DECL_COPYSIGNF', 'copysignf', 'math.h'],
   ['HAVE_DECL_COPYSIGNL', 'copysignl', 'math.h'],
   ['HAVE_DECL_DIRFD', 'dirfd', 'dirent.h'],
+  ['HAVE_DECL_EACCESS', 'eaccess', 'unistd.h'],
   ['HAVE_DECL_ECVT', 'ecvt', 'stdlib.h'],
   ['HAVE_DECL_EXECVPE', 'execvpe', 'unistd.h'],
   ['HAVE_DECL_FCHDIR', 'fchdir', 'unistd.h'],
   ['HAVE_DECL_FCLOSEALL', 'fcloseall', 'stdio.h'],
   ['HAVE_DECL_FCVT', 'fcvt', 'stdlib.h'],
+  ['HAVE_DECL_FDATASYNC', 'fdatasync', 'unistd.h'],
   ['HAVE_DECL_FDOPENDIR', 'fdopendir', 'dirent.h'],
   ['HAVE_DECL_FEOF_UNLOCKED', 'feof_unlocked', 'stdio.h'],
   ['HAVE_DECL_FERROR_UNLOCKED', 'ferror_unlocked', 'stdio.h'],
@@ -361,19 +343,33 @@ check_declarations = [
   ['HAVE_DECL_GETCHAR_UNLOCKED', 'getchar_unlocked', 'stdio.h'],
   ['HAVE_DECL_GETCWD', 'getcwd', 'unistd.h'],
   ['HAVE_DECL_GETC_UNLOCKED', 'getc_unlocked', 'stdio.h'],
+  ['HAVE_DECL_GETDELIM', 'getdelim', 'stdio.h'],
+  ['HAVE_DECL_GETDOMAINNAME', 'getdomainname', 'unistd.h'],
   ['HAVE_DECL_GETDTABLESIZE', 'getdtablesize', 'unistd.h'],
+  ['HAVE_DECL_GETLINE', 'getline', 'stdio.h'],
+  ['HAVE_DECL_GETLOADAVG', 'getloadavg', 'stdlib.h'],
+  ['HAVE_DECL_GETLOGIN', 'getlogin', 'unistd.h'],
+  ['HAVE_DECL_GETLOGIN_R', 'getlogin_r', 'unistd.h'],
+  ['HAVE_DECL_GETPAGESIZE', 'getpagesize', 'unistd.h'],
+  ['HAVE_DECL_GETUSERSHELL', 'getusershell', 'unistd.h'],
   ['HAVE_DECL_INET_PTON', 'inet_pton', 'arpa/inet.h'],
+  ['HAVE_DECL_INITSTATE', 'initstate', 'stdlib.h'],
   ['HAVE_DECL_ISBLANK', 'isblank', 'ctype.h'],
   ['HAVE_DECL_ISWBLANK', 'iswblank', 'wctype.h'],
   ['HAVE_DECL_MBRTOWC', 'mbrtowc', 'wchar.h'],
   ['HAVE_DECL_MBSINIT', 'mbsinit', 'wchar.h'],
+  ['HAVE_DECL_MEMMEM', 'memmem', 'string.h'],
   ['HAVE_DECL_MEMRCHR', 'memrchr', 'string.h'],
+  ['HAVE_DECL_OBSTACK_PRINTF', 'obstack_printf', 'stdio.h'],
+  ['HAVE_DECL_O_CLOEXEC', 'O_CLOEXEC', 'fcntl.h'],
   ['HAVE_DECL_POSIX_SPAWN', 'posix_spawn', 'spawn.h'],
   ['HAVE_DECL_PROGRAM_INVOCATION_NAME', 'program_invocation_name', 'errno.h'],
   ['HAVE_DECL_PROGRAM_INVOCATION_SHORT_NAME', 'program_invocation_short_name', 'errno.h'],
   ['HAVE_DECL_PUTCHAR_UNLOCKED', 'putchar_unlocked', 'stdio.h'],
   ['HAVE_DECL_PUTC_UNLOCKED', 'putc_unlocked', 'stdio.h'],
   ['HAVE_DECL_SETENV', 'setenv', 'stdlib.h'],
+  ['HAVE_DECL_SETHOSTNAME', 'sethostname', 'unistd.h'],
+  ['HAVE_DECL_SETSTATE', 'setstate', 'stdlib.h'],
   ['HAVE_DECL_SLEEP', 'sleep', 'unistd.h'],
   ['HAVE_DECL_SNPRINTF', 'snprintf', 'stdio.h'],
   ['HAVE_DECL_STRDUP', 'strdup', 'string.h'],
@@ -381,9 +377,13 @@ check_declarations = [
   ['HAVE_DECL_STRNDUP', 'strndup', 'string.h'],
   ['HAVE_DECL_STRNLEN', 'strnlen', 'string.h'],
   ['HAVE_DECL_STRSIGNAL', 'strsignal', 'string.h'],
+  ['HAVE_DECL_STRTOK_R', 'strtok_r', 'string.h'],
   ['HAVE_DECL_SYS_SIGLIST', 'sys_siglist', 'signal.h'],
   ['HAVE_DECL_TOWLOWER', 'towlower', 'wctype.h'],
+  ['HAVE_DECL_TRUNCATE', 'truncate', 'unistd.h'],
+  ['HAVE_DECL_TTYNAME_R', 'ttyname_r', 'unistd.h'],
   ['HAVE_DECL_UNSETENV', 'unsetenv', 'stdlib.h'],
+  ['HAVE_DECL_VSNPRINTF', 'vsnprintf', 'stdio.h'],
   ['HAVE_DECL_WCRTOMB', 'wcrtomb', 'wchar.h'],
   ['HAVE_DECL_WCSDUP', 'wcsdup', 'wchar.h'],
   ['HAVE_DECL_WCTOB', 'wctob', 'wchar.h'],
@@ -394,13 +394,13 @@ check_declarations = [
   ['HAVE_DECL__SYS_SIGLIST', '_sys_siglist', 'signal.h'],
   ['HAVE_DECL___ARGV', '__argv', 'stdlib.h'],
   ['HAVE_DECL___FPENDING', '__fpending', 'stdio_ext.h'],
-  ['HAVE_ENVIRON_DECL', 'environ', 'unistd.h'],
   ['HAVE_DECL_ENVIRON', 'environ', 'unistd.h'],
+  ['HAVE_ENVIRON_DECL', 'environ', 'unistd.h'],
   ['HAVE_LC_MESSAGES', 'LC_MESSAGES', 'locale.h'],
   ['HAVE_MAP_ANONYMOUS', 'MAP_ANONYMOUS', 'sys/mman.h'],
+  ['HAVE_OBSTACK', 'obstack_init', 'obstack.h'], # it's a define
   ['HAVE_PTHREAD_MUTEX_RECURSIVE', 'PTHREAD_MUTEX_RECURSIVE', 'pthread.h'],
   ['HAVE_VAR___PROGNAME', '__progname', 'stdlib.h'],
-  ['HAVE_OBSTACK', 'obstack_init', 'obstack.h'], # it's a define
 ]
 
 foreach f : check_declarations
@@ -408,79 +408,15 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
-  ['HAVE_RE_COMPILE_PATTERN', 're_compile_pattern', '#include<regex.h>'],
-  ['HAVE_RE_SEARCH', 're_search', '#include<regex.h>'],
-  ['HAVE_RE_SET_REGISTERS', 're_set_registers', '#include<regex.h>'],
-  ['HAVE_DPRINTF', 'dprintf', '#include<stdio.h>'],
-  ['HAVE_PCLOSE', 'pclose', '#include<stdio.h>'],
-  ['HAVE_POPEN', 'popen', '#include<stdio.h>'],
-  ['HAVE_RENAMEAT', 'renameat', '#include<stdio.h>'],
-  ['HAVE_VDPRINTF', 'vdprintf', '#include<stdio.h>'],
-  ['HAVE_ERROR_AT_LINE', 'error_at_line', '#include<error.h>'],
-  ['HAVE_WAITPID', 'waitpid', '#include<sys/wait.h>'],
   ['HAVE_ALIGNED_ALLOC', 'aligned_alloc', '#include<stdlib.h>'],
-  ['HAVE_ATOLL', 'atoll', '#include<stdlib.h>'],
-  ['HAVE_GETSUBOPT', 'getsubopt', '#include<stdlib.h>'],
-  ['HAVE_GRANTPT', 'grantpt', '#include<stdlib.h>'],
-  ['HAVE_INITSTATE', 'initstate', '#include<stdlib.h>'],
-  ['HAVE_MKOSTEMP', 'mkostemp', '#include<stdlib.h>'],
-  ['HAVE_MKOSTEMPS', 'mkostemps', '#include<stdlib.h>'],
-  ['HAVE_MKSTEMPS', 'mkstemps', '#include<stdlib.h>'],
-  ['HAVE_POSIX_MEMALIGN', 'posix_memalign', '#include<stdlib.h>'],
-  ['HAVE_POSIX_OPENPT', 'posix_openpt', '#include<stdlib.h>'],
-  ['HAVE_PTSNAME', 'ptsname', '#include<stdlib.h>'],
-  ['HAVE_PTSNAME_R', 'ptsname_r', '#include<stdlib.h>'],
-  ['HAVE_QSORT_R', 'qsort_r', '#include<stdlib.h>'],
-  ['HAVE_RANDOM', 'random', '#include<stdlib.h>'],
-  ['HAVE_RANDOM_R', 'random_r', '#include<stdlib.h>'],
-  ['HAVE_RPMATCH', 'rpmatch', '#include<stdlib.h>'],
-  ['HAVE_SETSTATE', 'setstate', '#include<stdlib.h>'],
-  ['HAVE_STRTOD', 'strtod', '#include<stdlib.h>'],
-  ['HAVE_STRTOL', 'strtol', '#include<stdlib.h>'],
-  ['HAVE_STRTOLD', 'strtold', '#include<stdlib.h>'],
-  ['HAVE_STRTOLL', 'strtoll', '#include<stdlib.h>'],
-  ['HAVE_STRTOUL', 'strtoul', '#include<stdlib.h>'],
-  ['HAVE_STRTOULL', 'strtoull', '#include<stdlib.h>'],
-  ['HAVE_UNLOCKPT', 'unlockpt', '#include<stdlib.h>'],
-  ['HAVE__EXIT', '_exit', '#include<stdlib.h>'],
-  ['HAVE_CHOWN', 'chown', '#include<unistd.h>'],
-  ['HAVE_COPY_FILE_RANGE', 'copy_file_range', '#include<unistd.h>'],
-  ['HAVE_DUP3', 'dup3', '#include<unistd.h>'],
-  ['HAVE_EUIDACCESS', 'euidaccess', '#include<unistd.h>'],
-  ['HAVE_EXECVPE', 'execvpe', '#include<unistd.h>'],
-  ['HAVE_FCHOWNAT', 'fchownat', '#include<unistd.h>'],
-  ['HAVE_FDATASYNC', 'fdatasync', '#include<unistd.h>'],
-  ['HAVE_FSYNC', 'fsync', '#include<unistd.h>'],
-  ['HAVE_GETENTROPY', 'getentropy', '#include<unistd.h>'],
-  ['HAVE_GETGROUPS', 'getgroups', '#include<unistd.h>'],
-  ['HAVE_GETHOSTNAME', 'gethostname', '#include<unistd.h>'],
-  ['HAVE_GETPASS', 'getpass', '#include<unistd.h>'],
-  ['HAVE_GROUP_MEMBER', 'group_member', '#include<unistd.h>'],
-  ['HAVE_LCHOWN', 'lchown', '#include<unistd.h>'],
-  ['HAVE_LINKAT', 'linkat', '#include<unistd.h>'],
-  ['HAVE_PREAD', 'pread', '#include<unistd.h>'],
-  ['HAVE_PWRITE', 'pwrite', '#include<unistd.h>'],
-  ['HAVE_READLINKAT', 'readlinkat', '#include<unistd.h>'],
-  ['HAVE_SETHOSTNAME', 'sethostname', '#include<unistd.h>'],
-  ['HAVE_SYMLINKAT', 'symlinkat', '#include<unistd.h>'],
-  ['HAVE_UNLINKAT', 'unlinkat', '#include<unistd.h>'],
-  ['HAVE_USLEEP', 'usleep', '#include<unistd.h>'],
-  ['HAVE_STRVERSCMP', 'strverscmp', '#include<string.h>'],
-  ['HAVE_STRSEP', 'strsep', '#include<string.h>'],
-  ['HAVE_STRPBRK', 'strpbrk', '#include<string.h>'],
-  ['HAVE_STRERRORNAME_NP', 'strerrorname_np', '#include<string.h>'],
-  ['HAVE_STRCASESTR', 'STRCASESTR', '#include<string.h>'],
-  ['HAVE_STPNCPY', 'stpncpy', '#include<string.h>'],
-  ['HAVE_SIGDESCR_NP', 'sigdescr_np', '#include<string.h>'],
-  ['HAVE_SIGABBREV_NP', 'sigabbrev_np', '#include<string.h>'],
-  ['HAVE_FFSL', 'ffsl', '#include<strings.h>'],
-  ['HAVE_FFSLL', 'ffsll', '#include<strings.h>'],
   ['HAVE_ALLOCA', 'alloca', '#include<alloca.h>'],
+  ['HAVE_ATOLL', 'atoll', '#include<stdlib.h>'],
   ['HAVE_BTOWC', 'btowc', '#include<wchar.h>'],
   ['HAVE_CANONICALIZE_FILE_NAME', 'canonicalize_file_name', '#include<stdlib.h>'],
   ['HAVE_CATGETS', 'catgets', '#include<nl_types.h>'],
   ['HAVE_CFLOCALECOPYPREFERREDLANGUAGES', 'CFLocaleCopyPreferredLanguages', '#include<CoreFoundation/CFLocale.h>'],
   ['HAVE_CFPREFERENCESCOPYAPPVALUE', 'CFPreferencesCopyAppValue', '#include<CoreFoundation/CFPreferences.h>'],
+  ['HAVE_CHOWN', 'chown', '#include<unistd.h>'],
   ['HAVE_CLOCK_GETTIME', 'clock_gettime', '#include<time.h>'],
   ['HAVE_CLOCK_SETTIME', 'clock_settime', '#include<time.h>'],
   ['HAVE_CLOSEDIR', 'closedir', '#include<dirent.h>'],
@@ -489,15 +425,25 @@ check_functions = [
   ['HAVE_COPYSIGNF_IN_LIBC', 'copysignf', '#include<math.h>'],
   ['HAVE_COPYSIGNL_IN_LIBC', 'copysignl', '#include<math.h>'],
   ['HAVE_COPYSIGN_IN_LIBC', 'copysign', '#include<math.h>'],
+  ['HAVE_COPY_FILE_RANGE', 'copy_file_range', '#include<unistd.h>'],
   ['HAVE_DCGETTEXT', 'dcgettext', '#include<libintl.h>'],
   ['HAVE_DIRFD', 'dirfd', '#include<dirent.h>'],
+  ['HAVE_DPRINTF', 'dprintf', '#include<stdio.h>'],
+  ['HAVE_DUP3', 'dup3', '#include<unistd.h>'],
   ['HAVE_DUPLOCALE', 'duplocale', '#include<locale.h>'],
+  ['HAVE_ERROR_AT_LINE', 'error_at_line', '#include<error.h>'],
+  ['HAVE_EUIDACCESS', 'euidaccess', '#include<unistd.h>'],
+  ['HAVE_EXECVPE', 'execvpe', '#include<unistd.h>'],
   ['HAVE_EXPLICIT_BZERO', 'explicit_bzero', '#include<string.h>'],
   ['HAVE_EXPLICIT_MEMSET', 'explicit_memset', '#include<string.h>'],
   ['HAVE_FACCESSAT', 'faccessat', '#include<unistd.h>'],
   ['HAVE_FCHDIR', 'fchdir', '#include<unistd.h>'],
+  ['HAVE_FCHOWNAT', 'fchownat', '#include<unistd.h>'],
   ['HAVE_FCNTL', 'fcntl', '#include<fcntl.h>'],
+  ['HAVE_FDATASYNC', 'fdatasync', '#include<unistd.h>'],
   ['HAVE_FDOPENDIR', 'fdopendir', '#include<dirent.h>'],
+  ['HAVE_FFSL', 'ffsl', '#include<strings.h>'],
+  ['HAVE_FFSLL', 'ffsll', '#include<strings.h>'],
   ['HAVE_FPURGE', 'fpurge', '#include<stdio.h>'],
   ['HAVE_FREELOCALE', 'freelocale', '#include<locale.h>'],
   ['HAVE_FREE_POSIX', 'free', '#include<stdlib.h>'],
@@ -505,24 +451,34 @@ check_functions = [
   ['HAVE_FREXP_IN_LIBC', 'frexp', '#include<math.h>'],
   ['HAVE_FSEEKO', 'fseeko', '#include<stdio.h>'],
   ['HAVE_FSTATAT', 'fstatat', '#include<sys/stat.h>'],
+  ['HAVE_FSYNC', 'fsync', '#include<unistd.h>'],
   ['HAVE_FTRUNCATE', 'ftruncate', '#include<unistd.h>'],
   ['HAVE_GETCWD', 'getcwd', '#include<unistd.h>'],
   ['HAVE_GETDTABLESIZE', 'getdtablesize', '#include<unistd.h>'],
   ['HAVE_GETEGID', 'getegid', '#include<unistd.h>'],
+  ['HAVE_GETENTROPY', 'getentropy', '#include<unistd.h>'],
   ['HAVE_GETEUID', 'geteuid', '#include<unistd.h>'],
   ['HAVE_GETEXECNAME', 'getexecname', '#include<stdlib.h>'],
   ['HAVE_GETGID', 'getgid', '#include<unistd.h>'],
+  ['HAVE_GETGROUPS', 'getgroups', '#include<unistd.h>'],
+  ['HAVE_GETHOSTNAME', 'gethostname', '#include<unistd.h>'],
   ['HAVE_GETLOCALENAME_L', 'getlocalename_l', '#include<locale.h>'],
   ['HAVE_GETOPT_LONG_ONLY', 'getopt_long_only', '#include<getopt.h>'],
   ['HAVE_GETPAGESIZE', 'getpagesize', '#include<unistd.h>'],
+  ['HAVE_GETPASS', 'getpass', '#include<unistd.h>'],
+  ['HAVE_GETPROGNAME', 'getprogname', '#include<stdlib.h>'],
   ['HAVE_GETRANDOM', 'getrandom', '#include<sys/random.h>'],
   ['HAVE_GETRLIMIT', 'getrlimit', '#include<sys/resource.h>'],
+  ['HAVE_GETSUBOPT', 'getsubopt', '#include<stdlib.h>'],
   ['HAVE_GETTEXT', 'gettext', '#include<libintl.h>'],
   ['HAVE_GETTIMEOFDAY', 'gettimeofday', '#include<sys/time.h>'],
   ['HAVE_GETUID', 'getuid', '#include<unistd.h>'],
   ['HAVE_GOOD_USELOCALE', 'uselocale', '#include<locale.h>'],
+  ['HAVE_GRANTPT', 'grantpt', '#include<stdlib.h>'],
+  ['HAVE_GROUP_MEMBER', 'group_member', '#include<unistd.h>'],
   ['HAVE_ICONV', 'iconv', '#include<iconv.h>'],
   ['HAVE_INET_PTON', 'inet_pton', '#include<arpa/inet.h>'],
+  ['HAVE_INITSTATE', 'initstate', '#include<stdlib.h>'],
   ['HAVE_IOCTL', 'ioctl', '#include<sys/ioctl.h>'],
   ['HAVE_ISBLANK', 'isblank', '#include<ctype.h>'],
   ['HAVE_ISNAND_IN_LIBC', 'isnand', '#include<ieeefp.h>'],
@@ -533,9 +489,11 @@ check_functions = [
   ['HAVE_ISWCNTRL', 'iswcntrl', '#include<wctype.h>'],
   ['HAVE_ISWCTYPE', 'iswctype', '#include<wctype.h>'],
   ['HAVE_LANGINFO_CODESET', 'nl_langinfo', '#include<langinfo.h>'],
+  ['HAVE_LCHOWN', 'lchown', '#include<unistd.h>'],
   ['HAVE_LDEXPL_IN_LIBC', 'ldexpl', '#include<math.h>'],
   ['HAVE_LDEXP_IN_LIBC', 'ldexp', '#include<math.h>'],
   ['HAVE_LINK', 'link', '#include<unistd.h>'],
+  ['HAVE_LINKAT', 'linkat', '#include<unistd.h>'],
   ['HAVE_LSTAT', 'lstat', '#include<sys/stat.h>'],
   ['HAVE_MALLOC_POSIX', 'malloc', '#include<stdlib.h>'],
   ['HAVE_MBRTOWC', 'mbrtowc', '#include<wchar.h>'],
@@ -546,7 +504,10 @@ check_functions = [
   ['HAVE_MEMRCHR', 'memrchr', '#include<string.h>'],
   ['HAVE_MEMSET_S', 'memset_s', '#include<string.h>'],
   ['HAVE_MKDTEMP', 'mkdtemp', '#include<stdlib.h>'],
+  ['HAVE_MKOSTEMP', 'mkostemp', '#include<stdlib.h>'],
+  ['HAVE_MKOSTEMPS', 'mkostemps', '#include<stdlib.h>'],
   ['HAVE_MKSTEMP', 'mkstemp', '#include<stdlib.h>'],
+  ['HAVE_MKSTEMPS', 'mkstemps', '#include<stdlib.h>'],
   ['HAVE_MPROTECT', 'mprotect', '#include<sys/mman.h>'],
   ['HAVE_MQUERY', 'mquery', '#include<sys/mman.h>'],
   ['HAVE_MSVC_INVALID_PARAMETER_HANDLER', '_set_invalid_parameter_handler', '#include<stdlib.h>'],
@@ -554,23 +515,40 @@ check_functions = [
   ['HAVE_NL_LANGINFO', 'nl_langinfo', '#include<langinfo.h>'],
   ['HAVE_OPENAT', 'openat', '#include<fcntl.h>'],
   ['HAVE_OPENDIR', 'opendir', '#include<dirent.h>'],
+  ['HAVE_PCLOSE', 'pclose', '#include<stdio.h>'],
   ['HAVE_PIPE', 'pipe', '#include<unistd.h>'],
   ['HAVE_PIPE2', 'pipe2', '#include<unistd.h>'],
+  ['HAVE_POPEN', 'popen', '#include<stdio.h>'],
+  ['HAVE_POSIX_MEMALIGN', 'posix_memalign', '#include<stdlib.h>'],
+  ['HAVE_POSIX_OPENPT', 'posix_openpt', '#include<stdlib.h>'],
   ['HAVE_POSIX_SPAWN', 'posix_spawn', '#include<spawn.h>'],
   ['HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 'posix_spawn_file_actions_addchdir', '#include <spawn.h>'],
   ['HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDFCHDIR', 'posix_spawn_file_actions_addfchdir', '#include <spawn.h>'],
+  ['HAVE_PREAD', 'pread', '#include<unistd.h>'],
   ['HAVE_PSTAT_GETPROCVM', 'pstat_getprocvm', '#include<sys/pstat.h>'],
   ['HAVE_PTHREAD_ATFORK', 'pthread_atfork', '#include<pthread.h>'],
   ['HAVE_PTHREAD_RWLOCK', 'pthread_rwlock_init', '#include<pthread.h>'],
   ['HAVE_PTHREAD_SIGMASK', 'pthread_sigmask', '#include<signal.h>'],
   ['HAVE_PTHREAD_SPINLOCK_T', 'pthread_spin_init', '#include<pthread.h>'],
+  ['HAVE_PTSNAME', 'ptsname', '#include<stdlib.h>'],
+  ['HAVE_PTSNAME_R', 'ptsname_r', '#include<stdlib.h>'],
+  ['HAVE_PWRITE', 'pwrite', '#include<unistd.h>'],
+  ['HAVE_QSORT_R', 'qsort_r', '#include<stdlib.h>'],
   ['HAVE_RAISE', 'raise', '#include<signal.h>'],
+  ['HAVE_RANDOM', 'random', '#include<stdlib.h>'],
+  ['HAVE_RANDOM_R', 'random_r', '#include<stdlib.h>'],
   ['HAVE_RAWMEMCHR', 'rawmemchr', '#include<string.h>'],
   ['HAVE_READDIR', 'readdir', '#include<dirent.h>'],
   ['HAVE_READLINK', 'readlink', '#include<unistd.h>'],
+  ['HAVE_READLINKAT', 'readlinkat', '#include<unistd.h>'],
   ['HAVE_REALLOCARRAY', 'reallocarray', '#include<stdlib.h>'],
   ['HAVE_REALPATH', 'realpath', '#include<stdlib.h>'],
+  ['HAVE_RENAMEAT', 'renameat', '#include<stdio.h>'],
   ['HAVE_REWINDDIR', 'rewinddir', '#include<dirent.h>'],
+  ['HAVE_RE_COMPILE_PATTERN', 're_compile_pattern', '#include<regex.h>'],
+  ['HAVE_RE_SEARCH', 're_search', '#include<regex.h>'],
+  ['HAVE_RE_SET_REGISTERS', 're_set_registers', '#include<regex.h>'],
+  ['HAVE_RPMATCH', 'rpmatch', '#include<stdlib.h>'],
   ['HAVE_SCHED_SETPARAM', 'sched_setparam', '#include<sched.h>'],
   ['HAVE_SCHED_SETSCHEDULER', 'sched_setscheduler', '#include<sched.h>'],
   ['HAVE_SECURE_GETENV', 'secure_getenv', '#include<stdlib.h>'],
@@ -578,30 +556,52 @@ check_functions = [
   ['HAVE_SETEGID', 'setegid', '#include<unistd.h>'],
   ['HAVE_SETENV', 'setenv', '#include<stdlib.h>'],
   ['HAVE_SETEUID', 'seteuid', '#include<unistd.h>'],
+  ['HAVE_SETHOSTNAME', 'sethostname', '#include<unistd.h>'],
   ['HAVE_SETRLIMIT', 'setrlimit', '#include<sys/resource.h>'],
+  ['HAVE_SETSTATE', 'setstate', '#include<stdlib.h>'],
   ['HAVE_SHUTDOWN', 'shutdown', '#include<sys/socket.h>'],
-  ['HAVE_SIGPROCMASK', 'sigprocmask', '#include<signal.h>'],
+  ['HAVE_SIGABBREV_NP', 'sigabbrev_np', '#include<string.h>'],
   ['HAVE_SIGACTION', 'sigaction', '#include<signal.h>'],
   ['HAVE_SIGALTSTACK', 'sigaltstack', '#include<signal.h>'],
+  ['HAVE_SIGDESCR_NP', 'sigdescr_np', '#include<string.h>'],
   ['HAVE_SIGINTERRUPT', 'siginterrupt', '#include<signal.h>'],
+  ['HAVE_SIGPROCMASK', 'sigprocmask', '#include<signal.h>'],
   ['HAVE_SLEEP', 'sleep', '#include<unistd.h>'],
   ['HAVE_SNPRINTF', 'snprintf', '#include<stdio.h>'],
   ['HAVE_STPCPY', 'stpcpy', '#include<string.h>'],
+  ['HAVE_STPNCPY', 'stpncpy', '#include<string.h>'],
+  ['HAVE_STRCASESTR', 'STRCASESTR', '#include<string.h>'],
   ['HAVE_STRCHRNUL', 'strchrnul', '#include<string.h>'],
+  ['HAVE_STRERRORNAME_NP', 'strerrorname_np', '#include<string.h>'],
   ['HAVE_STRERROR_R', 'strerror_r', '#include<string.h>'],
   ['HAVE_STRNDUP', 'strndup', '#include<string.h>'],
   ['HAVE_STRNLEN', 'strnlen', '#include<string.h>'],
+  ['HAVE_STRPBRK', 'strpbrk', '#include<string.h>'],
+  ['HAVE_STRSEP', 'strsep', '#include<string.h>'],
   ['HAVE_STRSIGNAL', 'strsignal', '#include<string.h>'],
+  ['HAVE_STRTOD', 'strtod', '#include<stdlib.h>'],
+  ['HAVE_STRTOL', 'strtol', '#include<stdlib.h>'],
+  ['HAVE_STRTOLD', 'strtold', '#include<stdlib.h>'],
+  ['HAVE_STRTOLL', 'strtoll', '#include<stdlib.h>'],
+  ['HAVE_STRTOUL', 'strtoul', '#include<stdlib.h>'],
+  ['HAVE_STRTOULL', 'strtoull', '#include<stdlib.h>'],
+  ['HAVE_STRVERSCMP', 'strverscmp', '#include<string.h>'],
   ['HAVE_SYMLINK', 'symlink', '#include<unistd.h>'],
+  ['HAVE_SYMLINKAT', 'symlinkat', '#include<unistd.h>'],
   ['HAVE_THRD_CREATE', 'thrd_create', '#include<threads.h>'],
   ['HAVE_TOWLOWER', 'towlower', '#include<wctype.h>'],
   ['HAVE_TSEARCH', 'tsearch', '#include<search.h>'],
+  ['HAVE_UNLINKAT', 'unlinkat', '#include<unistd.h>'],
+  ['HAVE_UNLOCKPT', 'unlockpt', '#include<stdlib.h>'],
   ['HAVE_UNSETENV', 'unsetenv', '#include<stdlib.h>'],
   ['HAVE_USELOCALE', 'uselocale', '#include<locale.h>'],
+  ['HAVE_USLEEP', 'usleep', '#include<unistd.h>'],
   ['HAVE_VASNPRINTF', 'vasnprintf', '#include<stdio.h>'],
   ['HAVE_VASPRINTF', 'vasprintf', '#include<stdio.h>'],
+  ['HAVE_VDPRINTF', 'vdprintf', '#include<stdio.h>'],
   ['HAVE_VFORK', 'vfork', '#include<unistd.h>'],
   ['HAVE_WAITID', 'waitid', '#include<sys/wait.h>'],
+  ['HAVE_WAITPID', 'waitpid', '#include<sys/wait.h>'],
   ['HAVE_WCRTOMB', 'wcrtomb', '#include<wchar.h>'],
   ['HAVE_WCSLEN', 'wcslen', '#include<wchar.h>'],
   ['HAVE_WCSNLEN', 'wcsnlen', '#include<wchar.h>'],
@@ -610,6 +610,7 @@ check_functions = [
   ['HAVE_WORKING_SIGALTSTACK', 'sigaltstack', '#include<signal.h>'],
   ['HAVE_WORKING_USELOCALE', 'uselocale', '#include<locale.h>'],
   ['HAVE__CHSIZE', '_chsize', '#include<io.h>'],
+  ['HAVE__EXIT', '_exit', '#include<stdlib.h>'],
   ['HAVE__FSEEKI64', '_fseeki64', '#include<stdio.h>'],
   ['HAVE__FTELLI64', '_ftelli64', '#include<stdio.h>'],
   ['HAVE__SET_INVALID_PARAMETER_HANDLER', '_set_invalid_parameter_handler', '#include<stdlib.h>'],
@@ -618,7 +619,6 @@ check_functions = [
   ['HAVE___FREADING', '__freading', '#include<stdio_ext.h>'],
   ['HAVE___SECURE_GETENV', '__secure_getenv', '#include<stdlib.h>'],
   ['HAVE___XPG_STRERROR_R', '__xpg_strerror_r', '#include<string.h>'],
-  ['HAVE_GETPROGNAME', 'getprogname', '#include<stdlib.h>'],
 ]
 
 foreach f : check_functions
@@ -671,12 +671,10 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token FUNC_REALPATH_WORKS --
 # check token FUNC_UNGETC_BROKEN
 # check token GETTIMEOFDAY_TIMEZONE
-# check token GNULIB_CLOSE_STREAM
 # check token GNULIB_DIRNAME
 # check token GNULIB_FDOPENDIR
 # check token GNULIB_FD_SAFER_FLAG
 # check token GNULIB_FFLUSH
-# check token GNULIB_FILENAMECAT
 # check token GNULIB_FOPEN_GNU
 # check token GNULIB_FOPEN_SAFER
 # check token GNULIB_FSCANF
@@ -697,160 +695,9 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token GNULIB_STRERROR
 # check token GNULIB_STRERROR_R_POSIX
 # check token GNULIB_TEMPNAME
-# check token GNULIB_TEST_ACCEPT
-# check token GNULIB_TEST_ACCESS
-# check token GNULIB_TEST_BIND
-# check token GNULIB_TEST_BTOWC
-# check token GNULIB_TEST_CALLOC_POSIX
-# check token GNULIB_TEST_CANONICALIZE
-# check token GNULIB_TEST_CANONICALIZE_FILE_NAME
-# check token GNULIB_TEST_CHDIR
-# check token GNULIB_TEST_CLOEXEC
-# check token GNULIB_TEST_CLOSE
-# check token GNULIB_TEST_CLOSEDIR
-# check token GNULIB_TEST_CONNECT
-# check token GNULIB_TEST_CREAT
-# check token GNULIB_TEST_DIRFD
-# check token GNULIB_TEST_DUP
-# check token GNULIB_TEST_DUP2
-# check token GNULIB_TEST_ENVIRON
-# check token GNULIB_TEST_EXPLICIT_BZERO
-# check token GNULIB_TEST_FCHDIR
-# check token GNULIB_TEST_FCLOSE
-# check token GNULIB_TEST_FCNTL
-# check token GNULIB_TEST_FDOPEN
-# check token GNULIB_TEST_FDOPENDIR
-# check token GNULIB_TEST_FFLUSH
-# check token GNULIB_TEST_FGETC
-# check token GNULIB_TEST_FGETS
-# check token GNULIB_TEST_FOPEN
-# check token GNULIB_TEST_FPRINTF
-# check token GNULIB_TEST_FPURGE
-# check token GNULIB_TEST_FPUTC
-# check token GNULIB_TEST_FPUTS
-# check token GNULIB_TEST_FREAD
-# check token GNULIB_TEST_FREE_POSIX
-# check token GNULIB_TEST_FREOPEN
-# check token GNULIB_TEST_FREXP
-# check token GNULIB_TEST_FREXPL
-# check token GNULIB_TEST_FSCANF
-# check token GNULIB_TEST_FSEEK
-# check token GNULIB_TEST_FSEEKO
-# check token GNULIB_TEST_FSTAT
-# check token GNULIB_TEST_FSTATAT
-# check token GNULIB_TEST_FTELL
-# check token GNULIB_TEST_FTELLO
-# check token GNULIB_TEST_FTRUNCATE
-# check token GNULIB_TEST_FWRITE
-# check token GNULIB_TEST_GETC
-# check token GNULIB_TEST_GETCHAR
-# check token GNULIB_TEST_GETCWD
-# check token GNULIB_TEST_GETDTABLESIZE
-# check token GNULIB_TEST_GETOPT_POSIX
-# check token GNULIB_TEST_GETPAGESIZE
-# check token GNULIB_TEST_GETRANDOM
-# check token GNULIB_TEST_GETTIMEOFDAY
-# check token GNULIB_TEST_IOCTL
-# check token GNULIB_TEST_ISWBLANK
-# check token GNULIB_TEST_ISWDIGIT
-# check token GNULIB_TEST_ISWXDIGIT
-# check token GNULIB_TEST_LINK
-# check token GNULIB_TEST_LISTEN
-# check token GNULIB_TEST_LOCALECONV
-# check token GNULIB_TEST_LOCALENAME
-# check token GNULIB_TEST_LSEEK
-# check token GNULIB_TEST_LSTAT
-# check token GNULIB_TEST_MALLOC_POSIX
-# check token GNULIB_TEST_MBRTOWC
-# check token GNULIB_TEST_MBSINIT
-# check token GNULIB_TEST_MBSLEN
-# check token GNULIB_TEST_MBSSTR
-# check token GNULIB_TEST_MBTOWC
-# check token GNULIB_TEST_MEMCHR
-# check token GNULIB_TEST_MEMPCPY
-# check token GNULIB_TEST_MEMRCHR
-# check token GNULIB_TEST_MKDIR
-# check token GNULIB_TEST_MKDTEMP
-# check token GNULIB_TEST_MKSTEMP
-# check token GNULIB_TEST_NANOSLEEP
-# check token GNULIB_TEST_NL_LANGINFO
-# check token GNULIB_TEST_OPEN
-# check token GNULIB_TEST_OPENAT
-# check token GNULIB_TEST_OPENDIR
-# check token GNULIB_TEST_PERROR
-# check token GNULIB_TEST_PIPE
-# check token GNULIB_TEST_PIPE2
-# check token GNULIB_TEST_POSIX_SPAWN
-# check token GNULIB_TEST_POSIX_SPAWNATTR_DESTROY
-# check token GNULIB_TEST_POSIX_SPAWNATTR_INIT
-# check token GNULIB_TEST_POSIX_SPAWNATTR_SETFLAGS
-# check token GNULIB_TEST_POSIX_SPAWNATTR_SETPGROUP
-# check token GNULIB_TEST_POSIX_SPAWNATTR_SETSIGMASK
-# check token GNULIB_TEST_POSIX_SPAWNP
-# check token GNULIB_TEST_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR
-# check token GNULIB_TEST_POSIX_SPAWN_FILE_ACTIONS_ADDCLOSE
-# check token GNULIB_TEST_POSIX_SPAWN_FILE_ACTIONS_ADDDUP2
-# check token GNULIB_TEST_POSIX_SPAWN_FILE_ACTIONS_ADDOPEN
-# check token GNULIB_TEST_POSIX_SPAWN_FILE_ACTIONS_DESTROY
-# check token GNULIB_TEST_POSIX_SPAWN_FILE_ACTIONS_INIT
-# check token GNULIB_TEST_PRINTF
-# check token GNULIB_TEST_PTHREAD_SIGMASK
-# check token GNULIB_TEST_PTHREAD_THREAD
-# check token GNULIB_TEST_PUTC
-# check token GNULIB_TEST_PUTCHAR
-# check token GNULIB_TEST_PUTENV
-# check token GNULIB_TEST_PUTS
-# check token GNULIB_TEST_RAISE
-# check token GNULIB_TEST_RAWMEMCHR
-# check token GNULIB_TEST_READDIR
-# check token GNULIB_TEST_READLINK
-# check token GNULIB_TEST_REALLOCARRAY
-# check token GNULIB_TEST_REALLOC_POSIX
-# check token GNULIB_TEST_REALPATH
-# check token GNULIB_TEST_RENAME
-# check token GNULIB_TEST_REWINDDIR
-# check token GNULIB_TEST_RMDIR
-# check token GNULIB_TEST_SCANF
-# check token GNULIB_TEST_SCHED_YIELD
-# check token GNULIB_TEST_SECURE_GETENV
-# check token GNULIB_TEST_SELECT
-# check token GNULIB_TEST_SETENV
-# check token GNULIB_TEST_SETLOCALE
-# check token GNULIB_TEST_SETLOCALE_NULL
-# check token GNULIB_TEST_SETSOCKOPT
-# check token GNULIB_TEST_SIGACTION
-# check token GNULIB_TEST_SIGNBIT
-# check token GNULIB_TEST_SIGPROCMASK
-# check token GNULIB_TEST_SLEEP
-# check token GNULIB_TEST_SNPRINTF
-# check token GNULIB_TEST_SOCKET
-# check token GNULIB_TEST_STAT
-# check token GNULIB_TEST_STPCPY
-# check token GNULIB_TEST_STRCHRNUL
-# check token GNULIB_TEST_STRDUP
-# check token GNULIB_TEST_STRERROR
-# check token GNULIB_TEST_STRERROR_R
-# check token GNULIB_TEST_STRNDUP
-# check token GNULIB_TEST_STRNLEN
-# check token GNULIB_TEST_STRSIGNAL
-# check token GNULIB_TEST_STRSTR
-# check token GNULIB_TEST_STRTOD
-# check token GNULIB_TEST_SYMLINK
-# check token GNULIB_TEST_UNSETENV
-# check token GNULIB_TEST_VASPRINTF
-# check token GNULIB_TEST_VFPRINTF
-# check token GNULIB_TEST_VPRINTF
-# check token GNULIB_TEST_WAITPID
-# check token GNULIB_TEST_WCRTOMB
-# check token GNULIB_TEST_WCTOB
-# check token GNULIB_TEST_WCTOMB
-# check token GNULIB_TEST_WCWIDTH
-# check token GNULIB_TEST_WRITE
 # check token GNULIB_UNISTR_U8_MBTOUCR
 # check token GNULIB_UNISTR_U8_UCTOMB
 # check token GNULIB_WCHAR_SINGLE_LOCALE
-# check token GNULIB_XALLOC
-# check token GNULIB_XALLOC_DIE
 # check token ICONV_CONST
 # check token ICONV_FLAVOR
 # check token LDBL_EXPBIT0_BIT
@@ -1099,7 +946,6 @@ configure_file(input : 'configmake.h.meson',
   configuration : configmake_data)
 
 generated_header_data.set('PRAGMA_SYSTEM_HEADER', '#pragma GCC system_header')
-#generated_header_data.set('PRAGMA_COLUMNS', '')#pragma columns 10000')
 if cc.compiles('#include_next <string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include_next')
   generated_header_data.set('NEXT_STRING_H', '<string.h>')
@@ -1111,6 +957,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_STDIO_H', '<stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<signal.h>')
+  generated_header_data.set('NEXT_FCNTL_H', '<fcntl.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -1122,6 +969,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../include/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../include/signal.h>')
+  generated_header_data.set('NEXT_FCNTL_H', '<../include/fcntl.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -1133,6 +981,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_STDIO_H', '<../ucrt/stdio.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../ucrt/signal.h>')
+  generated_header_data.set('NEXT_FCNTL_H', '<../ucrt/fcntl.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1515,7 +1364,17 @@ generated_header_data.set('REPLACE_PTHREAD_SIGMASK', 0)
 generated_header_data.set('REPLACE_RAISE', 0)
 generated_header_data.set('WINDOWS_STAT_INODES', 0)
 generated_header_data.set('ASM_SYMBOL_PREFIX', '')
-
+generated_header_data.set('GNULIB_CREAT', 0)
+generated_header_data.set('GNULIB_FCNTL', 0)
+generated_header_data.set('GNULIB_MDA_CREAT', 0)
+generated_header_data.set('GNULIB_MDA_OPEN', 0)
+generated_header_data.set('GNULIB_NONBLOCKING', 0)
+generated_header_data.set('GNULIB_OPEN', 0)
+generated_header_data.set('GNULIB_OPENAT', 0)
+generated_header_data.set('REPLACE_CREAT', 0)
+generated_header_data.set('REPLACE_FCNTL', 0)
+generated_header_data.set('REPLACE_OPEN', 0)
+generated_header_data.set('REPLACE_OPENAT', 0)
 if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
 struct stat buf;
 int verify_offt_size[sizeof (off_t) >= 8 ? 1 : -1];''')
@@ -1609,68 +1468,68 @@ subdir('sys')
 
 lib_inc = include_directories('.')
 m4lib_src = [
-  'xmalloc.c',
-  'xalloc-die.c',
-  'filenamecat.c',
-  'filenamecat-lgpl.c',
-  'basename.c',
+  'asyncsafe-spin.c',
   'basename-lgpl.c',
-  'exitfail.c',
-  'xstrndup.c',
-  'xasprintf.c',
-  'xvasprintf.c',
-  'xprintf.c',
-  'progname.c',
-  'verror.c',
+  'basename.c',
+  'c-stack.c',
+  'c-strcasecmp.c',
+  'canonicalize-lgpl.c',
+  'canonicalize.c',
+  'clean-temp-simple.c',
+  'clean-temp.c',
+  'close-stream.c',
   'closein.c',
   'closeout.c',
-  'close-stream.c',
-  'freadahead.c',
-  'quotearg.c',
-  'localcharset.c',
-  'c-stack.c',
-  'sigsegv.c',
-  'stackvma.c',
-  'version-etc.c',
-  'version-etc-fsf.c',
-  'propername.c',
-  'c-strcasecmp.c',
-  'xstriconv.c',
-  'mbsstr.c',
-  'mbchar.c',
-  'strnlen1.c',
-  'mbslen.c',
-  'striconv.c',
-  'malloca.c',
-  'execute.c',
-  'findprog-in.c',
-  'canonicalize.c',
-  'canonicalize-lgpl.c',
-  'wait-process.c',
-  'fatal-signal.c',
   'concat-filename.c',
+  'dup-safer.c',
+  'execute.c',
+  'exitfail.c',
+  'fatal-signal.c',
+  'fd-safer.c',
+  'file-set.c',
+  'filenamecat-lgpl.c',
+  'filenamecat.c',
+  'findprog-in.c',
+  'freadahead.c',
+  'gl_avltree_oset.c',
+  'gl_linked_list.c',
+  'gl_linkedhash_list.c',
+  'hash-pjw.c',
+  'hash-triple-simple.c',
+  'hash.c',
+  'localcharset.c',
   'malloc/scratch_buffer_dupfree.c',
   'malloc/scratch_buffer_grow.c',
   'malloc/scratch_buffer_grow_preserve.c',
   'malloc/scratch_buffer_set_array_size.c',
-  'file-set.c',
-  'hash-triple-simple.c',
-  'hash.c',
-  'hash-pjw.c',
-  'spawn-pipe.c',
+  'malloca.c',
+  'mbchar.c',
+  'mbslen.c',
+  'mbsstr.c',
   'memchr2.c',
-  'clean-temp.c',
-  'clean-temp-simple.c',
-  'gl_linked_list.c',
-  'xmalloca.c',
-  'tmpdir.c',
-  'asyncsafe-spin.c',
-  'gl_linkedhash_list.c',
-  'gl_avltree_oset.c',
   'mkstemp-safer.c',
-  'fd-safer.c',
-  'dup-safer.c',
   'pipe-safer.c',
+  'progname.c',
+  'propername.c',
+  'quotearg.c',
+  'sigsegv.c',
+  'spawn-pipe.c',
+  'stackvma.c',
+  'striconv.c',
+  'strnlen1.c',
+  'tmpdir.c',
+  'verror.c',
+  'version-etc-fsf.c',
+  'version-etc.c',
+  'wait-process.c',
+  'xalloc-die.c',
+  'xasprintf.c',
+  'xmalloc.c',
+  'xmalloca.c',
+  'xprintf.c',
+  'xstriconv.c',
+  'xstrndup.c',
+  'xvasprintf.c',
 ]
 
 if host_machine.system() == 'windows'
