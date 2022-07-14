@@ -939,7 +939,7 @@ if host_machine.system() == 'windows'
   libm4_c_args += '-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-DSPAWN_PIPE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-D_Restrict_arr_'
-  libm4_c_args += '/FI nononnull.h'
+  libm4_c_args += '/FI../lib/nononnull.h'
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
 else
