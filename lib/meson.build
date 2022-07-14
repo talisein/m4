@@ -326,15 +326,15 @@ if host_machine.system() == 'windows'
 #endif''')
     cdata.set10('HAVE_LIB_BCRYPT', true)
     generated_header_data.set10('HAVE_LIB_BCRYPT', true)
-    getrandom_lib = cc.find_library('bcrypt')
+    getrandom_dep = cc.find_library('bcrypt')
     else
       generated_header_data.set10('HAVE_LIB_BCRYPT', false)
-      getrandom_lib = cc.find_library('advapi32')
+      getrandom_dep = cc.find_library('advapi32')
     endif
   else
     generated_header_data.set10('HAVE_BCRYPT_H', false)
     generated_header_data.set10('HAVE_LIB_BCRYPT', false)
-    getrandom_lib = cc.find_library('advapi32')
+    getrandom_dep = cc.find_library('advapi32')
   endif
 endif
 
@@ -1839,11 +1839,8 @@ if generated_header_data.get('GNULIB_NL_LANGINFO') == 1
 endif
 
 if not cdata.has('HAVE_GETOPT_H')
-  message('Adding getopt_long source')
   m4lib_src += 'getopt.c'
   m4lib_src += 'getopt1.c'
-else
-  message('***NOT adding getopt_long source??***')
 endif
 
 if generated_header_data.get('GNULIB_FSEEKO') == 1
@@ -1940,7 +1937,8 @@ endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
 if host_machine.system() == 'windows'
-  m4_dep = declare_dependency(link_with: [m4_lib, getrandom_lib],
+  m4_dep = declare_dependency(link_with: m4_lib,
+                              dependencies: getrandom_dep,
                               compile_args: libm4_c_args,
                               include_directories: lib_inc)
 else
