@@ -426,6 +426,7 @@ check_declarations = [
   ['HAVE_OBSTACK', 'obstack_init', 'obstack.h'], # it's a define
   ['HAVE_PTHREAD_MUTEX_RECURSIVE', 'PTHREAD_MUTEX_RECURSIVE', 'pthread.h'],
   ['HAVE_VAR___PROGNAME', '__progname', 'stdlib.h'],
+  ['HAVE_DECL_MKDIR', 'mkdir', 'sys/stat.h'],
 ]
 
 foreach f : check_declarations
@@ -469,7 +470,6 @@ check_functions = [
   ['HAVE_FUTIMENS', 'futimens', '#include<sys/stat.h>'],
   ['HAVE_GETUMASK', 'getumask', '#include<sys/stat.h>'],
   ['HAVE_LCHMOD', 'lchmod', '#include<sys/stat.h>'],
-  ['HAVE_MKDIR', 'mkdir', '#include<sys/stat.h>'],
   ['HAVE_MKDIRAT', 'mkdirat', '#include<sys/stat.h>'],
   ['HAVE_MKFIFO', 'mkfifo', '#include<sys/stat.h>'],
   ['HAVE_MKFIFOAT', 'mkfifoat', '#include<sys/stat.h>'],
@@ -1602,8 +1602,8 @@ generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
 generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
 generated_header_data.set10('GNULIB_LSTAT', not cdata.has('HAVE_LSTAT'))
-generated_header_data.set10('GNULIB_MKDIR', not cdata.has('HAVE_MKDIR'))
-generated_header_data.set10('GNULIB_MDA_MKDIR', cdata.has('HAVE_MKDIR') and host_machine.system() == 'windows')
+generated_header_data.set10('GNULIB_MKDIR', cdata.get('HAVE_DECL_MKDIR') == 0)
+generated_header_data.set10('GNULIB_MDA_MKDIR', cdata.get('HAVE_DECL_MKDIR') == 1 and host_machine.system() == 'windows')
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
