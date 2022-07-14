@@ -549,6 +549,7 @@ check_functions = [
   ['HAVE_MBRTOWC', 'mbrtowc', '#include<wchar.h>'],
   ['HAVE_MBSINIT', 'mbsinit', '#include<wchar.h>'],
   ['HAVE_MBSLEN', 'mbslen', '#include<wchar.h>'],
+  ['HAVE_MBSSTR', 'mbsstr', '#include<wchar.h>'],
   ['HAVE_MBTOWC', 'mbtowc', '#include<wchar.h>'],
   ['HAVE_MEMPCPY', 'mempcpy', '#include<string.h>'],
   ['HAVE_MEMRCHR', 'memrchr', '#include<string.h>'],
@@ -723,7 +724,6 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token GETTIMEOFDAY_TIMEZONE
 # check token GNULIB_DIRNAME
 # check token GNULIB_FDOPENDIR
-# check token GNULIB_FD_SAFER_FLAG
 # check token GNULIB_FFLUSH
 # check token GNULIB_FOPEN_GNU
 # check token GNULIB_FOPEN_SAFER
@@ -734,7 +734,6 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token GNULIB_MBRTOWC_SINGLE_THREAD
 # check token GNULIB_MSVC_NOTHROW
 # check token GNULIB_OPENAT
-# check token GNULIB_PIPE2_SAFER
 # check token GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU
 # check token GNULIB_REALLOCARRAY
 # check token GNULIB_REGEX_SINGLE_THREAD
@@ -744,7 +743,6 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token GNULIB_STDIO_SINGLE_THREAD
 # check token GNULIB_STRERROR
 # check token GNULIB_STRERROR_R_POSIX
-# check token GNULIB_TEMPNAME
 # check token GNULIB_UNISTR_U8_MBTOUCR
 # check token GNULIB_UNISTR_U8_UCTOMB
 # check token GNULIB_WCHAR_SINGLE_LOCALE
@@ -925,13 +923,18 @@ cdata.set('GNULIB_XALLOC', 1)
 cdata.set('GNULIB_XALLOC_DIE', 1)
 cdata.set('GNULIB_FILENAMECAT', 1)
 cdata.set('GNULIB_CLOSE_STREAM', 1)
-cdata.set('GNULIB_MBSLEN', 1)
-cdata.set('GNULIB_MBSSTR', 1)
+cdata.set('GNULIB_MBSLEN', not cdata.has('HAVE_MBSLEN'))
+cdata.set('GNULIB_MBSSTR', not cdata.has('HAVE_MBSSTR'))
 cdata.set('GNULIB_CANONICALIZE', 1)
 cdata.set('GNULIB_CANONICALIZE_LGPL', 1)
 cdata.set('ICONV_CONST', '')
 if cdata.get('HAVE_DECL_EACCESS') == 0
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
+endif
+
+if not cdata.has('HAVE_PIPE2')
+  cdata.set('GNULIB_PIPE2_SAFER', 1)
+  cdata.set('GNULIB_FD_SAFER_FLAG', 1)
 endif
 
 libm4_c_args = []
@@ -1159,7 +1162,6 @@ generated_header_data.set('GNULIB_FSYNC', 0)
 generated_header_data.set('GNULIB_FTRUNCATE', 0)
 generated_header_data.set('GNULIB_GETCWD', 0)
 generated_header_data.set('GNULIB_GETDOMAINNAME', 0)
-generated_header_data.set('GNULIB_GETDTABLESIZE', 0)
 generated_header_data.set('GNULIB_GETENTROPY', 0)
 generated_header_data.set('GNULIB_GETGROUPS', 0)
 generated_header_data.set('GNULIB_GETHOSTNAME', 0)
@@ -1197,7 +1199,6 @@ generated_header_data.set('GNULIB_MDA_SWAB', 0)
 generated_header_data.set('GNULIB_MDA_UNLINK', 0)
 generated_header_data.set('GNULIB_MDA_WRITE', 0)
 generated_header_data.set('GNULIB_PIPE', 0)
-generated_header_data.set('GNULIB_PIPE2', 0)
 generated_header_data.set('GNULIB_PREAD', 0)
 generated_header_data.set('GNULIB_PWRITE', 0)
 generated_header_data.set('GNULIB_READ', 0)
@@ -1566,10 +1567,14 @@ generated_header_data.set10('GNULIB_STRSIGNAL', not cdata.has('HAVE_STRSIGNAL'))
 generated_header_data.set10('GNULIB_MKSTEMP', not cdata.has('HAVE_MKSTEMP'))
 generated_header_data.set10('GNULIB_MKDTEMP', not cdata.has('HAVE_MKDTEMP'))
 generated_header_data.set10('GNULIB_READLINK', not cdata.has('HAVE_READLINK'))
+generated_header_data.set10('GNULIB_VASNPRINTF', not cdata.has('HAVE_VASNPRINTF'))
 generated_header_data.set10('GNULIB_VASPRINTF', not cdata.has('HAVE_VASPRINTF'))
 generated_header_data.set10('GNULIB_WCWIDTH', not cdata.has('HAVE_WCWIDTH'))
 generated_header_data.set10('GNULIB_FCNTL', not cdata.has('HAVE_FCNTL'))
 generated_header_data.set10('GNULIB_STPCPY', not cdata.has('HAVE_STPCPY'))
+generated_header_data.set10('GNULIB_TEMPNAME', not cdata.has('HAVE_MKDTEMP') or not cdata.has('HAVE_MKSTEMP'))
+generated_header_data.set10('GNULIB_PIPE2', not cdata.has('HAVE_PIPE2'))
+generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABLESIZE'))
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
@@ -1717,8 +1722,6 @@ m4lib_src = [
   'malloc/scratch_buffer_set_array_size.c',
   'malloca.c',
   'mbchar.c',
-  'mbslen.c',
-  'mbsstr.c',
   'memchr2.c',
   'mkstemp-safer.c',
   'pipe-safer.c',
@@ -1747,7 +1750,6 @@ m4lib_src = [
 
 if host_machine.system() == 'windows'
   m4lib_src += ['windows-spawn.c',
-                'pipe2-safer.c', # used by spawn-pipe.c only for windows
                 'windows-spin.c', # used by asyncsafe-spin.c only for windows
                 'msvc-nothrow.c',
                 'msvc-inval.c']
@@ -1839,6 +1841,10 @@ if generated_header_data.get('GNULIB_WAITPID') == 1
   m4lib_src += 'waitpid.c'
 endif
 
+if generated_header_data.get('GNULIB_TEMPNAME') == 1
+  m4lib_src += 'tempname.c'
+endif
+
 if generated_header_data.get('GNULIB_MEMPCPY') == 1
   m4lib_src += 'mempcpy.c'
 endif
@@ -1849,6 +1855,10 @@ endif
 
 if generated_header_data.get('GNULIB_VASPRINTF') == 1
   m4lib_src += 'vasprintf.c'
+endif
+
+if generated_header_data.get('GNULIB_VASNPRINTF') == 1
+  m4lib_src += 'vasnprintf.c'
 endif
 
 if generated_header_data.get('GNULIB_WCWIDTH') == 1
@@ -1862,6 +1872,31 @@ endif
 
 if generated_header_data.get('GNULIB_STPCPY') == 1
   m4lib_src += 'stpcpy.c'
+endif
+
+if generated_header_data.get('GNULIB_PIPE2') == 1
+  m4lib_src += 'pipe2.c'
+endif
+
+if generated_header_data.get('GNULIB_PIPE2_SAFER') == 1
+  m4lib_src += 'pipe2-safer.c'
+endif
+
+if generated_header_data.get('GNULIB_FD_SAFER_FLAG') == 1
+  m4lib_src += 'dup-safer-flag.c'
+  m4lib_src += 'fd-safer-flag.c'
+endif
+
+if generated_header_data.get('GNULIB_MBSLEN') == 1
+  m4lib_src += 'mbslen.c'
+endif
+
+if generated_header_data.get('GNULIB_MBSSTR') == 1
+  m4lib_src += 'mbsstr.c'
+endif
+
+if generated_header_data.get('GNULIB_GETDTABLESIZE') == 1
+  m4lib_src += 'getdtablesize.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
