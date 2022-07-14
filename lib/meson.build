@@ -408,6 +408,11 @@ foreach f : check_declarations
 endforeach
 
 check_functions = [
+  ['HAVE_LANGINFO_CODESET', 'CODESET', '#include<langinfo.h>'],
+  ['HAVE_LANGINFO_T_FMT_AMPM', 'T_FMT_AMPM', '#include<langinfo.h>'],
+  ['HAVE_LANGINFO_ALTMON', 'ALTMON_1', '#include<langinfo.h>'],
+  ['HAVE_LANGINFO_ERA', 'ERA', '#include<langinfo.h>'],
+  ['HAVE_LANGINFO_YESEXPR', 'YESEXPR', '#include<langinfo.h>'],
   ['HAVE_ALIGNED_ALLOC', 'aligned_alloc', '#include<stdlib.h>'],
   ['HAVE_ALLOCA', 'alloca', '#include<alloca.h>'],
   ['HAVE_ATOLL', 'atoll', '#include<stdlib.h>'],
@@ -889,6 +894,7 @@ libm4_c_args = []
 if host_machine.system() == 'windows'
   libm4_c_args += '-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-DSPAWN_PIPE_IMPL_AVOID_POSIX_SPAWN=1'
+  libm4_c_args += '-D_Restrict_arr_'
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
 else
@@ -958,6 +964,7 @@ if cc.compiles('#include_next <string.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<signal.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<fcntl.h>')
+  generated_header_data.set('NEXT_LANGINFO_H', '<langinfo.h>')
 elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../include/string.h>')
@@ -970,6 +977,7 @@ elif cc.compiles('#include <../include/string.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../include/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../include/signal.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<../include/fcntl.h>')
+  generated_header_data.set('NEXT_LANGINFO_H', '<../include/langinfo.h>')
 elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('INCLUDE_NEXT', 'include')
   generated_header_data.set('NEXT_STRING_H', '<../ucrt/string.h>')
@@ -982,6 +990,7 @@ elif cc.compiles('#include <../ucrt/string.h>')
   generated_header_data.set('NEXT_STDDEF_H', '<../ucrt/stddef.h>')
   generated_header_data.set('NEXT_SIGNAL_H', '<../ucrt/signal.h>')
   generated_header_data.set('NEXT_FCNTL_H', '<../ucrt/fcntl.h>')
+  generated_header_data.set('NEXT_LANGINFO_H', '<../ucrt/langinfo.h>')
 else
   error('Can\'t figure out how to #include_next')
 endif
@@ -1375,6 +1384,12 @@ generated_header_data.set('REPLACE_CREAT', 0)
 generated_header_data.set('REPLACE_FCNTL', 0)
 generated_header_data.set('REPLACE_OPEN', 0)
 generated_header_data.set('REPLACE_OPENAT', 0)
+generated_header_data.set('GNULIB_NL_LANGINFO', 0)
+generated_header_data.set('REPLACE_NL_LANGINFO', 0)
+
+
+
+
 if host_machine.system() == 'windows' and not cc.compiles('''#include <sys/types.h>
 struct stat buf;
 int verify_offt_size[sizeof (off_t) >= 8 ? 1 : -1];''')
@@ -1457,6 +1472,13 @@ endif
 if cdata.get('HAVE_DECL_O_CLOEXEC') == 0
 configure_file(input : 'fcntl.in.h.meson',
                output : 'fcntl.h',
+               configuration : generated_header_data)
+endif
+
+# LANGINFO.H
+if cdata.get('HAVE_LANGINFO_H') == 0
+configure_file(input : 'langinfo.in.h.meson',
+               output : 'langinfo.h',
                configuration : generated_header_data)
 endif
 
