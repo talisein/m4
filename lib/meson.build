@@ -970,24 +970,24 @@ if host_machine.system() == 'windows'
   cdata.set('GNULIB_FOPEN_GNU', 1)
   cdata.set('GNULIB_OPEN', 1)
   cdata.set('GNULIB_FOPEN', 1)
-  cdata.set('GNULIB_FDOPEN', 1)
   cdata.set('REPLACE_OPEN', 1)
   cdata.set('REPLACE_FOPEN', 1)
-  cdata.set('REPLACE_FDOPEN', 1)
 else
   libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
   cdata.set('GNULIB_MSVC_NOTHROW', 0)
   cdata.set('GNULIB_PIPE2_SAFER', 0)
+  cdata.set('GNULIB_FOPEN_SAFER', 0)
   cdata.set('GNULIB_FOPEN_GNU', 0)
   cdata.set('GNULIB_OPEN', 0)
   cdata.set('GNULIB_FOPEN', 0)
-  cdata.set('GNULIB_FDOPEN', 0)
   cdata.set('REPLACE_OPEN', 0)
   cdata.set('REPLACE_FOPEN', 0)
-  cdata.set('REPLACE_FDOPEN', 0)
-
 endif
+
+cdata.set('REPLACE_FDOPEN', 0)
+cdata.set('GNULIB_FDOPEN', 0)
+
 if not cdata.has('HAVE_SSIZE_T')
   cdata.set('ssize_t', 'ptrdiff_t')
 endif
@@ -1955,6 +1955,7 @@ endif
 
 if generated_header_data.get('GNULIB_OPEN') == 1
   m4lib_src += 'open.c'
+  m4lib_src += 'cloexec.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
