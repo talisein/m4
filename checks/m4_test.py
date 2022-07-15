@@ -41,6 +41,7 @@ def main() -> int:
             print('Here is the output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected.decode(), res.stdout.decode()))
             if len(res.stderr) > 0:
                 print('Stderr:\n{0}'.format(res.stderr.decode()))
+            print('The input was:\n{0}'.format(data.decode()))
             return 1
         if byte_expected.splitlines() != res.stdout.splitlines():
             print('Unexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected.decode(), res.stdout.decode()))
@@ -58,7 +59,7 @@ def main() -> int:
             else:
                 edited_stderr += errline
         if len(byte_expected_err) > 0 and byte_expected_err.splitlines() != edited_stderr.splitlines():
-            print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err.decode(), b''.join(edited_stderr).decode()))
+            print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err.decode(), edited_stderr.decode()))
             print('The input was:\n{0}'.format(data.decode()))
             return 1
 

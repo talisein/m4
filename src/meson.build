@@ -17,5 +17,4 @@ m4_src = [
 
 
 m4 = executable('m4', m4_src,
-#                c_args: ['-DDEBUG_INCL'],
                 dependencies: m4_dep)

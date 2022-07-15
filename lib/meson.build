@@ -967,7 +967,7 @@ if host_machine.system() == 'windows'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_PIPE2_SAFER', 1)
-  cdata.set('GNULIB_FOPEN_GNU', 1)
+  cdata.set('GNULIB_FOPEN_GNU', 0)
   cdata.set('GNULIB_FOPEN', 1)
   cdata.set('REPLACE_FOPEN', 1)
 else
