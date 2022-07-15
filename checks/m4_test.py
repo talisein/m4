@@ -6,12 +6,11 @@ def main() -> int:
     m4 = sys.argv[1]
     inputfile = sys.argv[2]
     with open(inputfile, 'rb') as f:
-        lines = f.read().splitlines(keepends=True)
         expected_out = []
         expected_err = []
         ignore_expected_err = False
         data = bytes()
-        for l in lines:
+        for l in f.read().splitlines(keepends=True):
             if l.startswith(b'dnl @ expected status: '):
                 expected_code = int(l[len('dnl @ expected status: '):].rstrip())
             if l.startswith(b'dnl @ extra options: '):
@@ -19,7 +18,7 @@ def main() -> int:
             if l.startswith(b'dnl @result{}'):
                 expected_out.append(l[len('dnl @result{}'):])
             if l.startswith(b'dnl @error{}'):
-                expected_err.append(l[len('dnl @error{}'):].replace(b'm4:',b'_build/src/m4:'))
+                expected_err.append(l[len('dnl @error{}'):])
             if l.startswith(b'dnl @ expected error: ignore'):
                 ignore_expected_err = True
             if not l.startswith(b'dnl @'):
@@ -47,11 +46,20 @@ def main() -> int:
             print('Unexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected.decode(), res.stdout.decode()))
             if len(res.stderr) > 0:
                 print('stderr:\n{0}'.format(res.stderr.decode()))
+            print('The input was:\n{0}'.format(data.decode()))
             return 1
         if ignore_expected_err:
             return 0
-        if len(byte_expected_err) > 0 and byte_expected_err.splitlines() != res.stderr.splitlines():
-            print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err.decode(), res.stderr.decode()))
+        edited_stderr = []
+        for errline in res.stderr.splitlines(keepends=True):
+            if b':' in errline and b'm4trace' not in errline and b'm4debug' not in errline and b'm4' in errline:
+                colon = errline.find(b':') + 1
+                edited_stderr.append(b'm4:' + errline[colon:])
+            else:
+                edited_stderr.append(errline)
+        if len(byte_expected_err) > 0 and byte_expected_err != b''.join(edited_stderr):
+            print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err.decode(), b''.join(edited_stderr).decode()))
+            print('The input was:\n{0}'.format(data.decode()))
             return 1
 
     return 0
