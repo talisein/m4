@@ -953,9 +953,7 @@ if cdata.get('HAVE_DECL_EACCESS') == 0
   cdata.set('eaccess', 'access', description: 'Define as \'access\' if you don\'t have the eaccess() function.')
 endif
 
-if not cdata.has('HAVE_PIPE2')
-  cdata.set('GNULIB_FD_SAFER_FLAG', 1)
-endif
+cdata.set('GNULIB_FD_SAFER_FLAG', 1)
 
 libm4_c_args = []
 if host_machine.system() == 'windows'
@@ -976,8 +974,8 @@ else
   libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
   cdata.set('GNULIB_MSVC_NOTHROW', 0)
-  cdata.set('GNULIB_PIPE2_SAFER', 0)
-  cdata.set('GNULIB_FOPEN_SAFER', 0)
+  cdata.set('GNULIB_PIPE2_SAFER', 1)
+  cdata.set('GNULIB_FOPEN_SAFER', 1)
   cdata.set('GNULIB_FOPEN_GNU', 0)
   cdata.set('GNULIB_OPEN', 0)
   cdata.set('GNULIB_FOPEN', 0)
