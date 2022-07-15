@@ -197,7 +197,6 @@ checks = [
   '196.esyscmd',
   '197.sysval',
   '198.sysval',
-  '199.mkstemp',
   '200.mkstemp',
   '201.mkstemp',
   '202.errprint',
@@ -236,6 +235,9 @@ checks = [
   '235.improved_c',
   '236.improved_f',
 ]
+nopara_checks = [
+  '199.mkstemp',
+]
 
 getenv_exe = executable('getenv_test', 'getenv.c')
 test('Does getenv work?', getenv_exe, env: ['MYGETENVTEST=GETENVWORKS'])
@@ -244,4 +246,8 @@ py = find_program('python3')
 m4_test = files('m4_test.py')
 foreach file : checks
   test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'])
+endforeach
+
+foreach file : nopara_checks
+  test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'], is_parallel: false)
 endforeach
