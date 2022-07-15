@@ -57,7 +57,7 @@ def main() -> int:
                 edited_stderr.append(b'm4:' + errline[colon:])
             else:
                 edited_stderr.append(errline)
-        if len(byte_expected_err) > 0 and byte_expected_err != b''.join(edited_stderr):
+        if len(byte_expected_err) > 0 and byte_expected_err.splitlines() != b''.join(edited_stderr).splitlines():
             print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err.decode(), b''.join(edited_stderr).decode()))
             print('The input was:\n{0}'.format(data.decode()))
             return 1
