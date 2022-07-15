@@ -748,7 +748,6 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token GNULIB_DIRNAME
 # check token GNULIB_FDOPENDIR
 # check token GNULIB_FFLUSH
-# check token GNULIB_FOPEN_GNU
 # check token GNULIB_FOPEN_SAFER
 # check token GNULIB_FSCANF
 # check token GNULIB_GETCWD
@@ -966,11 +965,16 @@ if host_machine.system() == 'windows'
   libm4_c_args += '-DSPAWN_PIPE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-D_Restrict_arr_'
   libm4_c_args += '/FI../lib/nononnull.h'
-  cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
+  cdata.set('GNULIB_MSVC_NOTHROW', 1)
+  cdata.set('GNULIB_FOPEN_GNU', 1)
+  cdata.set('GNULIB_FOPEN', 1)
 else
   libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
+  cdata.set('GNULIB_MSVC_NOTHROW', 0)
+  cdata.set('GNULIB_FOPEN_GNU', 0)
+  cdata.set('GNULIB_FOPEN', 0)
 endif
 if not cdata.has('HAVE_SSIZE_T')
   cdata.set('ssize_t', 'ptrdiff_t')
@@ -1359,7 +1363,6 @@ generated_header_data.set('GNULIB_FDOPEN', 0)
 generated_header_data.set('GNULIB_FFLUSH', 0)
 generated_header_data.set('GNULIB_FGETC', 0)
 generated_header_data.set('GNULIB_FGETS', 0)
-generated_header_data.set('GNULIB_FOPEN', 0)
 generated_header_data.set('GNULIB_FPRINTF', 0)
 generated_header_data.set('GNULIB_FPRINTF_POSIX', 0)
 generated_header_data.set('GNULIB_FPURGE', 0)
@@ -1603,6 +1606,7 @@ generated_header_data.set10('GNULIB_GETDTABLESIZE', not cdata.has('HAVE_GETDTABL
 generated_header_data.set10('GNULIB_GETRANDOM', not cdata.has('HAVE_GETRANDOM'))
 generated_header_data.set10('GNULIB_LSTAT', not cdata.has('HAVE_LSTAT'))
 generated_header_data.set10('GNULIB_MDA_MKDIR', host_machine.system() == 'windows')
+
 
 # STRING.H
 configure_file(input : 'string.in.h.meson',
