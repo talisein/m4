@@ -968,16 +968,25 @@ if host_machine.system() == 'windows'
   cdata.set('GNULIB_PIPE2_SAFER', 1)
   cdata.set('GNULIB_FOPEN_SAFER', 1)
   cdata.set('GNULIB_FOPEN_GNU', 1)
+  cdata.set('GNULIB_OPEN', 1)
   cdata.set('GNULIB_FOPEN', 1)
+  cdata.set('GNULIB_FDOPEN', 1)
+  cdata.set('REPLACE_OPEN', 1)
   cdata.set('REPLACE_FOPEN', 1)
+  cdata.set('REPLACE_FDOPEN', 1)
 else
   libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
   cdata.set('GNULIB_MSVC_NOTHROW', 0)
   cdata.set('GNULIB_PIPE2_SAFER', 0)
   cdata.set('GNULIB_FOPEN_GNU', 0)
+  cdata.set('GNULIB_OPEN', 0)
   cdata.set('GNULIB_FOPEN', 0)
+  cdata.set('GNULIB_FDOPEN', 0)
+  cdata.set('REPLACE_OPEN', 0)
   cdata.set('REPLACE_FOPEN', 0)
+  cdata.set('REPLACE_FDOPEN', 0)
+
 endif
 if not cdata.has('HAVE_SSIZE_T')
   cdata.set('ssize_t', 'ptrdiff_t')
@@ -1121,7 +1130,6 @@ generated_header_data.set('GNULIB_FCHMODAT', 0)
 generated_header_data.set('GNULIB_FCHOWNAT', 0)
 generated_header_data.set('GNULIB_FCLOSE', 0)
 generated_header_data.set('GNULIB_FDATASYNC', 0)
-generated_header_data.set('GNULIB_FDOPEN', 0)
 generated_header_data.set('GNULIB_FFLUSH', 0)
 generated_header_data.set('GNULIB_FFSL', 0)
 generated_header_data.set('GNULIB_FFSLL', 0)
@@ -1248,7 +1256,6 @@ generated_header_data.set('GNULIB_NEWLOCALE', 0)
 generated_header_data.set('GNULIB_NONBLOCKING', 0)
 generated_header_data.set('GNULIB_OBSTACK_PRINTF', 0)
 generated_header_data.set('GNULIB_OBSTACK_PRINTF_POSIX', 0)
-generated_header_data.set('GNULIB_OPEN', 0)
 generated_header_data.set('GNULIB_OPENAT', 0)
 generated_header_data.set('GNULIB_OVERRIDES_STRUCT_STAT', 0)
 generated_header_data.set('GNULIB_PCLOSE', 0)
@@ -1421,7 +1428,6 @@ generated_header_data.set('REPLACE_FCHMODAT', 0)
 generated_header_data.set('REPLACE_FCHOWNAT', 0)
 generated_header_data.set('REPLACE_FCLOSE', 0)
 generated_header_data.set('REPLACE_FCNTL', 0)
-generated_header_data.set('REPLACE_FDOPEN', 0)
 generated_header_data.set('REPLACE_FFLUSH', 0)
 generated_header_data.set('REPLACE_FFSLL', 0)
 generated_header_data.set('REPLACE_FPRINTF', 0)
@@ -1475,7 +1481,6 @@ generated_header_data.set('REPLACE_NEWLOCALE', 0)
 generated_header_data.set('REPLACE_NL_LANGINFO', 0)
 generated_header_data.set('REPLACE_NULL', 0)
 generated_header_data.set('REPLACE_OBSTACK_PRINTF', 0)
-generated_header_data.set('REPLACE_OPEN', 0)
 generated_header_data.set('REPLACE_OPENAT', 0)
 generated_header_data.set('REPLACE_PERROR', 0)
 generated_header_data.set('REPLACE_POPEN', 0)
@@ -1946,6 +1951,10 @@ endif
 
 if generated_header_data.get('GNULIB_FOPEN_SAFER') == 1
   m4lib_src += 'fopen-safer.c'
+endif
+
+if generated_header_data.get('GNULIB_OPEN') == 1
+  m4lib_src += 'open.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
