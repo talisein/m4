@@ -23,7 +23,7 @@ def main() -> int:
                 data += l.encode()
         runargs = []
         runargs.append(m4)
-        runargs.append('-d')
+        runargs.append('-d aeqp')
         for arg in args.split(' '):
             if len(arg) > 0:
                 runargs.append(arg)
