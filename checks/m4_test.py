@@ -37,12 +37,12 @@ def main() -> int:
             print('Unexpected return code: {0}, expected {1}'.format(res.returncode, expected_code))
             print('Here is the output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected, res.stdout.replace(b'\r\n', b'\n')))
             if len(res.stderr) > 0:
-                printf('Stderr:\n{0}'.format(res.stderr))
+                print('Stderr:\n{0}'.format(res.stderr))
             return 1
         if byte_expected != res.stdout.replace(b'\r\n', b'\n'):
             print('unexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected, res.stdout.replace(b'\r\n', b'\n')))
             if len(res.stderr) > 0:
-                printf('Stderr:\n{0}'.format(res.stderr))
+                print('Stderr:\n{0}'.format(res.stderr))
             return 1
         if len(byte_expected_err) > 0 and byte_expected_err != b'ignore\n' and byte_expected_err != res.stderr.replace(b'\r\n', b'\n'):
             print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err, res.stderr.replace(b'\r\n', b'\n')))
