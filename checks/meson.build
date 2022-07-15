@@ -237,8 +237,11 @@ checks = [
   '236.improved_f',
 ]
 
+getenv_exe = executable('getenv_test', 'getenv.c')
+test('Does getenv work?', getenv_exe, env: ['MYGETENVTEST=GETENVWORKS'])
+
 py = find_program('python3')
 m4_test = files('m4_test.py')
 foreach file : checks
-  test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.source_root(), env: ['M4PATH=examples'])
+  test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + (meson.project_source_root() / 'examples')])
 endforeach

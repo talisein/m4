@@ -122,7 +122,6 @@ jobs:
 
       - name: Get release tarball
         run: |
-          dir
           C:\msys64\usr\bin\wget.exe http://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.xz
           C:\msys64\usr\bin\tar.exe --strip-components=1 -xvf m4-1.4.19.tar.xz
 
