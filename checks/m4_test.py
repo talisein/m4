@@ -30,6 +30,7 @@ def main() -> int:
         runargs.append('-')
         byte_expected = b''.join(expected_out)
         byte_expected_err = b''.join(expected_err)
+        print('Arguments are: {0}'.format(' '.join(runargs)))
         res = subprocess.run(runargs, input=data, capture_output=True)
         if res.returncode == 77:
             return 77
@@ -40,7 +41,7 @@ def main() -> int:
                 print('Stderr:\n{0}'.format(res.stderr))
             return 1
         if byte_expected.splitlines() != res.stdout.splitlines():
-            print('Enexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected, res.stdout))
+            print('Unexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected, res.stdout))
             if len(res.stderr) > 0:
                 print('stderr:\n{0}'.format(res.stderr))
             return 1
