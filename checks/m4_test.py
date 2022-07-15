@@ -9,6 +9,7 @@ def main() -> int:
         lines = f.read().splitlines(keepends=True)
         expected_out = []
         expected_err = []
+        ignore_expected_err = False
         data = bytes()
         for l in lines:
             if l.startswith(b'dnl @ expected status: '):
@@ -17,8 +18,10 @@ def main() -> int:
                 args = l[len('dnl @ extra options: '):].rstrip().decode()
             if l.startswith(b'dnl @result{}'):
                 expected_out.append(l[len('dnl @result{}'):])
-            if l.startswith(b'dnl @ expected error: '):
-                expected_err.append(l[len('dnl @ expected error: '):])
+            if l.startswith(b'dnl @error{}'):
+                expected_err.append(l[len('dnl @error{}'):].replace(b'm4:',b'_build/src/m4:'))
+            if l.startswith(b'dnl @ expected error: ignore'):
+                ignore_expected_err = True
             if not l.startswith(b'dnl @'):
                 data += l
         runargs = []
@@ -36,17 +39,19 @@ def main() -> int:
             return 77
         if res.returncode != expected_code:
             print('Unexpected return code: {0}, expected {1}'.format(res.returncode, expected_code))
-            print('Here is the output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected, res.stdout))
+            print('Here is the output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected.decode(), res.stdout.decode()))
             if len(res.stderr) > 0:
-                print('Stderr:\n{0}'.format(res.stderr))
+                print('Stderr:\n{0}'.format(res.stderr.decode()))
             return 1
         if byte_expected.splitlines() != res.stdout.splitlines():
-            print('Unexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected, res.stdout))
+            print('Unexpected output. Expected:\n{0}\nGot:\n{1}'.format(byte_expected.decode(), res.stdout.decode()))
             if len(res.stderr) > 0:
-                print('stderr:\n{0}'.format(res.stderr))
+                print('stderr:\n{0}'.format(res.stderr.decode()))
             return 1
-        if len(byte_expected_err) > 0 and byte_expected_err != b'ignore\n' and byte_expected_err != res.stderr.replace(b'\r\n', b'\n'):
-            print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err, res.stderr.replace(b'\r\n', b'\n')))
+        if ignore_expected_err:
+            return 0
+        if len(byte_expected_err) > 0 and byte_expected_err.splitlines() != res.stderr.splitlines():
+            print('unexpected error. Expected:\n{0}\nGot:\n{1}'.format(byte_expected_err.decode(), res.stderr.decode()))
             return 1
 
     return 0
