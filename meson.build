@@ -3,6 +3,7 @@ project('m4', 'c',
   license: 'GPLv3+',
   default_options: [
     'c_std=gnu11',
+    'buildtype=debugoptimized'
   ],
   meson_version: '>= 0.59.0', # required for executable(..., win_subsystem: ...)
 )

@@ -72,6 +72,8 @@ def main() -> int:
         for arg in args.split(' '):
             if len(arg) > 0:
                 runargs.append(arg)
+            else:
+                print('Skipped blank arg')
         runargs.append('-')
         print('Arguments are: {0}'.format(' '.join(runargs)))
         res = subprocess.run(runargs,
