@@ -10,10 +10,18 @@ def clean(x):
         lines.append(str(l))
     return '\n'.join(lines)
 
-def check_error(run_result, expected_code, expected_out, expected_err, ignore_err, m4_input) -> int:
+def check_error(run_result,
+                expected_code,
+                expected_out,
+                expected_err,
+                ignore_err,
+                m4_input,
+                m4_path,
+                examples_path
+                ) -> int:
     res = 0
-    lout = clean(run_result.stdout)
-    lerr = clean(run_result.stderr)
+    lout = clean(run_result.stdout).replace(m4_path, 'm4').replace(examples_path, 'examples')
+    lerr = clean(run_result.stderr).replace(m4_path, 'm4').replace(examples_path, 'examples')
     rout = clean(expected_out)
     rerr = clean(expected_err)
     if run_result.returncode != expected_code:
@@ -36,9 +44,11 @@ def main() -> int:
     input_path = sys.argv[2]
     tmproot = sys.argv[3]
     workdir = sys.argv[4]
+    m4_path = tmproot + '/../' + m4
+    examples_path = workdir + '/examples'
     with open(input_path, 'rb') as input_file, tempfile.TemporaryDirectory(dir=tmproot) as tmpdir:
         m4_env = {'TMPDIR': tmpdir,
-                  'M4PATH': 'examples'}
+                  'M4PATH': examples_path}
         expected_out = bytes()
         expected_err = bytes()
         ignore_err = False
@@ -57,7 +67,7 @@ def main() -> int:
             if not l.startswith(b'dnl @'):
                 m4_input += l + os.linesep.encode()
         runargs = []
-        runargs.append('m4')
+        runargs.append(m4_path)
         runargs.append('-d')
         for arg in args.split(' '):
             if len(arg) > 0:
@@ -68,11 +78,10 @@ def main() -> int:
                              input=m4_input,
                              capture_output=True,
                              cwd=workdir,
-                             env=m4_env,
-                             executable=tmproot + '/../' + m4)
+                             env=m4_env)
         if res.returncode == 77:
             return 77
-        return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input)
+        return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input, m4_path, examples_path)
 
 if __name__ == '__main__':
     sys.exit(main())  # next section explains the use of sys.exit
