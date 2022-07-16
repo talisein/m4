@@ -245,16 +245,16 @@ nowindows_checks = [
 py = find_program('python3')
 m4_test = files('m4_test_runner.py')
 foreach file : checks
-  test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'])
+  test(file, py, args: [m4_test, m4, files(file)], depends: m4, env: ['M4PATH=' + 'examples', 'TMPDIR=' + meson.current_build_dir()])
 endforeach
 
 
 if host_machine.system() != 'windows'
   foreach file : noparallel_checks
-    test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'], is_parallel: false)
+    test(file, py, args: [m4_test, m4, files(file)], depends: m4, env: ['M4PATH=' + 'examples', 'TMPDIR=' + meson.current_build_dir()], is_parallel: false)
   endforeach
 
   foreach file : nowindows_checks
-    test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'])
+    test(file, py, args: [m4_test, m4, files(file)], depends: m4, env: ['M4PATH=' + 'examples', 'TMPDIR=' + meson.current_build_dir()])
   endforeach
 endif
