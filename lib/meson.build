@@ -728,6 +728,7 @@ cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, defin
 # check token DIR_FD_MEMBER_NAME
 # check token DOUBLE_SLASH_IS_DISTINCT_ROOT
 # check token D_INO_IN_DIRENT
+cdata.set('ENABLE_CHANGEWORD', get_option('enable_changeword'))
 # check token ENABLE_CHANGEWORD
 # check token ENABLE_NLS <-- 1. for native language.
 # check token FCNTL_DUPFD_BUGGY
@@ -864,7 +865,7 @@ cdata.set('SIGNAL_SAFE_LIST', 1)
 cdata.set('STACK_DIRECTION', -1)
 # check token STAT_MACROS_BROKEN
 # check token STRERROR_R_CHAR_P
-cdata.set_quoted('SYSCMD_SHELL', '/bin/sh')
+cdata.set_quoted('SYSCMD_SHELL', get_option('with_syscmd_shell'))
 # check token SYSCMD_SHELL
 # check token TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC
 # check token USER_LABEL_PREFIX

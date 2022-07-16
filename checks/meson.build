@@ -192,13 +192,8 @@ checks = [
   '191.platform_m',
   '192.platform_m',
   '193.platform_m',
-  '194.syscmd',
   '195.syscmd',
-  '196.esyscmd',
-  '197.sysval',
   '198.sysval',
-  '200.mkstemp',
-  '201.mkstemp',
   '202.errprint',
   '203.location',
   '204.location',
@@ -235,19 +230,31 @@ checks = [
   '235.improved_c',
   '236.improved_f',
 ]
-nopara_checks = [
-  '199.mkstemp',
+noparallel_checks = [
+  '199.mkstemp', # Wants rm
 ]
 
-getenv_exe = executable('getenv_test', 'getenv.c')
-test('Does getenv work?', getenv_exe, env: ['MYGETENVTEST=GETENVWORKS'])
+nowindows_checks = [
+  '194.syscmd', # Wants echo
+  '196.esyscmd', # Wants echo
+  '197.sysval', # Wants false
+  '200.mkstemp', # Wants rm
+  '201.mkstemp', # Wants rm
+]
 
 py = find_program('python3')
-m4_test = files('m4_test.py')
+m4_test = files('m4_test_runner.py')
 foreach file : checks
   test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'])
 endforeach
 
-foreach file : nopara_checks
-  test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'], is_parallel: false)
-endforeach
+
+if host_machine.system() != 'windows'
+  foreach file : noparallel_checks
+    test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'], is_parallel: false)
+  endforeach
+
+  foreach file : nowindows_checks
+    test(file, py, args: [m4_test, m4, files(file)], depends: m4, workdir: meson.project_source_root(), env: ['M4PATH=' + 'examples'])
+  endforeach
+endif
