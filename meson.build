@@ -7,6 +7,8 @@ project('m4', 'c',
   meson_version: '>= 0.59.0', # required for executable(..., win_subsystem: ...)
 )
 
+add_project_arguments('-D_GNU_SOURCE', language: 'c')
+
 subdir('lib')
 subdir('src')
 if get_option('enable_tests')

@@ -65,7 +65,7 @@ def main() -> int:
             if l.startswith(b'dnl @ expected error: ignore'):
                 ignore_err = True
             if not l.startswith(b'dnl @'):
-                m4_input += l + os.linesep.encode()
+                m4_input += l + b'\n'
         runargs = []
         runargs.append(m4_path)
         runargs.append('-d')
