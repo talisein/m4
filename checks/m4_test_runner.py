@@ -49,8 +49,6 @@ def main() -> int:
     if ':' in examples_path:
         examples_path = examples_path.partition(':')[2]
     with open(input_path, 'rb') as input_file, tempfile.TemporaryDirectory(dir=tmproot) as tmpdir:
-        m4_env = {'TMPDIR': tmpdir,
-                  'M4PATH': examples_path}
         expected_out = bytes()
         expected_err = bytes()
         ignore_err = False
@@ -74,8 +72,6 @@ def main() -> int:
         for arg in args.split(' '):
             if len(arg) > 0:
                 runargs.append(arg)
-            else:
-                print('Skipped blank arg')
         runargs.append('-')
         print('Arguments are: {0}'.format(' '.join(runargs)))
         res = subprocess.run(runargs,
