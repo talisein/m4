@@ -798,11 +798,15 @@ if host_machine.system() == 'windows'
   cdata.set('GNULIB_FFLUSH', 1)
   cdata.set('GNULIB_FSEEKO', 1)
   cdata.set('GNULIB_LSEEK', 1)
+  cdata.set('GNULIB_FTELLO', 1)
+  cdata.set('GNULIB_FPURGE', 1)
   cdata.set('REPLACE_OPEN', 1)
   cdata.set('REPLACE_FOPEN', 1)
   cdata.set('REPLACE_FFLUSH', 1)
   cdata.set('REPLACE_FSEEKO', 1)
   cdata.set('REPLACE_LSEEK', 1)
+  cdata.set('REPLACE_FTELLO', 1)
+  cdata.set('REPLACE_FPURGE', 1)
 else
   libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
@@ -815,11 +819,15 @@ else
   cdata.set('GNULIB_FFLUSH', 0)
   cdata.set('GNULIB_FSEEKO', 0)
   cdata.set('GNULIB_LSEEK', 0)
+  cdata.set('GNULIB_FTELLO', 0)
+  cdata.set('GNULIB_FPURGE', 0)
   cdata.set('REPLACE_OPEN', 0)
   cdata.set('REPLACE_FOPEN', 0)
   cdata.set('REPLACE_FFLUSH', 0)
   cdata.set('REPLACE_FSEEKO', 0)
   cdata.set('REPLACE_LSEEK', 0)
+  cdata.set('REPLACE_FTELLO', 0)
+  cdata.set('REPLACE_FPURGE', 0)
 endif
 
 if cc.run('''#include <sys/types.h> /* for off_t */
@@ -834,9 +842,7 @@ int main(int argc, char *argv[]) {
     return lseek (0, (off_t)0, SEEK_CUR) < 0;
 }
 ''').returncode() == 0
-  message('lseek on stdout returns 0')
-else
-  message('lseek on stdout not 0')
+  cdata.set('LSEEK_PIPE_BROKEN', 1)
 endif
 
 cdata.set('REPLACE_FDOPEN', 0)
@@ -990,7 +996,6 @@ generated_header_data.set('GNULIB_FGETC', 0)
 generated_header_data.set('GNULIB_FGETS', 0)
 generated_header_data.set('GNULIB_FPRINTF', 0)
 generated_header_data.set('GNULIB_FPRINTF_POSIX', 0)
-generated_header_data.set('GNULIB_FPURGE', 0)
 generated_header_data.set('GNULIB_FPUTC', 0)
 generated_header_data.set('GNULIB_FPUTS', 0)
 generated_header_data.set('GNULIB_FREAD', 0)
@@ -1003,7 +1008,6 @@ generated_header_data.set('GNULIB_FSTAT', 0)
 generated_header_data.set('GNULIB_FSTATAT', 0)
 generated_header_data.set('GNULIB_FSYNC', 0)
 generated_header_data.set('GNULIB_FTELL', 0)
-generated_header_data.set('GNULIB_FTELLO', 0)
 generated_header_data.set('GNULIB_FTRUNCATE', 0)
 generated_header_data.set('GNULIB_FUTIMENS', 0)
 generated_header_data.set('GNULIB_FWRITE', 0)
@@ -1282,7 +1286,6 @@ generated_header_data.set('REPLACE_FCLOSE', 0)
 generated_header_data.set('REPLACE_FCNTL', 0)
 generated_header_data.set('REPLACE_FFSLL', 0)
 generated_header_data.set('REPLACE_FPRINTF', 0)
-generated_header_data.set('REPLACE_FPURGE', 0)
 generated_header_data.set('REPLACE_FREE', 0)
 generated_header_data.set('REPLACE_FREELOCALE', 0)
 generated_header_data.set('REPLACE_FREOPEN', 0)
@@ -1808,10 +1811,19 @@ endif
 
 if generated_header_data.get('GNULIB_FFLUSH') == 1
   m4lib_src += 'fflush.c'
+  m4lib_src += 'freading.c'
 endif
 
 if generated_header_data.get('GNULIB_LSEEK') == 1
   m4lib_src += 'lseek.c'
+endif
+
+if generated_header_data.get('GNULIB_FTELLO') == 1
+  m4lib_src += 'ftello.c'
+endif
+
+if generated_header_data.get('GNULIB_FPURGE') == 1
+  m4lib_src += 'fpurge.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)

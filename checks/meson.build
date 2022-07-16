@@ -245,7 +245,7 @@ nowindows_checks = [
 py = find_program('python3')
 m4_test = files('m4_test_runner.py')
 m4_env = ['TMPDIR=' + meson.project_build_root(),'M4PATH=' + meson.project_source_root() / 'examples']
-message('m4_env: ' + m4_env[1])
+
 foreach file : checks
   test(file, py,
        args: [m4_test, m4, files(file), meson.current_build_dir(), meson.project_source_root()],

@@ -1,6 +1,3 @@
-
-
-
 m4_src = [
   'builtin.c',
   'debug.c',
@@ -14,7 +11,6 @@ m4_src = [
   'symtab.c',
   'm4.c'
 ]
-
 
 m4 = executable('m4', m4_src,
                 dependencies: m4_dep)
