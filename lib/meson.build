@@ -108,9 +108,6 @@ if  host_machine.cpu_family() == 'sparc64'
   cdata.set('__sparc64__', 1)
 endif
 
-cc.get_define('__GNUC__')
-cc.get_define('__clang__')
-
 check_headers = [
   'alloca.h',
   'arpa/inet.h',
@@ -713,48 +710,18 @@ cdata.set('FUNC_REALPATH_WORKS', 1)
 cdata.set('GETTIMEOFDAY_TIMEZONE', 'void', description: '''Define this to 'void' or 'struct timezone' to match the system's declaration of the second argument to gettimeofday.''')
 cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, define this to 1. Otherwise define this to 0.')
 
-# check token AC_APPLE_UNIVERSAL_BUILD
-# check token BITSIZEOF_PTRDIFF_T
-# check token BITSIZEOF_SIG_ATOMIC_T
-# check token BITSIZEOF_SIZE_T
-# check token BITSIZEOF_WCHAR_T
-# check token BITSIZEOF_WINT_T
-# check token CHECK_PRINTF_SAFE
-# check token C_ALLOCA
-# check token DBL_EXPBIT0_BIT
-# check token DBL_EXPBIT0_WORD
-# check token DBL_SIGNBIT_BIT
-# check token DBL_SIGNBIT_WORD
-# check token DIR_FD_MEMBER_NAME
-# check token DOUBLE_SLASH_IS_DISTINCT_ROOT
-# check token D_INO_IN_DIRENT
 cdata.set('ENABLE_CHANGEWORD', get_option('enable_changeword'))
-# check token ENABLE_CHANGEWORD
 # check token ENABLE_NLS <-- 1. for native language.
-# check token FCNTL_DUPFD_BUGGY
-# check token FLEXIBLE_ARRAY_MEMBER
-# check token FLT_EXPBIT0_BIT
-# check token FLT_EXPBIT0_WORD
-# check token FLT_SIGNBIT_BIT
-# check token FLT_SIGNBIT_WORD
-# check token FOPEN_TRAILING_SLASH_BUG
 # check token FTELLO_BROKEN_AFTER_SWITCHING_FROM_READ_TO_WRITE
 # check token FTELLO_BROKEN_AFTER_UNGETC
-# check token FUNC_MKDIR_DOT_BUG
-# check token FUNC_NL_LANGINFO_YESEXPR_WORKS --
-# check token FUNC_REALPATH_NEARLY_WORKS
-# check token FUNC_REALPATH_WORKS --
 # check token FUNC_UNGETC_BROKEN
-# check token GETTIMEOFDAY_TIMEZONE
 # check token GNULIB_DIRNAME
 # check token GNULIB_FDOPENDIR
-# check token GNULIB_FFLUSH
 # check token GNULIB_FSCANF
 # check token GNULIB_GETCWD
 # check token GNULIB_ISBLANK
 # check token GNULIB_LOCK
 # check token GNULIB_MBRTOWC_SINGLE_THREAD
-# check token GNULIB_MSVC_NOTHROW
 # check token GNULIB_OPENAT
 # check token GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU
 # check token GNULIB_REALLOCARRAY
@@ -768,47 +735,11 @@ cdata.set('ENABLE_CHANGEWORD', get_option('enable_changeword'))
 # check token GNULIB_UNISTR_U8_MBTOUCR
 # check token GNULIB_UNISTR_U8_UCTOMB
 # check token GNULIB_WCHAR_SINGLE_LOCALE
-# check token ICONV_CONST
-# check token ICONV_FLAVOR
-# check token LDBL_EXPBIT0_BIT
-# check token LDBL_EXPBIT0_WORD
-# check token LDBL_SIGNBIT_BIT
-# check token LDBL_SIGNBIT_WORD
-# check token LOCALENAME_ENHANCE_LOCALE_FUNCS
 # check token LSEEK_PIPE_BROKEN
-# check token LSTAT_FOLLOWS_SLASHED_SYMLINK
-# check token MALLOC_0_IS_NONNULL
-# check token MAP_ANONYMOUS
-# check token MBRTOWC_EMPTY_INPUT_BUG
-cdata.set('MBRTOWC_IN_C_LOCALE_MAYBE_EILSEQ', 1)
-# check token MBRTOWC_IN_C_LOCALE_MAYBE_EILSEQ
-# check token MBRTOWC_NULL_ARG1_BUG
-# check token MBRTOWC_NULL_ARG2_BUG
-# check token MBRTOWC_NUL_RETVAL_BUG
-# check token MBRTOWC_RETVAL_BUG
-# check token MBRTOWC_STORES_INCOMPLETE_BUG
 # check token __USE_MINGW_ANSI_STDIO
-# check token MUSL_LIBC
-# check token NDEBUG
-# check token NEED_PRINTF_DIRECTIVE_A
-# check token NEED_PRINTF_DIRECTIVE_F
-# check token NEED_PRINTF_DIRECTIVE_LS
-# check token NEED_PRINTF_DOUBLE
-# check token NEED_PRINTF_ENOMEM
-# check token NEED_PRINTF_FLAG_GROUPING
-# check token NEED_PRINTF_FLAG_LEFTADJUST
-# check token NEED_PRINTF_FLAG_ZERO
-# check token NEED_PRINTF_INFINITE_DOUBLE
-# check token NEED_PRINTF_INFINITE_LONG_DOUBLE
-# check token NEED_PRINTF_LONG_DOUBLE
-# check token NEED_PRINTF_UNBOUNDED_PRECISION
 cdata.set('NEED_SETLOCALE_IMPROVED', 0)
 cdata.set('NEED_SETLOCALE_MTSAFE', 0)
 cdata.set('NL_LANGINFO_MTSAFE', 1)
-# check token NEED_SETLOCALE_IMPROVED
-# check token NEED_SETLOCALE_MTSAFE
-# check token NL_LANGINFO_MTSAFE
-# check token OPEN_TRAILING_SLASH_BUG
 cdata.set_quoted('PACKAGE', 'm4')
 cdata.set_quoted('PACKAGE_BUGREPORT', 'bug-m4@gnu.org')
 cdata.set_quoted('PACKAGE_NAME', 'GNU M4')
@@ -817,107 +748,13 @@ cdata.set_quoted('PACKAGE_TARNAME', 'm4')
 cdata.set_quoted('PACKAGE_URL', 'https://www.gnu.org/software/m4/')
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 cdata.set('PROMOTED_MODE_T', 'mode_t')
-# check token PROMOTED_MODE_T
-# check token PTHREAD_CREATE_IS_INLINE
-# check token PTHREAD_IN_USE_DETECTION_HARD
-# check token PTHREAD_SIGMASK_FAILS_WITH_ERRNO
-# check token PTHREAD_SIGMASK_INEFFECTIVE
-# check token PTHREAD_SIGMASK_UNBLOCK_BUG
-# check token PTRDIFF_T_SUFFIX
-# check token READLINK_TRAILING_SLASH_BUG
-# check token READLINK_TRUNCATE_BUG
-# check token RENAME_DEST_EXISTS_BUG
-# check token RENAME_HARD_LINK_BUG
 cdata.set('RENAME_OPEN_FILE_WORKS', '1')
-# check token RENAME_OPEN_FILE_WORKS
-# check token RENAME_TRAILING_SLASH_DEST_BUG
-# check token RENAME_TRAILING_SLASH_SOURCE_BUG
-# check token REPLACE_DIRFD
-# check token REPLACE_FCHDIR
-# check token REPLACE_FUNC_STAT_FILE
-# check token REPLACE_NL_LANGINFO
-# check token REPLACE_OPEN_DIRECTORY
-# check token REPLACE_POSIX_SPAWN
-# check token REPLACE_STRERROR_0
-# check token REPLACE_VASNPRINTF
 cdata.set('SETLOCALE_NULL_ALL_MTSAFE', 1)
 cdata.set('SETLOCALE_NULL_ONE_MTSAFE', 1)
-# check token SETLOCALE_NULL_ALL_MTSAFE
-# check token SETLOCALE_NULL_ONE_MTSAFE
-# check token SIGALTSTACK_SS_REVERSED
 cdata.set('SIGNAL_SAFE_LIST', 1)
-# check token SIGNAL_SAFE_LIST
-# check token SIG_ATOMIC_T_SUFFIX
-# check token SIZE_MAX
-# check token SIZE_T_SUFFIX
-# check token SOLARIS11
-# check token STACK_DIRECTION
 cdata.set('STACK_DIRECTION', -1)
-# check token STAT_MACROS_BROKEN
-# check token STRERROR_R_CHAR_P
 cdata.set_quoted('SYSCMD_SHELL', get_option('with_syscmd_shell'))
-# check token TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC
-# check token USER_LABEL_PREFIX
-# check token USE_ISOC_AND_POSIX_THREADS
-# check token USE_ISOC_THREADS
-# check token USE_POSIX_THREADS
-# check token USE_POSIX_THREADS_WEAK
-# check token USE_UNLOCKED_IO
-# check token USE_WINDOWS_THREADS
 cdata.set_quoted('VERSION', '1.4.19')
-# check token VERSION
-# check token VOID_UNSETENV
-# check token WCHAR_T_SUFFIX
-# check token WCRTOMB_C_LOCALE_BUG
-# check token WCRTOMB_RETVAL_BUG
-# check token WINDOWS_SOCKETS
-# check token WINT_T_SUFFIX
-# check token WITH_DMALLOC
-# check token WORDS_BIGENDIAN
-# check token _FILE_OFFSET_BITS
-# check token _ISOC11_SOURCE
-# check token _LARGEFILE_SOURCE
-# check token _LARGE_FILES
-# check token _LCONV_C99
-# check token _POSIX_PII_SOCKET
-# check token _REGEX_LARGE_OFFSETS
-# check token _USE_STD_STAT
-# check token __GETOPT_PREFIX
-# check token __STDC_CONSTANT_MACROS
-# check token __STDC_LIMIT_MACROS
-# check token eaccess
-# check token gid_t
-# check token inline
-# check token intmax_t
-# check token mbstate_t
-# check token mode_t
-# check token nlink_t
-# check token off_t
-# check token pid_t
-# check token ptrdiff_t
-# check token re_comp
-# check token re_compile_fastmap
-# check token re_compile_pattern
-# check token re_exec
-# check token re_match
-# check token re_match_2
-# check token re_search
-# check token re_search_2
-# check token re_set_registers
-# check token re_set_syntax
-# check token re_syntax_options
-# check token regcomp
-# check token regerror
-# check token regexec
-# check token regfree
-# check token restrict
-# check token sig_atomic_t
-# check token size_t
-# check token socklen_t
-# check token ssize_t
-# check token stack_t
-# check token uid_t
-# check token va_copy
 
 if (cc.get_define('O_BINARY', prefix: '#include<fcntl.h>') == '')
   if (cc.get_define('_O_BINARY', prefix: '#include<fcntl.h>') != '')
@@ -958,8 +795,14 @@ if host_machine.system() == 'windows'
   cdata.set('GNULIB_FOPEN_GNU', 1)
   cdata.set('GNULIB_OPEN', 1)
   cdata.set('GNULIB_FOPEN', 1)
+  cdata.set('GNULIB_FFLUSH', 1)
+  cdata.set('GNULIB_FSEEKO', 1)
+  cdata.set('GNULIB_LSEEK', 1)
   cdata.set('REPLACE_OPEN', 1)
   cdata.set('REPLACE_FOPEN', 1)
+  cdata.set('REPLACE_FFLUSH', 1)
+  cdata.set('REPLACE_FSEEKO', 1)
+  cdata.set('REPLACE_LSEEK', 1)
 else
   libm4_c_args += '-DGCC_LINT'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
@@ -969,8 +812,31 @@ else
   cdata.set('GNULIB_FOPEN_GNU', 0)
   cdata.set('GNULIB_OPEN', 0)
   cdata.set('GNULIB_FOPEN', 0)
+  cdata.set('GNULIB_FFLUSH', 0)
+  cdata.set('GNULIB_FSEEKO', 0)
+  cdata.set('GNULIB_LSEEK', 0)
   cdata.set('REPLACE_OPEN', 0)
   cdata.set('REPLACE_FOPEN', 0)
+  cdata.set('REPLACE_FFLUSH', 0)
+  cdata.set('REPLACE_FSEEKO', 0)
+  cdata.set('REPLACE_LSEEK', 0)
+endif
+
+if cc.run('''#include <sys/types.h> /* for off_t */
+#include <stdio.h> /* for SEEK_CUR */
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#else /* on Windows with MSVC */
+# include <io.h>
+#endif
+
+int main(int argc, char *argv[]) {
+    return lseek (0, (off_t)0, SEEK_CUR) < 0;
+}
+''').returncode() == 0
+  message('lseek on stdout returns 0')
+else
+  message('lseek on stdout not 0')
 endif
 
 cdata.set('REPLACE_FDOPEN', 0)
@@ -1118,7 +984,6 @@ generated_header_data.set('GNULIB_FCHMODAT', 0)
 generated_header_data.set('GNULIB_FCHOWNAT', 0)
 generated_header_data.set('GNULIB_FCLOSE', 0)
 generated_header_data.set('GNULIB_FDATASYNC', 0)
-generated_header_data.set('GNULIB_FFLUSH', 0)
 generated_header_data.set('GNULIB_FFSL', 0)
 generated_header_data.set('GNULIB_FFSLL', 0)
 generated_header_data.set('GNULIB_FGETC', 0)
@@ -1169,7 +1034,6 @@ generated_header_data.set('GNULIB_LINK', 0)
 generated_header_data.set('GNULIB_LINKAT', 0)
 generated_header_data.set('GNULIB_LOCALECONV', 0)
 generated_header_data.set('GNULIB_LOCALENAME', 0)
-generated_header_data.set('GNULIB_LSEEK', 0)
 generated_header_data.set('GNULIB_MALLOC_POSIX', 0)
 generated_header_data.set('GNULIB_MBRLEN', 0)
 generated_header_data.set('GNULIB_MBRTOWC', 0)
@@ -1416,7 +1280,6 @@ generated_header_data.set('REPLACE_FCHMODAT', 0)
 generated_header_data.set('REPLACE_FCHOWNAT', 0)
 generated_header_data.set('REPLACE_FCLOSE', 0)
 generated_header_data.set('REPLACE_FCNTL', 0)
-generated_header_data.set('REPLACE_FFLUSH', 0)
 generated_header_data.set('REPLACE_FFSLL', 0)
 generated_header_data.set('REPLACE_FPRINTF', 0)
 generated_header_data.set('REPLACE_FPURGE', 0)
@@ -1424,7 +1287,6 @@ generated_header_data.set('REPLACE_FREE', 0)
 generated_header_data.set('REPLACE_FREELOCALE', 0)
 generated_header_data.set('REPLACE_FREOPEN', 0)
 generated_header_data.set('REPLACE_FSEEK', 0)
-generated_header_data.set('REPLACE_FSEEKO', 0)
 generated_header_data.set('REPLACE_FSTAT', 0)
 generated_header_data.set('REPLACE_FSTATAT', 0)
 generated_header_data.set('REPLACE_FTELL', 0)
@@ -1447,7 +1309,6 @@ generated_header_data.set('REPLACE_LCHOWN', 0)
 generated_header_data.set('REPLACE_LINK', 0)
 generated_header_data.set('REPLACE_LINKAT', 0)
 generated_header_data.set('REPLACE_LOCALECONV', 0)
-generated_header_data.set('REPLACE_LSEEK', 0)
 generated_header_data.set('REPLACE_LSTAT', 0)
 generated_header_data.set('REPLACE_MALLOC', 0)
 generated_header_data.set('REPLACE_MBRLEN', 0)
@@ -1584,7 +1445,6 @@ generated_header_data.set10('GNULIB_SIGPROCMASK', not cdata.has('HAVE_SIGPROCMAS
 generated_header_data.set10('GNULIB_REALPATH', not cdata.has('HAVE_REALPATH'))
 generated_header_data.set10('GNULIB_NL_LANGINFO', not cdata.has('HAVE_NL_LANGINFO'))
 generated_header_data.set10('GNULIB_SETLOCALE_NULL', not cdata.has('HAVE_NL_LANGINFO'))
-generated_header_data.set10('GNULIB_FSEEKO', not cdata.has('HAVE_FSEEKO'))
 generated_header_data.set10('GNULIB_STRSIGNAL', not cdata.has('HAVE_STRSIGNAL'))
 generated_header_data.set10('GNULIB_MKSTEMP', not cdata.has('HAVE_MKSTEMP'))
 generated_header_data.set10('GNULIB_MKDTEMP', not cdata.has('HAVE_MKDTEMP'))
@@ -1944,6 +1804,14 @@ endif
 if generated_header_data.get('GNULIB_OPEN') == 1
   m4lib_src += 'open.c'
   m4lib_src += 'cloexec.c'
+endif
+
+if generated_header_data.get('GNULIB_FFLUSH') == 1
+  m4lib_src += 'fflush.c'
+endif
+
+if generated_header_data.get('GNULIB_LSEEK') == 1
+  m4lib_src += 'lseek.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)
