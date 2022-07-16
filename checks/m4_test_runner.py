@@ -1,5 +1,7 @@
 import sys
 import subprocess
+import os
+import tempfile
 
 # We want to print line endings normally, but each line should be a b'' string
 def clean(x):
@@ -31,13 +33,17 @@ def check_error(run_result, expected_code, expected_out, expected_err, ignore_er
 
 def main() -> int:
     m4 = sys.argv[1]
-    inputfile = sys.argv[2]
-    with open(inputfile, 'rb') as f:
+    input_path = sys.argv[2]
+    tmproot = sys.argv[3]
+    workdir = sys.argv[4]
+    m4_env = {'TMPDIR': tmpdir,
+              'M4PATH': 'examples'}
+    with open(input_path, 'rb') as input_file, tempfile.TemporaryDirectory(dir=tmproot) as tmpdir:
         expected_out = bytes()
         expected_err = bytes()
         ignore_err = False
         m4_input = bytes()
-        for l in f.read().splitlines(keepends=True):
+        for l in input_file.read().splitlines():
             if l.startswith(b'dnl @ expected status: '):
                 expected_code = int(l[len('dnl @ expected status: '):].rstrip())
             if l.startswith(b'dnl @ extra options: '):
@@ -49,7 +55,7 @@ def main() -> int:
             if l.startswith(b'dnl @ expected error: ignore'):
                 ignore_err = True
             if not l.startswith(b'dnl @'):
-                m4_input += l
+                m4_input += l + os.linesep.encode()
         runargs = []
         runargs.append('m4')
         runargs.append('-d')
@@ -58,7 +64,12 @@ def main() -> int:
                 runargs.append(arg)
         runargs.append('-')
         print('Arguments are: {0}'.format(' '.join(runargs)))
-        res = subprocess.run(runargs, input=m4_input, capture_output=True, executable=m4)
+        res = subprocess.run(runargs,
+                             input=m4_input,
+                             capture_output=True,
+                             cwd=workdir,
+                             env=m4_env,
+                             executable=m4)
         if res.returncode == 77:
             return 77
         return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input)

@@ -812,20 +812,10 @@ cdata.set('NL_LANGINFO_MTSAFE', 1)
 cdata.set_quoted('PACKAGE', 'm4')
 cdata.set_quoted('PACKAGE_BUGREPORT', 'bug-m4@gnu.org')
 cdata.set_quoted('PACKAGE_NAME', 'GNU M4')
-cdata.set_quoted('PACKAGE_STRING', 'GNU M4 1.4.19')
+cdata.set_quoted('PACKAGE_STRING', 'GNU M4 ' + meson.project_version())
 cdata.set_quoted('PACKAGE_TARNAME', 'm4')
 cdata.set_quoted('PACKAGE_URL', 'https://www.gnu.org/software/m4/')
-cdata.set_quoted('PACKAGE_VERSION', '1.4.19')
-# check token PACKAGE
-# check token PACKAGE_BUGREPORT
-# check token PACKAGE_NAME
-# check token PACKAGE_PACKAGER
-# check token PACKAGE_PACKAGER_BUG_REPORTS
-# check token PACKAGE_PACKAGER_VERSION
-# check token PACKAGE_STRING
-# check token PACKAGE_TARNAME
-# check token PACKAGE_URL
-# check token PACKAGE_VERSION
+cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 cdata.set('PROMOTED_MODE_T', 'mode_t')
 # check token PROMOTED_MODE_T
 # check token PTHREAD_CREATE_IS_INLINE
