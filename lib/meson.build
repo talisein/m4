@@ -1686,6 +1686,8 @@ endif
 if not cdata.has('HAVE_REGEX_H') or not cdata.has('HAVE_RE_COMPILE_PATTERN')
   m4lib_src += ['regex.c',
                 'malloc/dynarray_resize.c',
+                'malloc/dynarray_emplace_enlarge.c',
+                'malloc/dynarray_finalize.c',
                ]
 endif
 

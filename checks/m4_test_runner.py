@@ -23,8 +23,8 @@ def check_error(run_result,
                 examples_path
                 ) -> int:
     res = 0
-    lout = clean(run_result.stdout).replace(str(m4_path.encode())[2:-1], 'm4').replace(str(examples_path.encode())[2:-1], 'examples').replace('m4.exe', 'm4')
-    lerr = clean(run_result.stderr).replace(str(m4_path.encode())[2:-1], 'm4').replace(str(examples_path.encode())[2:-1], 'examples').replace('m4.exe', 'm4')
+    lout = clean(run_result.stdout).replace(str(m4_path.encode())[2:-1], 'm4').replace(examples_path, 'examples').replace('m4.exe', 'm4')
+    lerr = clean(run_result.stderr).replace(str(m4_path.encode())[2:-1], 'm4').replace(examples_path, 'examples').replace('m4.exe', 'm4')
     rout = clean(expected_out)
     rerr = clean(expected_err)
     if run_result.returncode != expected_code:
@@ -82,7 +82,7 @@ def main() -> int:
                              capture_output=True)
         if res.returncode == 77:
             return 77
-        return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input, m4_path, examples_path)
+        return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input, m4_path, examples_path.replace('\\','/'))
 
 if __name__ == '__main__':
     sys.exit(main())  # next section explains the use of sys.exit
