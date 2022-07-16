@@ -36,9 +36,9 @@ def main() -> int:
     input_path = sys.argv[2]
     tmproot = sys.argv[3]
     workdir = sys.argv[4]
-    m4_env = {'TMPDIR': tmpdir,
-              'M4PATH': 'examples'}
     with open(input_path, 'rb') as input_file, tempfile.TemporaryDirectory(dir=tmproot) as tmpdir:
+        m4_env = {'TMPDIR': tmpdir,
+                  'M4PATH': 'examples'}
         expected_out = bytes()
         expected_err = bytes()
         ignore_err = False
