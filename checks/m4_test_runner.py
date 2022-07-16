@@ -35,7 +35,7 @@ def check_error(run_result,
         print('Unexpected stdout:\n{0}'.format(lout))
         print('Expected stdout:\n{0}'.format(rout))
         res = 1
-    if not ignore_err and len(rerr) > 0 and lerr != rerr:
+    if not ignore_err and lerr != rerr and lerr != 'Killed':
         print('Unexpected stderr:\n{0}'.format(lerr))
         print('Expected stderr:\n{0}'.format(rerr))
         res = 1
