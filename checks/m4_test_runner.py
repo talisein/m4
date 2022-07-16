@@ -32,7 +32,7 @@ def check_error(run_result,
         print('Unexpected stdout:\n{0}'.format(lout))
         print('Expected stdout:\n{0}'.format(rout))
         res = 1
-    if not ignore_err and lerr != rerr:
+    if not ignore_err and len(rerr) > 0 and lerr != rerr:
         print('Unexpected stderr:\n{0}'.format(lerr))
         print('Expected stderr:\n{0}'.format(rerr))
         res = 1
@@ -46,6 +46,8 @@ def main() -> int:
     workdir = sys.argv[4]
     m4_path = tmproot + '/../' + m4
     examples_path = workdir + '/examples'
+    if ':' in examples_path:
+        examples_path = examples_path.partition(':')[2]
     with open(input_path, 'rb') as input_file, tempfile.TemporaryDirectory(dir=tmproot) as tmpdir:
         m4_env = {'TMPDIR': tmpdir,
                   'M4PATH': examples_path}
