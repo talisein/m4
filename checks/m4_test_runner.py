@@ -8,7 +8,7 @@ def clean(x):
     lines = []
     for l in x.splitlines():
         if b'examples' in l:
-            lines.append(str(l.replace(b'\\','/')))
+            lines.append(str(l.replace(b'\\',b'/')))
         else:
             lines.append(str(l))
     return '\n'.join(lines)
