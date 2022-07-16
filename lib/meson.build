@@ -866,7 +866,6 @@ cdata.set('STACK_DIRECTION', -1)
 # check token STAT_MACROS_BROKEN
 # check token STRERROR_R_CHAR_P
 cdata.set_quoted('SYSCMD_SHELL', get_option('with_syscmd_shell'))
-# check token SYSCMD_SHELL
 # check token TYPEOF_STRUCT_STAT_ST_ATIM_IS_STRUCT_TIMESPEC
 # check token USER_LABEL_PREFIX
 # check token USE_ISOC_AND_POSIX_THREADS

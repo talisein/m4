@@ -192,7 +192,6 @@ checks = [
   '191.platform_m',
   '192.platform_m',
   '193.platform_m',
-  '195.syscmd',
   '198.sysval',
   '202.errprint',
   '203.location',
@@ -236,6 +235,7 @@ noparallel_checks = [
 
 nowindows_checks = [
   '194.syscmd', # Wants echo
+  '195.syscmd', # Wants cat
   '196.esyscmd', # Wants echo
   '197.sysval', # Wants false
   '200.mkstemp', # Wants rm

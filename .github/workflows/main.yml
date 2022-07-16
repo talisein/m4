@@ -46,7 +46,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Configure
-        run: meson setup --warnlevel 3 --buildtype release -Dc_args='-Wno-sign-compare -Wno-unused-parameter' _build-linux
+        run: meson setup --warnlevel 3 --buildtype release -Dc_args='-Wno-sign-compare -Wno-unused-parameter' -Denable_changeword=true _build-linux
 
       # Runs a set of commands using the runners shell
       - name: Compile
@@ -128,7 +128,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Configure
         run: |
-          meson setup --buildtype release _build-win
+          meson setup --buildtype release -Dwith_syscmd_shell=cmd _build-win
 
       - name: Capture config.h
         uses: actions/upload-artifact@v3

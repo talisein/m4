@@ -8,14 +8,14 @@ def clean(x):
         lines.append(str(l))
     return '\n'.join(lines)
 
-def check_error(run_result, expected_code, expected_out, expected_err, ignore_err) -> int:
+def check_error(run_result, expected_code, expected_out, expected_err, ignore_err, m4_input) -> int:
     res = 0
     lout = clean(run_result.stdout)
     lerr = clean(run_result.stderr)
     rout = clean(expected_out)
     rerr = clean(expected_err)
     if run_result.returncode != expected_code:
-        print('Unexpected return code: {0}'.format(res.returncode))
+        print('Unexpected return code: {0}'.format(run_result.returncode))
         print('Expected return code: {0}'.format(expected_code))
         res = 1
     if lout != rout:
@@ -26,6 +26,7 @@ def check_error(run_result, expected_code, expected_out, expected_err, ignore_er
         print('Unexpected stderr:\n{0}'.format(lerr))
         print('Expected stderr:\n{0}'.format(rerr))
         res = 1
+    print('The input was:\n{0}'.format(clean(m4_input)))
     return res
 
 def main() -> int:
@@ -35,7 +36,7 @@ def main() -> int:
         expected_out = bytes()
         expected_err = bytes()
         ignore_err = False
-        data = bytes()
+        m4_input = bytes()
         for l in f.read().splitlines(keepends=True):
             if l.startswith(b'dnl @ expected status: '):
                 expected_code = int(l[len('dnl @ expected status: '):].rstrip())
@@ -48,7 +49,7 @@ def main() -> int:
             if l.startswith(b'dnl @ expected error: ignore'):
                 ignore_err = True
             if not l.startswith(b'dnl @'):
-                data += l
+                m4_input += l
         runargs = []
         runargs.append('m4')
         runargs.append('-d')
@@ -57,10 +58,10 @@ def main() -> int:
                 runargs.append(arg)
         runargs.append('-')
         print('Arguments are: {0}'.format(' '.join(runargs)))
-        res = subprocess.run(runargs, input=data, capture_output=True, executable=m4)
+        res = subprocess.run(runargs, input=m4_input, capture_output=True, executable=m4)
         if res.returncode == 77:
             return 77
-        return check_error(res, expected_code, expected_out, expected_err, ignore_err)
+        return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input)
 
 if __name__ == '__main__':
     sys.exit(main())  # next section explains the use of sys.exit
