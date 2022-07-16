@@ -7,7 +7,10 @@ import tempfile
 def clean(x):
     lines = []
     for l in x.splitlines():
-        lines.append(str(l))
+        if b'examples' in l:
+            lines.append(str(l.replace(b'\\','/')))
+        else:
+            lines.append(str(l))
     return '\n'.join(lines)
 
 def check_error(run_result,
