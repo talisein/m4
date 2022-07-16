@@ -49,9 +49,9 @@ def main() -> int:
             if l.startswith(b'dnl @ extra options: '):
                 args = l[len('dnl @ extra options: '):].rstrip().decode()
             if l.startswith(b'dnl @result{}'):
-                expected_out += l[len('dnl @result{}'):]
+                expected_out += l[len('dnl @result{}'):] + os.linesep.encode()
             if l.startswith(b'dnl @error{}'):
-                expected_err += l[len('dnl @error{}'):]
+                expected_err += l[len('dnl @error{}'):] + os.linesep.encode()
             if l.startswith(b'dnl @ expected error: ignore'):
                 ignore_err = True
             if not l.startswith(b'dnl @'):
@@ -69,7 +69,7 @@ def main() -> int:
                              capture_output=True,
                              cwd=workdir,
                              env=m4_env,
-                             executable=m4)
+                             executable=tmproot + '/../' + m4)
         if res.returncode == 77:
             return 77
         return check_error(res, expected_code, expected_out, expected_err, ignore_err, m4_input)
