@@ -20,8 +20,8 @@ def check_error(run_result,
                 examples_path
                 ) -> int:
     res = 0
-    lout = clean(run_result.stdout).replace(m4_path, 'm4').replace(examples_path, 'examples')
-    lerr = clean(run_result.stderr).replace(m4_path, 'm4').replace(examples_path, 'examples')
+    lout = clean(run_result.stdout).replace(str(m4_path.encode())[2:-1], 'm4').replace(str(examples_path.encode())[2:-1], 'examples')
+    lerr = clean(run_result.stderr).replace(str(m4_path.encode())[2:-1], 'm4').replace(str(examples_path.encode())[2:-1], 'examples')
     rout = clean(expected_out)
     rerr = clean(expected_err)
     if run_result.returncode != expected_code:
