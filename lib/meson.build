@@ -641,7 +641,7 @@ check_functions = [
   ['HAVE_SNPRINTF', 'snprintf', '#include<stdio.h>'],
   ['HAVE_STPCPY', 'stpcpy', '#include<string.h>'],
   ['HAVE_STPNCPY', 'stpncpy', '#include<string.h>'],
-  ['HAVE_STRCASESTR', 'STRCASESTR', '#include<string.h>'],
+  ['HAVE_STRCASESTR', 'strcasestr', '#include<string.h>'],
   ['HAVE_STRCHRNUL', 'strchrnul', '#include<string.h>'],
   ['HAVE_STRERRORNAME_NP', 'strerrorname_np', '#include<string.h>'],
   ['HAVE_STRERROR_R', 'strerror_r', '#include<string.h>'],
@@ -752,30 +752,49 @@ cdata.set('RENAME_OPEN_FILE_WORKS', '1')
 cdata.set('SETLOCALE_NULL_ALL_MTSAFE', 1)
 cdata.set('SETLOCALE_NULL_ONE_MTSAFE', 1)
 cdata.set('SIGNAL_SAFE_LIST', 1)
-cdata.set('STACK_DIRECTION', -1)
+
+stack_direction_result = cc.run('''#include <stdio.h>
+int
+find_stack_direction (int *addr, int depth)
+{
+  int dir, dummy = 0;
+  if (! addr)
+    addr = &dummy;
+  *addr = addr < &dummy ? 1 : addr == &dummy ? 0 : -1;
+  dir = depth ? find_stack_direction (addr, depth - 1) : 0;
+  return dir + dummy;
+}
+int
+main (int argc, char *argv[])
+{
+    return find_stack_direction (NULL, argc + 20);
+}''')
+
+if stack_direction_result.returncode() > 0
+  cdata.set('STACK_DIRECTION', 1)
+else
+  cdata.set('STACK_DIRECTION', -1)
+endif
 
 syscmd_shell = get_option('with_syscmd_shell')
 kill_printed = false
 if syscmd_shell.startswith('default')
-  sh = find_program('bash', required: false)
+  sh = find_program('/bin/sh', 'sh', required: false)
   if not sh.found()
-    sh = find_program('sh', required: false)
-    if not sh.found()
-      sh = find_program('cmd')
-    endif
+    sh = find_program('cmd')
   endif
   syscmd_shell = sh.full_path()
 endif
 
-kill_test = run_command('bash', '-c', 'kill -9 $$', capture: true, check: false)
+kill_test = run_command('/bin/sh', '-c', 'kill -9 $$', capture: true, check: false)
 if kill_test.stderr().contains('Killed')
-  message('Shell prints Killed')
+  message('/bin/sh prints Killed')
   kill_printed = true
 else
-  message('Shell does not print Killed')
+  message('/bin/sh does not print Killed')
 endif
 
-x = run_command('sh', '-c', 'echo $-', capture: true, check: true)
+x = run_command('/bin/sh', '-c', 'echo $-', capture: true, check: true)
 message('Attributes: ' + x.stdout())
 
 cdata.set_quoted('SYSCMD_SHELL', syscmd_shell)

@@ -128,7 +128,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Configure
         run: |
-          meson setup -Dwith_syscmd_shell=cmd _build-win
+          meson setup _build-win
 
       - name: Capture config.h
         uses: actions/upload-artifact@v3
