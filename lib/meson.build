@@ -753,7 +753,32 @@ cdata.set('SETLOCALE_NULL_ALL_MTSAFE', 1)
 cdata.set('SETLOCALE_NULL_ONE_MTSAFE', 1)
 cdata.set('SIGNAL_SAFE_LIST', 1)
 cdata.set('STACK_DIRECTION', -1)
-cdata.set_quoted('SYSCMD_SHELL', get_option('with_syscmd_shell'))
+
+syscmd_shell = get_option('with_syscmd_shell')
+kill_printed = false
+if syscmd_shell.startswith('default')
+  sh = find_program('bash', required: false)
+  if not sh.found()
+    sh = find_program('sh', required: false)
+    if not sh.found()
+      sh = find_program('cmd')
+    endif
+  endif
+  syscmd_shell = sh.full_path()
+endif
+
+kill_test = run_command('bash', '-c', 'kill -9 $$', capture: true, check: false)
+if kill_test.stderr().contains('Killed')
+  message('Shell prints Killed')
+  kill_printed = true
+else
+  message('Shell does not print Killed')
+endif
+
+x = run_command('sh', '-c', 'echo $-', capture: true, check: true)
+message('Attributes: ' + x.stdout())
+
+cdata.set_quoted('SYSCMD_SHELL', syscmd_shell)
 cdata.set_quoted('VERSION', '1.4.19')
 
 if (cc.get_define('O_BINARY', prefix: '#include<fcntl.h>') == '')
