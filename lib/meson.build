@@ -767,27 +767,27 @@ find_stack_direction (int *addr, int depth)
 int
 main (int argc, char *argv[])
 {
-    return find_stack_direction (NULL, argc + 20);
+    printf("%d", find_stack_direction (NULL, argc + 20));
+    return 0;
 }''', name: 'Determine STACK_DIRECTION')
 
-if stack_direction_result.returncode() > 0
+if stack_direction_result.stdout().to_int() > 0
+  message('STACK_DIRECTION=1')
   cdata.set('STACK_DIRECTION', 1)
 else
+  message('STACK_DIRECTION=-1')
   cdata.set('STACK_DIRECTION', -1)
 endif
 
 syscmd_shell = get_option('with_syscmd_shell')
 kill_printed = false
 if syscmd_shell.startswith('default')
-  sh = find_program('/bin/sh', 'sh', required: false)
-  if not sh.found()
-    sh = find_program('cmd')
-  endif
+  sh = find_program('bash', 'sh', 'cmd')
   syscmd_shell = sh.full_path()
 endif
 
-kill_test = run_command(sh, '-c', 'kill -9 $$', capture: true, check: false)
-if kill_test.stderr().contains('Killed')
+kill_test = run_command(sh, '-c', '/bin/sh', '-c', 'kill', '-9', '$$', capture: true, check: false)
+if kill_test.stderr().contains('Killed') or kill_test.stdout().contains('Killed')
   message('/bin/sh prints Killed')
   kill_printed = true
 else
