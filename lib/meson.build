@@ -768,7 +768,7 @@ int
 main (int argc, char *argv[])
 {
     return find_stack_direction (NULL, argc + 20);
-}''')
+}''', name: 'Determine STACK_DIRECTION')
 
 if stack_direction_result.returncode() > 0
   cdata.set('STACK_DIRECTION', 1)
@@ -786,7 +786,7 @@ if syscmd_shell.startswith('default')
   syscmd_shell = sh.full_path()
 endif
 
-kill_test = run_command('/bin/sh', '-c', 'kill -9 $$', capture: true, check: false)
+kill_test = run_command(sh, '-c', 'kill -9 $$', capture: true, check: false)
 if kill_test.stderr().contains('Killed')
   message('/bin/sh prints Killed')
   kill_printed = true
@@ -794,7 +794,7 @@ else
   message('/bin/sh does not print Killed')
 endif
 
-x = run_command('/bin/sh', '-c', 'echo $-', capture: true, check: true)
+x = run_command(sh, '-c', 'echo $-', capture: true, check: false)
 message('Attributes: ' + x.stdout())
 
 cdata.set_quoted('SYSCMD_SHELL', syscmd_shell)

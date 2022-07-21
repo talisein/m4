@@ -54,6 +54,7 @@ jobs:
 
       # Tests
       - name: Test
+        shell: bash
         run: ninja -C _build-linux test
 
   build-mac:
@@ -92,6 +93,7 @@ jobs:
 
       # Tests
       - name: Test
+        shell: bash
         run: ninja -C _build-mac test
 
       # Capture the binary
@@ -142,6 +144,7 @@ jobs:
 
       # Tests
       - name: Test
+        shell: bash
         run: ninja -C _build-win test
 
       # Capture the binary
