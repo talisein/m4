@@ -191,7 +191,6 @@ checks = [
   '191.platform_m',
   '192.platform_m',
   '193.platform_m',
-  '198.sysval',
   '202.errprint',
   '203.location',
   '204.location',
@@ -229,7 +228,10 @@ checks = [
   '236.improved_f',
   '146.diversions',
 ]
+
 noparallel_checks = [
+  # This is doing an rm *, and the glob sometimes captures other test's temp
+  # directories
   '199.mkstemp', # Wants rm
 ]
 
@@ -240,12 +242,6 @@ nowindows_checks = [
   '197.sysval', # Wants false
   '200.mkstemp', # Wants rm
   '201.mkstemp', # Wants rm
-  #  146.diversions fails, seemingly after 9001 diversions. I'm not sure if this
-  #  is a github actions environment issue or a legitimate failure.
-  #  clean-temp.c:fopen_temp()
-  #
-  #  m4:stdin:6: cannot create temporary file for diversion: Permission denied
-  #  m4: cannot remove temporary file D:\\a\\m4\\m4\\_build-win/m4-tvQs7L/m4-9001: Permission denied
 ]
 
 nomac_checks = [
