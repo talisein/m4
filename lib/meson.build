@@ -725,7 +725,6 @@ cdata.set_quoted('PACKAGE_TARNAME', 'm4')
 cdata.set_quoted('PACKAGE_URL', 'https://www.gnu.org/software/m4/')
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 cdata.set('PROMOTED_MODE_T', 'mode_t')
-cdata.set('RENAME_OPEN_FILE_WORKS', '1')
 cdata.set('SETLOCALE_NULL_ALL_MTSAFE', 1)
 cdata.set('SETLOCALE_NULL_ONE_MTSAFE', 1)
 cdata.set('SIGNAL_SAFE_LIST', 1)
@@ -798,6 +797,7 @@ if host_machine.system() == 'windows'
   libm4_c_args += '-DSPAWN_PIPE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-D_Restrict_arr_'
   libm4_c_args += '/FI../lib/nononnull.h'
+  cdata.set('RENAME_OPEN_FILE_WORKS', '0')
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_PIPE2_SAFER', 1)
@@ -810,6 +810,7 @@ if host_machine.system() == 'windows'
   cdata.set('GNULIB_LSEEK', 1)
   cdata.set('GNULIB_FTELLO', 1)
   cdata.set('GNULIB_FPURGE', 1)
+  cdata.set('GNULIB_RENAME', 1)
   cdata.set('REPLACE_OPEN', 1)
   cdata.set('REPLACE_FOPEN', 1)
   cdata.set('REPLACE_FFLUSH', 1)
@@ -817,8 +818,10 @@ if host_machine.system() == 'windows'
   cdata.set('REPLACE_LSEEK', 1)
   cdata.set('REPLACE_FTELLO', 1)
   cdata.set('REPLACE_FPURGE', 1)
+  cdata.set('REPLACE_RENAME', 1)
 else
   libm4_c_args += '-DGCC_LINT'
+  cdata.set('RENAME_OPEN_FILE_WORKS', '1')
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 1)
   cdata.set('GNULIB_MSVC_NOTHROW', 0)
   cdata.set('GNULIB_PIPE2_SAFER', 1)
@@ -831,6 +834,7 @@ else
   cdata.set('GNULIB_LSEEK', 0)
   cdata.set('GNULIB_FTELLO', 0)
   cdata.set('GNULIB_FPURGE', 0)
+  cdata.set('GNULIB_RENAME', 0)
   cdata.set('REPLACE_OPEN', 0)
   cdata.set('REPLACE_FOPEN', 0)
   cdata.set('REPLACE_FFLUSH', 0)
@@ -838,6 +842,7 @@ else
   cdata.set('REPLACE_LSEEK', 0)
   cdata.set('REPLACE_FTELLO', 0)
   cdata.set('REPLACE_FPURGE', 0)
+  cdata.set('REPLACE_RENAME', 0)
 endif
 
 if cc.run('''#include <sys/types.h> /* for off_t */
@@ -1171,7 +1176,6 @@ generated_header_data.set('GNULIB_READ', 0)
 generated_header_data.set('GNULIB_READLINKAT', 0)
 generated_header_data.set('GNULIB_REALLOC_POSIX', 0)
 generated_header_data.set('GNULIB_REMOVE', 0)
-generated_header_data.set('GNULIB_RENAME', 0)
 generated_header_data.set('GNULIB_RENAMEAT', 0)
 generated_header_data.set('GNULIB_RMDIR', 0)
 generated_header_data.set('GNULIB_RPMATCH', 0)
@@ -1371,7 +1375,6 @@ generated_header_data.set('REPLACE_REALLOC', 0)
 generated_header_data.set('REPLACE_REALLOCARRAY', 0)
 generated_header_data.set('REPLACE_REALPATH', 0)
 generated_header_data.set('REPLACE_REMOVE', 0)
-generated_header_data.set('REPLACE_RENAME', 0)
 generated_header_data.set('REPLACE_RENAMEAT', 0)
 generated_header_data.set('REPLACE_RMDIR', 0)
 generated_header_data.set('REPLACE_SETENV', 0)
@@ -1836,6 +1839,10 @@ endif
 
 if generated_header_data.get('GNULIB_FPURGE') == 1
   m4lib_src += 'fpurge.c'
+endif
+
+if generated_header_data.get('GNULIB_RENAME') == 1
+  m4lib_src += 'rename.c'
 endif
 
 m4_lib = static_library('m4', m4lib_src, c_args: libm4_c_args)

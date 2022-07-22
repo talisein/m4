@@ -144,7 +144,6 @@ checks = [
   '143.diversions',
   '144.diversions',
   '145.diversions',
-  '146.diversions',
   '147.divert',
   '148.divert',
   '149.divert',
@@ -228,6 +227,7 @@ checks = [
   '234.improved_c',
   '235.improved_c',
   '236.improved_f',
+  '146.diversions',
 ]
 noparallel_checks = [
   '199.mkstemp', # Wants rm
@@ -240,6 +240,21 @@ nowindows_checks = [
   '197.sysval', # Wants false
   '200.mkstemp', # Wants rm
   '201.mkstemp', # Wants rm
+  #  146.diversions fails, seemingly after 9001 diversions. I'm not sure if this
+  #  is a github actions environment issue or a legitimate failure.
+  #  clean-temp.c:fopen_temp()
+  #
+  #  m4:stdin:6: cannot create temporary file for diversion: Permission denied
+  #  m4: cannot remove temporary file D:\\a\\m4\\m4\\_build-win/m4-tvQs7L/m4-9001: Permission denied
+]
+
+nomac_checks = [
+  # 198.sysval expects no output on stderr. However, the esyscmd(kill) it issues prints
+  # sh: line 1: 14295 Killed: 9               /bin/sh -c 'kill -9 $$'
+  #
+  # I believe this is not a problem with m4 but rather just an unexpected
+  # behavior of the shell environment
+  '198.sysval',
 ]
 
 py = find_program('python3')
@@ -253,6 +268,14 @@ foreach file : checks
        depends: m4)
 endforeach
 
+if host_machine.system() != 'darwin'
+  foreach file : nomac_checks
+    test(file, py,
+         args: [m4_test, m4, files(file), meson.current_build_dir(), meson.project_source_root()],
+         env: m4_env,
+         depends: m4)
+  endforeach
+endif
 
 if host_machine.system() != 'windows'
   foreach file : noparallel_checks

@@ -4,7 +4,7 @@ project('m4', 'c',
   default_options: [
     'c_std=c11',
   ],
-  meson_version: '>= 0.59.0', # required for executable(..., win_subsystem: ...)
+  meson_version: '>= 0.59.0',
 )
 
 subdir('lib')
