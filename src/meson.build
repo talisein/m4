@@ -13,4 +13,5 @@ m4_src = [
 ]
 
 m4 = executable('m4', m4_src,
-                dependencies: m4_dep)
+                dependencies: m4_dep,
+                install: true)

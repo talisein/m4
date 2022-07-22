@@ -425,6 +425,7 @@ check_declarations = [
   ['HAVE_VAR___PROGNAME', '__progname', 'stdlib.h'],
 ]
 
+# HAVe_DECL_FOO tends to want to be explicitly 1 or 0, rather than 1 or undefined.
 foreach f : check_declarations
   cdata.set10(f.get(0), cc.has_header_symbol(f.get(2), f.get(1), prefix: ac_includes_default, args: have_header_args + extension_args))
 endforeach
@@ -692,6 +693,8 @@ check_functions = [
   ['HAVE___XPG_STRERROR_R', '__xpg_strerror_r', '#include<string.h>'],
 ]
 
+# HAVE_FOO tends to want to be 1 or undefined
+# generated_header_data needs to be defined to 0, however.
 foreach f : check_functions
   if cc.has_function(f.get(1), prefix : f.get(2) + '\n' + ac_includes_default, args : have_header_args + extension_args)
     cdata.set(f.get(0), 1)
@@ -711,32 +714,6 @@ cdata.set('GETTIMEOFDAY_TIMEZONE', 'void', description: '''Define this to 'void'
 cdata.set('MALLOC_0_IS_NONNULL', 1, description: 'If malloc(0) is != NULL, define this to 1. Otherwise define this to 0.')
 
 cdata.set('ENABLE_CHANGEWORD', get_option('enable_changeword'))
-# check token ENABLE_NLS <-- 1. for native language.
-# check token FTELLO_BROKEN_AFTER_SWITCHING_FROM_READ_TO_WRITE
-# check token FTELLO_BROKEN_AFTER_UNGETC
-# check token FUNC_UNGETC_BROKEN
-# check token GNULIB_DIRNAME
-# check token GNULIB_FDOPENDIR
-# check token GNULIB_FSCANF
-# check token GNULIB_GETCWD
-# check token GNULIB_ISBLANK
-# check token GNULIB_LOCK
-# check token GNULIB_MBRTOWC_SINGLE_THREAD
-# check token GNULIB_OPENAT
-# check token GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU
-# check token GNULIB_REALLOCARRAY
-# check token GNULIB_REGEX_SINGLE_THREAD
-# check token GNULIB_SCANF
-# check token GNULIB_SIGPIPE
-# check token GNULIB_SNPRINTF
-# check token GNULIB_STDIO_SINGLE_THREAD
-# check token GNULIB_STRERROR
-# check token GNULIB_STRERROR_R_POSIX
-# check token GNULIB_UNISTR_U8_MBTOUCR
-# check token GNULIB_UNISTR_U8_UCTOMB
-# check token GNULIB_WCHAR_SINGLE_LOCALE
-# check token LSEEK_PIPE_BROKEN
-# check token __USE_MINGW_ANSI_STDIO
 cdata.set('NEED_SETLOCALE_IMPROVED', 0)
 cdata.set('NEED_SETLOCALE_MTSAFE', 0)
 cdata.set('NL_LANGINFO_MTSAFE', 1)
@@ -786,17 +763,6 @@ if syscmd_shell.startswith('default')
   syscmd_shell = sh.full_path()
 endif
 
-kill_test = run_command(sh, '-c', '/bin/sh', '-c', 'kill', '-9', '$$', capture: true, check: false)
-if kill_test.stderr().contains('Killed') or kill_test.stdout().contains('Killed')
-  message('/bin/sh prints Killed')
-  kill_printed = true
-else
-  message('/bin/sh does not print Killed')
-endif
-
-x = run_command(sh, '-c', 'echo $-', capture: true, check: false)
-message('Attributes: ' + x.stdout())
-
 cdata.set_quoted('SYSCMD_SHELL', syscmd_shell)
 cdata.set_quoted('VERSION', '1.4.19')
 
@@ -831,7 +797,7 @@ if host_machine.system() == 'windows'
   libm4_c_args += '-DEXECUTE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-DSPAWN_PIPE_IMPL_AVOID_POSIX_SPAWN=1'
   libm4_c_args += '-D_Restrict_arr_'
-#  libm4_c_args += '/FI../lib/nononnull.h'
+  libm4_c_args += '/FI../lib/nononnull.h'
   cdata.set('GNULIB_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR', 0)
   cdata.set('GNULIB_MSVC_NOTHROW', 1)
   cdata.set('GNULIB_PIPE2_SAFER', 1)
